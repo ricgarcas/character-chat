@@ -1,0 +1,684 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Inky Companions - Sketchbook Chat</title>
+    
+    
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Patrick+Hand&amp;display=swap" rel="stylesheet" vid="7">
+
+    <style vid="8">
+        :root {
+            --bg-paper: #EBE8E0;
+            --ink-main: #242422;
+            --ink-wash: #757575;
+            
+            --font-display: 'Architects Daughter', cursive;
+            --font-body: 'Patrick Hand', cursive;
+
+            
+            --wobble-1: 2% 95% 3% 90% / 95% 4% 92% 5%;
+            --wobble-2: 95% 4% 92% 5% / 2% 95% 3% 90%;
+            --wobble-3: 4% 95% 6% 95% / 95% 4% 92% 5%;
+            --wobble-4: 10% 90% 15% 85% / 85% 10% 95% 5%;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-paper);
+            color: var(--ink-main);
+            font-family: var(--font-body);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            cursor: crosshair;
+        }
+
+        
+        .texture-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+            mix-blend-mode: multiply;
+        }
+
+        .stain-svg {
+            display: none; 
+        }
+
+        
+        .app-container {
+            width: 90vw;
+            max-width: 1200px;
+            height: 85vh;
+            display: flex;
+            gap: 40px;
+            z-index: 10;
+            position: relative;
+        }
+
+        
+        .sketched-box {
+            background: transparent;
+            transition: all 0.2s ease;
+        }
+
+        .sketched-box.alt { border-radius: var(--wobble-2); }
+        .sketched-box.round { border-radius: var(--wobble-4); }
+
+        
+        .sidebar {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .sidebar-header {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-header span {
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            margin-left: 20px;
+            color: var(--ink-main);
+            opacity: 0.8;
+            letter-spacing: 1px;
+        }
+
+        .character-list {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            overflow-y: auto;
+            padding-right: 15px;
+            
+            scrollbar-width: thin;
+            scrollbar-color: var(--ink-wash) transparent;
+        }
+        
+        .character-list::-webkit-scrollbar { width: 4px; }
+        .character-list::-webkit-scrollbar-track { background: transparent; }
+        .character-list::-webkit-scrollbar-thumb { 
+            background-color: var(--ink-wash); 
+            border-radius: 10px; 
+        }
+
+        .character-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 5px;
+            cursor: pointer;
+            position: relative;
+            border: none; 
+        }
+
+        .character-card:hover .char-avatar {
+            transform: scale(1.05);
+        }
+
+        .character-card.active .char-avatar {
+            border: 2px solid var(--ink-main);
+        }
+
+        .character-card.active .char-avatar::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 2px dashed var(--ink-main);
+            border-radius: inherit;
+        }
+
+        .char-avatar {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        
+        .char-avatar svg * {
+            fill: none !important;
+            stroke: var(--ink-main) !important;
+            stroke-width: 2.5px !important;
+            stroke-linecap: round !important;
+            stroke-linejoin: round !important;
+        }
+
+        .char-label {
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            background: var(--bg-paper);
+            padding: 0 4px;
+        }
+
+        .char-info h3 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .char-info p {
+            font-size: 1.2rem;
+            color: var(--ink-main);
+            opacity: 0.8;
+            line-height: 1.1;
+            text-transform: lowercase; 
+        }
+
+        
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        
+        .bg-typography {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            opacity: 0.05;
+            pointer-events: none;
+            font-family: var(--font-display);
+            z-index: 0;
+            width: 100%;
+        }
+
+        .bg-typography h1 {
+            font-size: 6rem;
+            line-height: 0.8;
+            text-transform: uppercase;
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--ink-main);
+        }
+        
+        .bg-typography h2 {
+            font-size: 3rem;
+            letter-spacing: 5px;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--ink-main);
+        }
+
+        .chat-header {
+            padding: 15px 0;
+            border-bottom: 2px dashed var(--ink-wash);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            z-index: 2;
+        }
+
+        .chat-header h2 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .chat-header span {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--ink-main);
+            opacity: 0.6;
+            text-transform: uppercase;
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            padding: 20px 10px;
+            z-index: 2;
+            
+            scrollbar-width: thin;
+            scrollbar-color: var(--ink-wash) transparent;
+        }
+
+        .message {
+            max-width: 75%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .message.ai { align-self: flex-start; }
+        .message.user { align-self: flex-end; }
+
+        .bubble {
+            padding: 15px 22px;
+            font-size: 1.4rem;
+            line-height: 1.4;
+            position: relative;
+            background-color: transparent;
+        }
+
+        .message.ai .bubble {
+            border: 2px solid var(--ink-main);
+            border-radius: var(--wobble-1);
+        }
+
+        .message.user .bubble {
+            border: 2px dashed var(--ink-main);
+            border-radius: var(--wobble-2);
+        }
+
+        
+        .message.ai .bubble::before, .message.user .bubble::after {
+            display: none;
+        }
+
+        .message-time {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--ink-main);
+            opacity: 0.5;
+            padding: 0 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .message.user .message-time { text-align: right; }
+
+        
+        .input-area {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .chat-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 15px 20px;
+            font-family: var(--font-body);
+            font-size: 1.6rem;
+            color: var(--ink-main);
+            outline: none;
+        }
+
+        .chat-input::placeholder {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            color: var(--ink-main);
+            opacity: 0.4;
+            letter-spacing: 1px;
+        }
+
+        
+        .input-lines {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .input-lines path {
+            fill: none;
+            stroke: var(--ink-main);
+            stroke-width: 2;
+            stroke-dasharray: 8 12; 
+        }
+
+        .send-btn {
+            background: transparent;
+            color: var(--ink-main);
+            border: 2px solid var(--ink-main);
+            width: 65px;
+            height: 65px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50% 45% 55% 40% / 40% 55% 45% 50%;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .send-btn::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 2px dashed var(--ink-main);
+            border-radius: 55% 40% 50% 45% / 45% 50% 40% 55%;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .send-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: none !important;
+            stroke: var(--ink-main) !important;
+            stroke-width: 2.5 !important;
+        }
+
+        
+        .doodles {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .doodle-dots {
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--font-display);
+            font-size: 2rem;
+            letter-spacing: 15px;
+            color: var(--ink-main);
+            opacity: 0.2;
+        }
+        
+        div[style*="une OEUF"] {
+            font-family: var(--font-display) !important;
+            text-transform: uppercase !important;
+            color: var(--ink-main) !important;
+            opacity: 0.2 !important;
+            font-size: 2rem !important;
+            letter-spacing: 2px !important;
+        }
+
+    </style>
+</head>
+<body vid="9">
+
+    
+    <div class="texture-layer" vid="10">
+        
+        <svg class="stain-svg" style="top: -5%; right: 10%; width: 400px; height: 400px;" viewBox="0 0 100 100" vid="11">
+            <path d="M50,10 C70,12 88,30 85,55 C82,80 60,92 40,88 C20,84 10,60 15,40 C20,20 30,8 50,10 Z" fill="none" stroke="var(--stain-light)" stroke-width="6" opacity="0.6" vid="12"></path>
+            <path d="M50,15 C65,17 80,32 78,50 C76,70 58,82 42,78 C25,75 18,55 22,40 C25,25 35,13 50,15 Z" fill="none" stroke="var(--stain-dark)" stroke-width="3" opacity="0.8" vid="13"></path>
+            <circle cx="20" cy="80" r="3" fill="var(--stain-dark)" vid="14"></circle>
+            <circle cx="85" cy="30" r="2" fill="var(--stain-dark)" vid="15"></circle>
+            <circle cx="75" cy="85" r="4" fill="var(--stain-light)" vid="16"></circle>
+        </svg>
+
+        
+        <svg class="stain-svg" style="bottom: -10%; left: 5%; width: 500px; height: 500px;" viewBox="0 0 200 200" vid="17">
+            <path d="M100,50 C130,40 160,70 150,110 C140,150 90,170 60,140 C30,110 40,60 100,50 Z" fill="var(--stain-light)" opacity="0.4" vid="18"></path>
+            <path d="M110,60 C125,55 145,75 140,100 C135,125 95,140 75,120 C55,100 65,70 110,60 Z" fill="var(--stain-dark)" opacity="0.5" vid="19"></path>
+            
+            <path d="M140,100 L180,95 M150,110 L175,130 M130,140 L150,170 M90,150 L100,180 M60,140 L30,160 M50,110 L20,100 M60,70 L30,50" stroke="var(--stain-dark)" stroke-width="2" stroke-linecap="round" vid="20"></path>
+            <circle cx="185" cy="90" r="3" fill="var(--stain-dark)" vid="21"></circle>
+            <circle cx="160" cy="180" r="2" fill="var(--stain-dark)" vid="22"></circle>
+            <circle cx="20" cy="120" r="4" fill="var(--stain-light)" vid="23"></circle>
+        </svg>
+    </div>
+
+    <div class="app-container" vid="24">
+        
+        
+        <aside class="sidebar" vid="25">
+            <div class="sidebar-header" vid="26">
+                <div vid="27">Four</div>
+                <div vid="28">on British</div>
+                <span vid="29">companions</span>
+            </div>
+
+            <div class="character-list" vid="30">
+                
+                
+                <div class="character-card sketched-box alt active" vid="31">
+                    <div class="char-avatar sketched-box round" vid="32">
+                        <svg viewBox="0 0 100 100" vid="33">
+                            
+                            <path d="M20,60 C20,40 30,20 50,20 C60,20 70,10 75,15 C75,25 65,30 65,40 C80,45 90,55 85,70 C80,85 40,90 25,75 Z" vid="34"></path>
+                            <circle cx="55" cy="25" r="2" fill="#FDF8F0" vid="35"></circle>
+                            
+                            <path d="M40,80 L40,95 M35,95 L45,95 M60,80 L60,95 M55,95 L65,95" stroke="var(--ink-main)" stroke-width="3" fill="none" vid="36"></path>
+                            
+                            <path d="M75,15 L85,20 L72,22 Z" vid="37"></path>
+                            
+                            <path d="M50,20 C45,10 55,5 60,15 C65,5 75,10 70,20 Z" vid="38"></path>
+                        </svg>
+                        <span class="char-label" vid="39">h.</span>
+                    </div>
+                    <div class="char-info" vid="40">
+                        <h3 vid="41">Henrietta</h3>
+                        <p vid="42">Grounded advice &amp; foraging</p>
+                    </div>
+                </div>
+
+                
+                <div class="character-card sketched-box" vid="43">
+                    <div class="char-avatar sketched-box round" vid="44">
+                        <svg viewBox="0 0 100 100" vid="45">
+                            
+                            <path d="M25,50 C25,30 75,30 75,50 L80,80 C80,90 20,90 20,80 Z" vid="46"></path>
+                            
+                            <path d="M35,30 C40,20 60,20 65,30 Z" vid="47"></path>
+                            <circle cx="50" cy="22" r="4" vid="48"></circle>
+                            
+                            <path d="M25,40 C10,40 10,70 20,70" stroke="var(--ink-main)" stroke-width="5" fill="none" vid="49"></path>
+                            
+                            <path d="M75,55 C90,50 95,40 90,35 C85,30 80,40 78,45" stroke="var(--ink-main)" stroke-width="5" fill="none" vid="50"></path>
+                            
+                            <path d="M30,50 L30,80 M40,50 L40,80 M50,50 L50,80 M60,50 L60,80 M70,50 L70,80" stroke="#FDF8F0" stroke-width="2" vid="51"></path>
+                        </svg>
+                        <span class="char-label" vid="52">a.</span>
+                    </div>
+                    <div class="char-info" vid="53">
+                        <h3 vid="54">Agatha</h3>
+                        <p vid="55">Warmth &amp; brewing thoughts</p>
+                    </div>
+                </div>
+
+                
+                <div class="character-card sketched-box alt" vid="56">
+                    <div class="char-avatar sketched-box round" vid="57">
+                        <svg viewBox="0 0 100 100" vid="58">
+                            
+                            <path d="M20,45 C20,35 80,35 80,45 L80,75 C80,90 20,90 20,75 Z" vid="59"></path>
+                            
+                            <path d="M25,35 C35,25 65,25 75,35 Z" vid="60"></path>
+                            <circle cx="50" cy="25" r="3" vid="61"></circle>
+                            
+                            <path d="M20,55 C10,55 10,70 20,70 M80,55 C90,55 90,70 80,70" stroke="var(--ink-main)" stroke-width="4" fill="none" vid="62"></path>
+                        </svg>
+                        <span class="char-label" vid="63">d.</span>
+                    </div>
+                    <div class="char-info" vid="64">
+                        <h3 vid="65">Duncan</h3>
+                        <p vid="66">Simmering long-term plans</p>
+                    </div>
+                </div>
+
+                 
+                 <div class="character-card sketched-box" vid="67">
+                    <div class="char-avatar sketched-box round" vid="68">
+                        <svg viewBox="0 0 100 100" vid="69">
+                            
+                            <path d="M60,15 C75,15 80,35 70,50 L50,95 C45,100 40,95 45,90 L60,45 C50,35 45,15 60,15 Z" vid="70"></path>
+                        </svg>
+                        <span class="char-label" vid="71">c.</span>
+                    </div>
+                    <div class="char-info" vid="72">
+                        <h3 vid="73">Colin</h3>
+                        <p vid="74">Stirring up trouble</p>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        
+        <main class="chat-area" vid="75">
+            
+            <div class="bg-typography" vid="76">
+                <h1 vid="77">Seasonal</h1>
+                <h2 vid="78">EATING</h2>
+                <div class="doodles doodle-dots" vid="79">.........</div>
+            </div>
+
+            <div class="chat-header" vid="80">
+                <h2 vid="81">Henrietta</h2>
+                <span vid="82">scratching the surface...</span>
+            </div>
+
+            <div class="messages-container" vid="83">
+                
+                <div class="message ai" vid="84">
+                    <div class="bubble" vid="85">
+                        Cluck. Good morning. Have you checked the soil today? It's perfectly damp. Good for worms.
+                    </div>
+                    <div class="message-time" vid="86">08:14 am</div>
+                </div>
+
+                <div class="message user" vid="87">
+                    <div class="bubble" vid="88">
+                        Not yet. I've been stuck inside staring at a screen. Feeling a bit disconnected to be honest.
+                    </div>
+                    <div class="message-time" vid="89">08:17 am</div>
+                </div>
+
+                <div class="message ai" vid="90">
+                    <div class="bubble" vid="91">
+                        A common modern ailment. You need to ruffle your feathers. Step outside, find a nice patch of dirt, and just scratch at it for a while. Perspective is everything.
+                    </div>
+                    <div class="message-time" vid="92">08:18 am</div>
+                </div>
+                
+                <div class="message ai" vid="93">
+                    <div class="bubble" vid="94">
+                        Or just eat a beetle. Always cheers me up.
+                    </div>
+                    <div class="message-time" vid="95">08:19 am</div>
+                </div>
+
+                <div class="message user" vid="96">
+                    <div class="bubble" vid="97">
+                        I might skip the beetle, but a walk sounds nice. Thanks, h.
+                    </div>
+                    <div class="message-time" vid="98">08:22 am</div>
+                </div>
+
+            </div>
+
+            <div class="input-area" vid="99">
+                <div class="input-wrapper" vid="100">
+                    
+                    <svg class="input-lines" preserveAspectRatio="none" vid="101">
+                        <path d="M 5 15 C 50 10, 800 18, 98% 12 C 99% 30, 97% 50, 98% 85 C 800 90, 50 82, 5 88 C 2 50, 8 30, 5 15 Z" vid="102"></path>
+                    </svg>
+                    <input type="text" class="chat-input" placeholder="Jot something down..." vid="103">
+                </div>
+                <button class="send-btn" vid="104">
+                    
+                    <svg viewBox="0 0 24 24" vid="105">
+                        <path d="M4 12 L20 12 M14 6 L21 12 L14 18" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" vid="106"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div style="position: absolute; bottom: -40px; right: 0; font-family: var(--font-display); font-size: 3rem; color: var(--ink-wash); transform: rotate(-5deg);" vid="107">
+                une OEUF
+            </div>
+
+        </main>
+
+    </div>
+
+    <script vid="108">
+        
+        document.querySelector('.send-btn').addEventListener('click', () => {
+            const input = document.querySelector('.chat-input');
+            if (input.value.trim() !== '') {
+                const msgContainer = document.querySelector('.messages-container');
+                
+                
+                const newMsg = document.createElement('div');
+                newMsg.className = 'message user';
+                
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}).toLowerCase();
+
+                newMsg.innerHTML = `
+                    <div class="bubble">${input.value}</div>
+                    <div class="message-time">${timeStr}</div>
+                `;
+                
+                msgContainer.appendChild(newMsg);
+                input.value = '';
+                
+                
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+                
+                
+                document.querySelector('.chat-header span').innerText = 'clucking...';
+                
+                setTimeout(() => {
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'message ai';
+                    aiMsg.innerHTML = `
+                        <div class="bubble">Interesting thought. I'll need to brood on that for a bit.</div>
+                        <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}).toLowerCase()}</div>
+                    `;
+                    msgContainer.appendChild(aiMsg);
+                    msgContainer.scrollTop = msgContainer.scrollHeight;
+                    document.querySelector('.chat-header span').innerText = 'scratching the surface...';
+                }, 1500);
+            }
+        });
+
+        
+        document.querySelector('.chat-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                document.querySelector('.send-btn').click();
+            }
+        });
+    </script>
+
+</body></html>

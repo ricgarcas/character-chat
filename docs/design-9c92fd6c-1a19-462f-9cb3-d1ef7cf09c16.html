@@ -1,0 +1,317 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+    <title vid="4">Scribe - Processing</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&amp;display=swap" rel="stylesheet" vid="7">
+
+    <style vid="8">
+        :root {
+            --paper: #f2ece0;
+            --ink: #1e1d1b;
+            --ink-faded: rgba(30, 29, 27, 0.5);
+            --font-main: 'Nanum Pen Script', cursive;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--paper);
+            color: var(--ink);
+            font-family: var(--font-main);
+            overflow: hidden; 
+        }
+
+        #texture-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .wiggle-stroke {
+            filter: url(#handdrawn-filter);
+        }
+
+        .app-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+
+        .status {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stage {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: -4rem;
+        }
+
+        .mascot-container {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 2rem;
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .mascot-svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: var(--ink);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .dialogue-box {
+            max-width: 280px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .quote {
+            font-size: 2.2rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transform: rotate(-1deg); 
+        }
+
+        .quote span {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            margin-top: 1.5rem;
+            animation: rotate-dashed 4s linear infinite;
+        }
+
+        .spinner-svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: var(--ink);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-dasharray: 10 15;
+        }
+
+        .transcript-preview {
+            width: 80%;
+            max-width: 300px;
+            min-height: 100px;
+            border: 1.5px dashed var(--ink-faded);
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-size: 1.4rem;
+            line-height: 1.3;
+            text-align: left;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fade-up 1.5s ease 1s forwards;
+            position: relative;
+        }
+
+        .transcript-preview::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--paper);
+            border-left: 1.5px dashed var(--ink-faded);
+            border-top: 1.5px dashed var(--ink-faded);
+            transform: rotate(45deg);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+
+        @keyframes rotate-dashed {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fade-up {
+            to {
+                opacity: 0.8;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 380px) {
+            .quote { font-size: 1.8rem; }
+            .mascot-container { width: 100px; height: 100px; }
+            .transcript-preview { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body vid="9">
+
+    <canvas id="texture-canvas" vid="10"></canvas>
+
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false" vid="11">
+        <defs vid="12">
+            <filter id="handdrawn-filter" x="-20%" y="-20%" width="140%" height="140%" vid="13">
+                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" vid="14"></feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" vid="15"></feDisplacementMap>
+            </filter>
+        </defs>
+    </svg>
+
+    <div class="app-container" vid="16">
+        <header vid="17">
+            <div class="brand" vid="18">Scribe</div>
+            <div class="status" vid="19">
+                <span id="status-text" vid="20">Processing</span>
+            </div>
+        </header>
+
+        <main class="stage" vid="21">
+            
+            <div class="mascot-container" vid="22">
+                <svg class="mascot-svg wiggle-stroke" viewBox="0 0 100 100" vid="23">
+                    <path d="M 50 15 C 25 15, 15 40, 20 65 C 25 85, 45 90, 50 90 C 55 90, 75 85, 80 65 C 85 40, 75 15, 50 15 Z" vid="24"></path>
+                    
+                    <path d="M 35 45 Q 40 40 45 45" stroke-width="2.5" vid="25"></path>
+                    <path d="M 65 45 Q 60 40 55 45" stroke-width="2.5" vid="26"></path>
+                    
+                    <path d="M 45 60 L 55 60" vid="27"></path>
+                    <path d="M 48 56 Q 50 54 52 56" stroke-width="1.5" vid="28"></path>
+                </svg>
+            </div>
+
+            <div class="dialogue-box" vid="29">
+                <div class="quote wiggle-stroke" vid="30">
+                    "Scribe is<br vid="31">thinking..."
+                </div>
+                <div class="spinner" vid="32">
+                    <svg class="spinner-svg wiggle-stroke" viewBox="0 0 50 50" vid="33">
+                        <circle cx="25" cy="25" r="20" vid="34"></circle>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="transcript-preview wiggle-stroke" vid="35">
+                "It was a small house with a big porch. I remember the smell of pine trees and the creak of the old wooden steps..."
+            </div>
+        </main>
+    </div>
+
+    <script vid="36">
+        const canvas = document.getElementById('texture-canvas');
+        const gl = canvas.getContext('webgl', { alpha: false, depth: false, antialias: false });
+
+        if (gl) {
+            const resize = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            };
+            window.addEventListener('resize', resize);
+            resize();
+
+            const vsSource = `
+                attribute vec4 aVertexPosition;
+                void main() {
+                    gl_Position = aVertexPosition;
+                }
+            `;
+
+            const fsSource = `
+                precision lowp float;
+                uniform vec2 uResolution;
+                
+                float random (vec2 st) {
+                    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+                }
+
+                void main() {
+                    vec2 st = gl_FragCoord.xy / uResolution;
+                    float n = random(st * 100.0);
+                    vec3 baseColor = vec3(242.0/255.0, 236.0/255.0, 224.0/255.0);
+                    vec3 finalColor = baseColor - (n * 0.05);
+                    gl_FragColor = vec4(finalColor, 1.0);
+                }
+            `;
+
+            const compileShader = (type, source) => {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                return shader;
+            };
+
+            const program = gl.createProgram();
+            gl.attachShader(program, compileShader(gl.VERTEX_SHADER, vsSource));
+            gl.attachShader(program, compileShader(gl.FRAGMENT_SHADER, fsSource));
+            gl.linkProgram(program);
+            gl.useProgram(program);
+
+            const positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            const positions = [-1.0, -1.0, 1.0, -1.0, -1.0,  1.0, 1.0,  1.0];
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+            const positionLocation = gl.getAttribLocation(program, 'aVertexPosition');
+            gl.enableVertexAttribArray(positionLocation);
+            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+            const resLocation = gl.getUniformLocation(program, 'uResolution');
+
+            const render = () => {
+                gl.uniform2f(resLocation, canvas.width, canvas.height);
+                gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            };
+            
+            render();
+        }
+    </script>
+
+</body></html>

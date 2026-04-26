@@ -1,0 +1,637 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+    <title vid="4">Field Guide Chat</title>
+    <style vid="5">
+        @import url('https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&family=Caveat:wght@400;500;700&display=swap');
+
+        :root {
+            --bg-paper: #E9DECF;
+            --bg-paper-light: #F2ECE1;
+            --ink-main: #3C3026;
+            --ink-light: #6A5B4C;
+            --ink-faint: #A69B8F;
+            --accent-flesh: #DABFAC;
+            --accent-red: #8B4A4A;
+            
+            --font-head: 'Cabin Sketch', cursive;
+            --font-body: 'Caveat', cursive;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #222; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: var(--font-body);
+            color: var(--ink-main);
+        }
+
+        
+        .paper-texture {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.4;
+            z-index: 100;
+        }
+
+        
+        #app {
+            width: 100%;
+            max-width: 420px;
+            height: 100%;
+            max-height: 850px;
+            background-color: var(--bg-paper);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        
+        .sketch-border {
+            border: 2px solid var(--ink-main);
+            
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+        }
+        
+        .sketch-underline {
+            position: relative;
+            display: inline-block;
+        }
+        .sketch-underline::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: -2px;
+            right: -5px;
+            height: 2px;
+            background-color: var(--ink-main);
+            border-radius: 50%;
+            transform: rotate(-1deg);
+        }
+        .sketch-underline::before {
+            content: '';
+            position: absolute;
+            bottom: 0px;
+            left: 2px;
+            right: -2px;
+            height: 1px;
+            background-color: var(--ink-main);
+            transform: rotate(1deg);
+        }
+
+        
+        header {
+            padding: 20px 20px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--ink-main);
+            border-radius: 0 0 255px 15px/0 0 15px 255px;
+            z-index: 10;
+            background: var(--bg-paper);
+        }
+
+        .back-btn, .info-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn svg, .info-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--ink-main);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .header-title {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .header-title h1 {
+            font-family: var(--font-head);
+            font-size: 28px;
+            letter-spacing: 2px;
+            
+            text-shadow: 1px 1px 0 var(--bg-paper), -1px -1px 0 var(--bg-paper), 1px -1px 0 var(--bg-paper), -1px 1px 0 var(--bg-paper), 2px 2px 0 var(--ink-main);
+        }
+        
+        .header-title span {
+            font-size: 14px;
+            color: var(--ink-light);
+            display: block;
+            margin-top: -5px;
+        }
+
+        
+        #chat-area {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scrollbar-width: none; 
+        }
+        #chat-area::-webkit-scrollbar {
+            display: none; 
+        }
+
+        .timestamp {
+            text-align: center;
+            font-size: 14px;
+            color: var(--ink-light);
+            margin: 10px 0;
+            opacity: 0.7;
+        }
+
+        .message {
+            max-width: 85%;
+            position: relative;
+            animation: fadeIn 0.4s ease-out forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message:nth-child(2) { animation-delay: 0.1s; }
+        .message:nth-child(3) { animation-delay: 0.6s; }
+        .message:nth-child(4) { animation-delay: 0.8s; }
+
+        .bubble {
+            padding: 12px 16px;
+            font-size: 20px;
+            line-height: 1.2;
+            position: relative;
+            z-index: 2;
+        }
+
+        
+        .bubble::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 2px solid var(--ink-main);
+            background-color: var(--bg-paper-light);
+            z-index: -1;
+        }
+
+        .ai.message {
+            align-self: flex-start;
+        }
+        .ai .bubble::before {
+            border-radius: 255px 25px 225px 25px/25px 225px 25px 255px;
+            transform: rotate(-1deg);
+        }
+        
+        .ai .bubble::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: -12px;
+            width: 20px;
+            height: 20px;
+            border-bottom: 2px solid var(--ink-main);
+            border-left: 2px solid var(--ink-main);
+            border-bottom-left-radius: 20px;
+            background-color: var(--bg-paper-light);
+            z-index: -2;
+            transform: skew(-20deg) rotate(15deg);
+        }
+
+        .user.message {
+            align-self: flex-end;
+        }
+        .user .bubble::before {
+            border-radius: 25px 255px 25px 225px/225px 25px 255px 25px;
+            background-color: transparent;
+            transform: rotate(1deg);
+        }
+        
+        .user .bubble::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            border-bottom: 2px solid var(--ink-main);
+            border-right: 2px solid var(--ink-main);
+            border-bottom-right-radius: 20px;
+            background-color: var(--bg-paper);
+            z-index: -2;
+            transform: skew(20deg) rotate(-15deg);
+        }
+
+        .marginalia {
+            font-size: 14px;
+            color: var(--ink-light);
+            position: absolute;
+            width: max-content;
+            pointer-events: none;
+        }
+        .marg-1 { right: -15px; top: -15px; transform: rotate(5deg); }
+        .marg-2 { left: -10px; bottom: -20px; transform: rotate(-4deg); }
+
+        
+        footer {
+            padding: 15px 20px 25px;
+            background: var(--bg-paper);
+            border-top: 2px solid var(--ink-main);
+            border-radius: 255px 15px 0 0/15px 255px 0 0;
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .input-wrapper {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: transparent;
+            border: none;
+            font-family: var(--font-body);
+            font-size: 22px;
+            color: var(--ink-main);
+            padding: 10px;
+            outline: none;
+        }
+
+        .input-wrapper::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--ink-main);
+            border-radius: 50%;
+            transform: rotate(-0.5deg);
+        }
+
+        .send-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+        .send-btn svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--ink-main);
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.2s;
+        }
+        .send-btn:active svg {
+            transform: translate(2px, -2px) scale(0.95);
+        }
+
+        
+        #dossier {
+            position: absolute;
+            top: 100%; 
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-paper);
+            z-index: 50;
+            transition: top 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 30px 20px;
+        }
+
+        #dossier.open {
+            top: 0;
+        }
+
+        .close-dossier {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-family: var(--font-body);
+            font-size: 24px;
+            color: var(--ink-main);
+            cursor: pointer;
+            z-index: 60;
+        }
+
+        .dossier-title {
+            font-family: var(--font-head);
+            font-size: 48px;
+            color: var(--ink-main);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            
+            -webkit-text-stroke: 1px var(--ink-main);
+            text-shadow: 3px 3px 0 var(--ink-faint);
+            line-height: 0.9;
+        }
+
+        .dossier-desc {
+            font-size: 20px;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            width: 80%;
+        }
+
+        
+        .anatomy-container {
+            position: relative;
+            width: 100%;
+            height: 500px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        
+        .illustration-svg {
+            width: 180px;
+            height: 400px;
+            position: relative;
+            z-index: 5;
+        }
+
+        
+        .note {
+            position: absolute;
+            font-size: 16px;
+            line-height: 1.1;
+            max-width: 120px;
+            z-index: 10;
+        }
+        
+        .note.left { text-align: right; }
+        .note.right { text-align: left; }
+
+        .note-title {
+            font-family: var(--font-body);
+            font-size: 22px;
+            display: block;
+        }
+
+        .note-body {
+            color: var(--ink-light);
+            font-size: 15px;
+        }
+
+        
+        #note-eyes { top: 20px; left: 10px; }
+        #note-heart { top: 140px; left: 5px; max-width: 100px; }
+        #note-claws { top: 280px; left: 10px; }
+        #note-behavior { bottom: 20px; right: 10px; max-width: 150px; }
+
+        
+        .leader-lines {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 4;
+        }
+        
+        .leader-lines path {
+            stroke: var(--ink-faint);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            
+        }
+
+        .dossier-footer-note {
+            margin-top: auto;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            color: var(--ink-light);
+        }
+
+        
+        .char-path {
+            stroke: var(--ink-main);
+            stroke-width: 2.5;
+            fill: var(--accent-flesh);
+            stroke-linejoin: round;
+            stroke-linecap: round;
+        }
+        .char-detail {
+            stroke: var(--ink-main);
+            stroke-width: 1.5;
+            fill: none;
+        }
+        .char-internal {
+            stroke: var(--ink-main);
+            stroke-width: 2;
+            fill: var(--bg-paper-light);
+        }
+        .char-dark {
+            fill: var(--ink-main);
+        }
+
+    </style>
+</head>
+<body vid="6">
+
+    
+    <svg class="paper-texture" vid="7">
+        <filter id="noise" vid="8">
+            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" vid="9"></feTurbulence>
+            <feColorMatrix type="matrix" values="1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 0.1 0" vid="10"></feColorMatrix>
+        </filter>
+        <rect width="100%" height="100%" filter="url(#noise)" vid="11"></rect>
+    </svg>
+
+    <div id="app" vid="12">
+        
+        <header vid="13">
+            <button class="back-btn" vid="14">
+                <svg viewBox="0 0 24 24" vid="15"><path d="M15 18l-6-6 6-6" vid="16"></path></svg>
+            </button>
+            <div class="header-title" onclick="toggleDossier()" vid="17">
+                <h1 vid="18">Wytchling</h1>
+                <span vid="19"><span class="sketch-underline" vid="20">Subject #042</span> • Active</span>
+            </div>
+            <button class="info-btn" onclick="toggleDossier()" vid="21">
+                <svg viewBox="0 0 24 24" vid="22"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4m0 4h.01" vid="23"></path></svg>
+            </button>
+        </header>
+
+        
+        <main id="chat-area" vid="24">
+            <div class="timestamp" vid="25">Dusk, 3rd of Moon</div>
+
+            <div class="message ai" vid="26">
+                <div class="bubble" vid="27">
+                    I have swept the summoning circle as requested. The ash is... sticky today.
+                </div>
+                <div class="marginalia marg-1" vid="28">(always complaining)</div>
+            </div>
+
+            <div class="message user" vid="29">
+                <div class="bubble" vid="30">
+                    Good. Did you find the missing raven skull?
+                </div>
+            </div>
+
+            <div class="message ai" vid="31">
+                <div class="bubble" vid="32">
+                    It was under the floorboards. <br vid="33">I had to use my claws to pry it out.
+                </div>
+            </div>
+
+            <div class="message user" vid="34">
+                <div class="bubble" vid="35">
+                    Bring it to the study immediately. We begin at midnight.
+                </div>
+            </div>
+            
+            <div class="message ai" style="animation-delay: 1.5s;" vid="36">
+                <div class="bubble" vid="37">
+                    ...yes, Master. I will fetch the binding twine as well.
+                </div>
+                <div class="marginalia marg-2" vid="38">*sigh*</div>
+            </div>
+        </main>
+
+        
+        <footer vid="39">
+            <div class="input-wrapper" vid="40">
+                <input type="text" placeholder="Write a directive..." vid="41">
+            </div>
+            <button class="send-btn" vid="42">
+                
+                <svg viewBox="0 0 24 24" vid="43">
+                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" vid="44"></path>
+                </svg>
+            </button>
+        </footer>
+
+        
+        <aside id="dossier" vid="45">
+            <button class="close-dossier" onclick="toggleDossier()" vid="46">[ x ] close</button>
+            
+            <h2 class="dossier-title" vid="47">Wytchling</h2>
+            <p class="dossier-desc" vid="48">
+                Wytchlings are created when a human child comes into the possession of a true Wytch Coven. The transformation process remains undocumented.
+            </p>
+
+            <div class="anatomy-container" vid="49">
+                
+                <svg class="illustration-svg" viewBox="0 0 200 450" xmlns="http://www.w3.org/2000/svg" vid="50">
+                    
+                    <path class="char-path" d="M100 40 C120 40, 130 60, 125 80 L120 100 C115 110, 85 110, 80 100 L75 80 C70 60, 80 40, 100 40 Z" vid="51"></path> 
+                    
+                    <path class="char-path" d="M85 100 L70 120 L50 220 C45 240, 60 240, 65 220 L80 140 L120 140 L135 220 C140 240, 155 240, 150 220 L130 120 L115 100" vid="52"></path> 
+                    
+                    <path class="char-path" d="M75 120 L125 120 L120 250 L80 250 Z" vid="53"></path> 
+                    
+                    <path class="char-path" d="M85 250 L75 400 C70 420, 95 420, 95 400 L100 300 L105 400 C105 420, 130 420, 125 400 L115 250" vid="54"></path> 
+
+                    
+                    <path class="char-detail" d="M85 75 Q90 70 95 75" vid="55"></path> 
+                    <path class="char-detail" d="M105 75 Q110 70 115 75" vid="56"></path> 
+                    <circle class="char-dark" cx="90" cy="76" r="2" vid="57"></circle>
+                    <circle class="char-dark" cx="110" cy="76" r="2" vid="58"></circle>
+                    <path class="char-detail" d="M95 90 Q100 95 105 90" vid="59"></path> 
+                    
+                    
+                    <path class="char-path" d="M75 70 L60 65 L72 80 Z" vid="60"></path>
+                    <path class="char-path" d="M125 70 L140 65 L128 80 Z" vid="61"></path>
+
+                    
+                    <path class="char-internal" d="M85 130 C100 125, 115 130, 115 180 C115 200, 100 210, 85 200 C80 180, 80 150, 85 130 Z" vid="62"></path>
+                    
+                    <path class="char-detail" d="M100 135 L112 140 M100 145 L114 150 M100 155 L113 160 M100 165 L111 170" vid="63"></path>
+                    
+                    <path class="char-dark" d="M88 140 C95 135, 100 145, 95 160 C90 170, 85 160, 88 140 Z" vid="64"></path>
+                    
+                    <path class="char-detail" d="M92 160 L95 180 L88 190 M95 180 L105 195" vid="65"></path>
+                    
+                    
+                    <path style="fill: var(--ink-light); stroke: var(--ink-main); stroke-width: 2;" d="M78 240 L122 240 L120 280 L100 270 L80 280 Z" vid="66"></path>
+                </svg>
+
+                
+                <svg class="leader-lines" vid="67">
+                    
+                    <path d="M 120 45 Q 150 40 180 80" vid="68"></path> 
+                    
+                    <path d="M 100 150 Q 80 150 40 200" vid="69"></path>
+                    
+                    <path d="M 55 220 Q 30 250 50 290" vid="70"></path>
+                </svg>
+
+                
+                <div class="note left" id="note-eyes" vid="71">
+                    <span class="note-title" vid="72">Enlarged Pupils</span>
+                    <span class="note-title" vid="73">Pointed Ears</span>
+                </div>
+
+                <div class="note right" id="note-heart" vid="74">
+                    <span class="note-title" vid="75">Wytchling Heart</span>
+                    <span class="note-body" vid="76">Possession veins infecting rest of organs.</span>
+                </div>
+
+                <div class="note left" id="note-claws" vid="77">
+                    <span class="note-title" vid="78">Claws</span>
+                    <span class="note-body" vid="79">(Sprouted after fingernails shed)</span>
+                </div>
+
+                <div class="note right" id="note-behavior" vid="80">
+                    <span class="note-body" vid="81">Typically assist their Coven with housework and menial tasks.</span>
+                </div>
+            </div>
+
+            <p class="dossier-footer-note sketch-underline" vid="82">
+                (Wytchlings &amp; Juvenile Elves make for natural enemies.)
+            </p>
+
+        </aside>
+    </div>
+
+    <script vid="83">
+        function toggleDossier() {
+            const dossier = document.getElementById('dossier');
+            dossier.classList.toggle('open');
+        }
+    </script>
+
+</body></html>

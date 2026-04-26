@@ -1,0 +1,392 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+    <title vid="4">Scribe - Archive</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&amp;display=swap" rel="stylesheet" vid="7">
+
+    <style vid="8">
+        :root {
+            --paper: #f2ece0;
+            --ink: #1e1d1b;
+            --ink-faded: rgba(30, 29, 27, 0.5);
+            --font-main: 'Nanum Pen Script', cursive;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--paper);
+            color: var(--ink);
+            font-family: var(--font-main);
+            overflow: hidden; 
+        }
+
+        #texture-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .wiggle-stroke {
+            filter: url(#handdrawn-filter);
+        }
+
+        .app-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 1.5rem 0 1.5rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            flex-shrink: 0;
+            margin-bottom: 2rem;
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            transform: rotate(-2deg);
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: var(--ink);
+            font-family: var(--font-main);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            opacity: 0.7;
+            padding: 0;
+        }
+
+        .nav-btn:hover {
+            opacity: 1;
+        }
+
+        .archive-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding-bottom: 3rem;
+            scrollbar-width: none; 
+            -ms-overflow-style: none;  
+        }
+
+        .archive-list::-webkit-scrollbar {
+            display: none; 
+        }
+
+        .memory-card {
+            border: 2px solid var(--ink);
+            border-radius: 8px;
+            padding: 1.5rem;
+            position: relative;
+            background-color: transparent;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .memory-card:active {
+            transform: scale(0.98);
+        }
+        
+        .memory-card:nth-child(odd) {
+            transform: rotate(1deg);
+        }
+        
+        .memory-card:nth-child(even) {
+            transform: rotate(-1deg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            fill: none;
+            stroke: var(--ink);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .card-meta {
+            text-align: right;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .card-date {
+            margin-bottom: 0.2rem;
+        }
+
+        .card-duration {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .duration-icon {
+            width: 12px;
+            height: 12px;
+            fill: none;
+            stroke: var(--ink);
+            stroke-width: 1.5;
+        }
+
+        .card-question {
+            font-size: 1.6rem;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+        
+        .play-indicator {
+            position: absolute;
+            bottom: 1rem;
+            right: 1.5rem;
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: var(--ink);
+            stroke-width: 1.5;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .memory-card:hover .play-indicator {
+            opacity: 0.8;
+        }
+
+    </style>
+</head>
+<body vid="9">
+
+    <canvas id="texture-canvas" vid="10"></canvas>
+
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false" vid="11">
+        <defs vid="12">
+            <filter id="handdrawn-filter" x="-20%" y="-20%" width="140%" height="140%" vid="13">
+                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" vid="14"></feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" vid="15"></feDisplacementMap>
+            </filter>
+        </defs>
+    </svg>
+
+    <div class="app-container" vid="16">
+        <header vid="17">
+            <button class="nav-btn" vid="18">Back</button>
+            <div class="header-title wiggle-stroke" vid="19">Journal</div>
+            <div style="width: 45px;" vid="20"></div> 
+        </header>
+
+        <main class="archive-list" vid="21">
+            
+            <div class="memory-card wiggle-stroke" vid="22">
+                <div class="card-header" vid="23">
+                    <svg class="card-icon" viewBox="0 0 50 50" vid="24">
+                        <path d="M 10 25 L 25 10 L 40 25" vid="25"></path>
+                        <path d="M 15 20 L 15 45 L 35 45 L 35 20" vid="26"></path>
+                        <path d="M 22 45 L 22 30 L 28 30 L 28 45" vid="27"></path> 
+                    </svg>
+                    <div class="card-meta" vid="28">
+                        <div class="card-date" vid="29">Oct 12, 2023</div>
+                        <div class="card-duration" vid="30">
+                            <svg class="duration-icon" viewBox="0 0 24 24" vid="31">
+                                <circle cx="12" cy="12" r="10" vid="32"></circle>
+                                <polyline points="12 6 12 12 16 14" vid="33"></polyline>
+                            </svg>
+                            4:20
+                        </div>
+                    </div>
+                </div>
+                <div class="card-question" vid="34">"Tell me about the home you grew up in."</div>
+                <svg class="play-indicator" viewBox="0 0 24 24" vid="35">
+                    <polygon points="5 3 19 12 5 21 5 3" vid="36"></polygon>
+                </svg>
+            </div>
+
+            <div class="memory-card wiggle-stroke" vid="37">
+                <div class="card-header" vid="38">
+                    <svg class="card-icon" viewBox="0 0 50 50" vid="39">
+                        <path d="M 15 15 L 35 15 L 35 35 C 35 42, 15 42, 15 35 Z" vid="40"></path>
+                        <path d="M 35 20 C 42 20, 42 30, 35 30" vid="41"></path> 
+                        <path d="M 20 10 Q 22 5 25 10" vid="42"></path> 
+                    </svg>
+                    <div class="card-meta" vid="43">
+                        <div class="card-date" vid="44">Oct 05, 2023</div>
+                        <div class="card-duration" vid="45">
+                            <svg class="duration-icon" viewBox="0 0 24 24" vid="46">
+                                <circle cx="12" cy="12" r="10" vid="47"></circle>
+                                <polyline points="12 6 12 12 16 14" vid="48"></polyline>
+                            </svg>
+                            6:15
+                        </div>
+                    </div>
+                </div>
+                <div class="card-question" vid="49">"What was the best meal you ever had?"</div>
+                <svg class="play-indicator" viewBox="0 0 24 24" vid="50">
+                    <polygon points="5 3 19 12 5 21 5 3" vid="51"></polygon>
+                </svg>
+            </div>
+
+            <div class="memory-card wiggle-stroke" vid="52">
+                <div class="card-header" vid="53">
+                    <svg class="card-icon" viewBox="0 0 50 50" vid="54">
+                        <path d="M 10 30 C 15 20, 30 15, 40 25 C 45 30, 40 35, 30 35 C 20 35, 10 40, 10 30 Z" vid="55"></path>
+                        <path d="M 40 25 L 45 23 L 43 28" vid="56"></path> 
+                        <circle cx="35" cy="24" r="1" fill="var(--ink)" stroke="none" vid="57"></circle>
+                    </svg>
+                    <div class="card-meta" vid="58">
+                        <div class="card-date" vid="59">Sep 28, 2023</div>
+                        <div class="card-duration" vid="60">
+                            <svg class="duration-icon" viewBox="0 0 24 24" vid="61">
+                                <circle cx="12" cy="12" r="10" vid="62"></circle>
+                                <polyline points="12 6 12 12 16 14" vid="63"></polyline>
+                            </svg>
+                            12:40
+                        </div>
+                    </div>
+                </div>
+                <div class="card-question" vid="64">"Tell me about a trip that changed you."</div>
+                <svg class="play-indicator" viewBox="0 0 24 24" vid="65">
+                    <polygon points="5 3 19 12 5 21 5 3" vid="66"></polygon>
+                </svg>
+            </div>
+
+            <div class="memory-card wiggle-stroke" vid="67">
+                <div class="card-header" vid="68">
+                    <svg class="card-icon" viewBox="0 0 50 50" vid="69">
+                        <circle cx="15" cy="35" r="8" vid="70"></circle>
+                        <circle cx="35" cy="35" r="8" vid="71"></circle>
+                        <path d="M 15 35 L 25 20 L 35 35" vid="72"></path>
+                        <path d="M 25 20 L 10 20" vid="73"></path>
+                    </svg>
+                    <div class="card-meta" vid="74">
+                        <div class="card-date" vid="75">Sep 14, 2023</div>
+                        <div class="card-duration" vid="76">
+                            <svg class="duration-icon" viewBox="0 0 24 24" vid="77">
+                                <circle cx="12" cy="12" r="10" vid="78"></circle>
+                                <polyline points="12 6 12 12 16 14" vid="79"></polyline>
+                            </svg>
+                            3:05
+                        </div>
+                    </div>
+                </div>
+                <div class="card-question" vid="80">"Tell me about a rebellious moment."</div>
+                <svg class="play-indicator" viewBox="0 0 24 24" vid="81">
+                    <polygon points="5 3 19 12 5 21 5 3" vid="82"></polygon>
+                </svg>
+            </div>
+
+        </main>
+    </div>
+
+    <script vid="83">
+        const canvas = document.getElementById('texture-canvas');
+        const gl = canvas.getContext('webgl', { alpha: false, depth: false, antialias: false });
+
+        if (gl) {
+            const resize = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            };
+            window.addEventListener('resize', resize);
+            resize();
+
+            const vsSource = `
+                attribute vec4 aVertexPosition;
+                void main() {
+                    gl_Position = aVertexPosition;
+                }
+            `;
+
+            const fsSource = `
+                precision lowp float;
+                uniform vec2 uResolution;
+                
+                float random (vec2 st) {
+                    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+                }
+
+                void main() {
+                    vec2 st = gl_FragCoord.xy / uResolution;
+                    float n = random(st * 100.0);
+                    
+                    vec3 baseColor = vec3(242.0/255.0, 236.0/255.0, 224.0/255.0);
+                    vec3 finalColor = baseColor - (n * 0.05);
+                    
+                    gl_FragColor = vec4(finalColor, 1.0);
+                }
+            `;
+
+            const compileShader = (type, source) => {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                return shader;
+            };
+
+            const program = gl.createProgram();
+            gl.attachShader(program, compileShader(gl.VERTEX_SHADER, vsSource));
+            gl.attachShader(program, compileShader(gl.FRAGMENT_SHADER, fsSource));
+            gl.linkProgram(program);
+            gl.useProgram(program);
+
+            const positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            const positions = [-1.0, -1.0, 1.0, -1.0, -1.0,  1.0, 1.0,  1.0];
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+            const positionLocation = gl.getAttribLocation(program, 'aVertexPosition');
+            gl.enableVertexAttribArray(positionLocation);
+            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+            const resLocation = gl.getUniformLocation(program, 'uResolution');
+
+            const render = () => {
+                gl.uniform2f(resLocation, canvas.width, canvas.height);
+                gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            };
+            
+            render();
+        }
+    </script>
+
+</body></html>

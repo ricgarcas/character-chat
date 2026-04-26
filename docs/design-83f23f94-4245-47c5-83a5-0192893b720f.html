@@ -1,0 +1,346 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+    <title vid="4">Scribe - Captured Memory</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&amp;display=swap" rel="stylesheet" vid="7">
+
+    <style vid="8">
+        :root {
+            --paper: #f2ece0;
+            --ink: #1e1d1b;
+            --ink-faded: rgba(30, 29, 27, 0.5);
+            --font-main: 'Nanum Pen Script', cursive;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--paper);
+            color: var(--ink);
+            font-family: var(--font-main);
+            overflow: hidden; 
+        }
+
+        #texture-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .wiggle-stroke {
+            filter: url(#handdrawn-filter);
+        }
+
+        .app-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--ink);
+            font-family: var(--font-main);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 0;
+            opacity: 0.8;
+        }
+
+        .date {
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .stage {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .memory-card {
+            width: 100%;
+            max-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .card-outline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: var(--ink);
+            stroke-width: 1.5;
+            pointer-events: none;
+        }
+
+        .question-tag {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            opacity: 0.9;
+        }
+
+        .transcription-area {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+            padding-right: 10px;
+        }
+
+        .transcription-text {
+            font-size: 1.6rem;
+            line-height: 1.6;
+            text-align: left;
+            opacity: 0.85;
+            letter-spacing: 0.5px;
+        }
+
+        
+        .transcription-area::-webkit-scrollbar {
+            width: 4px;
+        }
+        .transcription-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .transcription-area::-webkit-scrollbar-thumb {
+            background: var(--ink-faded);
+            border-radius: 4px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            padding: 1rem 0;
+            margin-top: auto;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--ink);
+            font-family: var(--font-main);
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            gap: 5px;
+            outline: none;
+        }
+
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            fill: none;
+            stroke: var(--ink);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.2s;
+        }
+
+        .action-btn:active .action-icon {
+            transform: scale(0.9);
+        }
+
+        @media (max-width: 380px) {
+            .question-tag { font-size: 1.5rem; }
+            .transcription-text { font-size: 1.4rem; }
+            .action-btn { width: 70px; height: 70px; font-size: 1.2rem; }
+            .action-icon { width: 35px; height: 35px; }
+            .memory-card { padding: 1.5rem; }
+        }
+
+    </style>
+</head>
+<body vid="9">
+
+    <canvas id="texture-canvas" vid="10" width="402" height="874"></canvas>
+
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false" vid="11">
+        <defs vid="12">
+            <filter id="handdrawn-filter" x="-20%" y="-20%" width="140%" height="140%" vid="13">
+                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" vid="14"></feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" vid="15"></feDisplacementMap>
+            </filter>
+        </defs>
+    </svg>
+
+    <div class="app-container" vid="16">
+        <header vid="17">
+            <button class="back-btn" vid="18">&lt; Back</button>
+            <div class="date" vid="19">Oct 24, 2023</div>
+        </header>
+
+        <main class="stage" vid="20">
+            <div class="memory-card" vid="21">
+                <svg class="card-outline wiggle-stroke" preserveAspectRatio="none" viewBox="0 0 100 100" vid="22">
+                    <rect x="2" y="2" width="96" height="96" rx="4" vid="23"></rect>
+                    <path d="M 5 20 L 95 20" stroke-width="0.5" stroke-dasharray="2 4" vid="24"></path>
+                </svg>
+
+                <div class="question-tag" vid="25">
+                    "Tell me about the home you grew up in."
+                </div>
+
+                <div class="transcription-area" vid="26">
+                    <div class="transcription-text" vid="27">
+                        Well, it was a small white house at the end of a dirt road. I remember the porch swing squeaking every time the wind blew. We didn't have much, but my mother always kept a garden full of tomatoes and marigolds out back. The kitchen always smelled like baking bread on Sundays. I shared a room with my two brothers, and we used to sneak out the window to catch fireflies in jars...
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="actions" vid="28">
+            <button class="action-btn" vid="29">
+                <svg class="action-icon wiggle-stroke" viewBox="0 0 50 50" vid="30">
+                    <path d="M 15 15 L 35 15 L 35 35 L 15 35 Z" vid="31"></path>
+                    <path d="M 15 20 L 35 20" stroke-width="1" vid="32"></path>
+                    <path d="M 22 15 L 22 12 L 28 12 L 28 15" vid="33"></path>
+                    <path d="M 20 25 L 30 30 L 20 35 Z" vid="34"></path>
+                </svg>
+                <span vid="35">Replay</span>
+            </button>
+            
+            <button class="action-btn" vid="36">
+                <svg class="action-icon wiggle-stroke" viewBox="0 0 50 50" vid="37">
+                    <circle cx="25" cy="25" r="18" vid="38"></circle>
+                    <path d="M 15 25 L 22 32 L 35 18" vid="39"></path>
+                </svg>
+                <span vid="40">Save</span>
+            </button>
+            
+            <button class="action-btn" vid="41">
+                <svg class="action-icon wiggle-stroke" viewBox="0 0 50 50" vid="42">
+                    <path d="M 18 18 L 32 32 M 32 18 L 18 32" vid="43"></path>
+                    <circle cx="25" cy="25" r="18" stroke-dasharray="4 4" vid="44"></circle>
+                </svg>
+                <span vid="45">Delete</span>
+            </button>
+        </div>
+    </div>
+
+    <script vid="46">
+        const canvas = document.getElementById('texture-canvas');
+        const gl = canvas.getContext('webgl', { alpha: false, depth: false, antialias: false });
+
+        if (gl) {
+            const resize = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            };
+            window.addEventListener('resize', resize);
+            resize();
+
+            const vsSource = `
+                attribute vec4 aVertexPosition;
+                void main() {
+                    gl_Position = aVertexPosition;
+                }
+            `;
+
+            const fsSource = `
+                precision lowp float;
+                uniform vec2 uResolution;
+                
+                float random (vec2 st) {
+                    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+                }
+
+                void main() {
+                    vec2 st = gl_FragCoord.xy / uResolution;
+                    float n = random(st * 100.0);
+                    
+                    vec3 baseColor = vec3(242.0/255.0, 236.0/255.0, 224.0/255.0);
+                    vec3 finalColor = baseColor - (n * 0.05);
+                    
+                    gl_FragColor = vec4(finalColor, 1.0);
+                }
+            `;
+
+            const compileShader = (type, source) => {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                return shader;
+            };
+
+            const program = gl.createProgram();
+            gl.attachShader(program, compileShader(gl.VERTEX_SHADER, vsSource));
+            gl.attachShader(program, compileShader(gl.FRAGMENT_SHADER, fsSource));
+            gl.linkProgram(program);
+            gl.useProgram(program);
+
+            const positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            const positions = [-1.0, -1.0, 1.0, -1.0, -1.0,  1.0, 1.0,  1.0];
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+            const positionLocation = gl.getAttribLocation(program, 'aVertexPosition');
+            gl.enableVertexAttribArray(positionLocation);
+            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+            const resLocation = gl.getUniformLocation(program, 'uResolution');
+
+            const render = () => {
+                gl.uniform2f(resLocation, canvas.width, canvas.height);
+                gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            };
+            
+            render();
+        }
+    </script>
+
+</body></html>
