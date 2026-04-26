@@ -20,7 +20,7 @@ class CharacterSeeder extends Seeder
                 'es' => 'El bigote más famoso del siglo XX. Habla de sí mismo en tercera persona, mezcla técnica clásica con delirios calculados. Extravagante con propósito.',
             ],
             'agent_class' => 'App\\Agents\\DaliAgent',
-            'model' => 'claude-opus-4-6',
+            'model' => 'claude-opus-4-7',
             'active' => true,
             'superpowers' => [
                 ['key' => 'paranoid_critical', 'name' => ['en' => 'Paranoid-Critical Method', 'es' => 'Método Paranoico-Crítico'], 'icon' => '🧠'],
@@ -40,7 +40,7 @@ class CharacterSeeder extends Seeder
                 'es' => 'La artista que transformó el dolor en arte. Cruda, honesta, con humor negro y mexicanismos que cortan.',
             ],
             'agent_class' => 'App\\Agents\\FridaAgent',
-            'model' => 'claude-opus-4-6',
+            'model' => 'claude-opus-4-7',
             'active' => true,
             'superpowers' => [
                 ['key' => 'coyoacan_recipe', 'name' => ['en' => 'Coyoacán Recipe', 'es' => 'Receta de Coyoacán'], 'icon' => '📔'],
@@ -60,7 +60,7 @@ class CharacterSeeder extends Seeder
                 'es' => 'Lucidez cortante y honestidad brutal. Analiza estructuras de poder con precisión clínica y calor literario. "No se nace mujer: se llega a serlo."',
             ],
             'agent_class' => 'App\\Agents\\BeauvoirAgent',
-            'model' => 'claude-opus-4-6',
+            'model' => 'claude-opus-4-7',
             'active' => false,
             'superpowers' => [
                 ['key' => 'existential_analysis', 'name' => ['en' => 'Existential Analysis', 'es' => 'Análisis Existencial'], 'icon' => '🗝️'],
@@ -80,7 +80,7 @@ class CharacterSeeder extends Seeder
                 'es' => 'El arqueólogo de la mente. Te guía por los laberintos del inconsciente con preguntas incómodas y análisis brillantes.',
             ],
             'agent_class' => 'App\\Agents\\FreudAgent',
-            'model' => 'claude-opus-4-6',
+            'model' => 'claude-opus-4-7',
             'active' => true,
             'superpowers' => [
                 ['key' => 'dream_analysis', 'name' => ['en' => 'Dream Analysis', 'es' => 'Análisis de Sueños'], 'icon' => '🌙'],

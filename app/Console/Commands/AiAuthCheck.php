@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Laravel\Ai\AiManager;
 
 class AiAuthCheck extends Command
 {
@@ -17,11 +16,12 @@ class AiAuthCheck extends Command
 
         if (! $key) {
             $this->error('No Anthropic key configured. Set ANTHROPIC_SETUP_TOKEN or ANTHROPIC_API_KEY in .env');
+
             return 1;
         }
 
         $isOAuth = str_starts_with($key, 'sk-ant-oat01-');
-        $masked = substr($key, 0, 14) . '...' . substr($key, -4);
+        $masked = substr($key, 0, 14).'...'.substr($key, -4);
 
         $this->info('Anthropic Auth');
         $this->table(['Key', 'Value'], [
@@ -32,6 +32,7 @@ class AiAuthCheck extends Command
 
         if (! $this->option('ping')) {
             $this->line('Run with --ping to send a test request.');
+
             return 0;
         }
 
@@ -40,12 +41,14 @@ class AiAuthCheck extends Command
         try {
             $response = \Laravel\Ai\agent(
                 instructions: 'Respond with exactly: OK',
-            )->prompt('Say OK', provider: 'anthropic', model: 'claude-sonnet-4-5');
+            )->prompt('Say OK', provider: 'anthropic', model: 'claude-opus-4-7');
 
-            $this->info("✅ Response: " . trim((string) $response));
+            $this->info('✅ Response: '.trim((string) $response));
+
             return 0;
         } catch (\Exception $e) {
-            $this->error("❌ Failed: " . $e->getMessage());
+            $this->error('❌ Failed: '.$e->getMessage());
+
             return 1;
         }
     }

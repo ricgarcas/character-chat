@@ -19,7 +19,55 @@ abstract class CharacterAgent implements Agent, Conversational, HasProviderOptio
     public function __construct(
         protected Character $character,
         protected ?string $photoPath = null,
+        protected ?string $userMessage = null,
     ) {}
+
+    /**
+     * Adaptive thinking — scale Opus 4.7's reasoning budget to the question's depth.
+     *
+     * Casual chit-chat skips extended thinking entirely (faster, cheaper). Reflective,
+     * philosophical or multi-part prompts unlock deeper reasoning so the character
+     * responds with genuine consideration rather than reflex.
+     *
+     * @return array{enabled: bool, budget: int, tier: string}
+     */
+    protected function adaptiveThinking(): array
+    {
+        $message = (string) ($this->userMessage ?? '');
+        $length = mb_strlen($message);
+        $questionMarks = substr_count($message, '?') + substr_count($message, '¿');
+        $lower = mb_strtolower($message);
+
+        $deepKeywords = [
+            'sentido', 'vida', 'muerte', 'amor', 'dios', 'alma', 'libertad',
+            'existir', 'conciencia', 'sueñ', 'miedo', 'verdad', 'destino',
+            'meaning', 'death', 'love', 'soul', 'freedom', 'truth', 'why',
+            'porqu', 'filosof', 'arte', 'belleza', 'tiempo', 'memoria',
+            'crear', 'inspir', 'sufri', 'feminis', 'patriarc',
+        ];
+
+        $deepHits = 0;
+        foreach ($deepKeywords as $kw) {
+            if (str_contains($lower, $kw)) {
+                $deepHits++;
+            }
+        }
+
+        if ($length < 60 && $questionMarks <= 1 && $deepHits === 0) {
+            return ['enabled' => false, 'budget' => 0, 'tier' => 'reflex'];
+        }
+
+        if ($deepHits >= 2 || $length > 280 || $questionMarks >= 3) {
+            return ['enabled' => true, 'budget' => 6000, 'tier' => 'deep'];
+        }
+
+        return ['enabled' => true, 'budget' => 2000, 'tier' => 'considered'];
+    }
+
+    public function lastThinkingTier(): ?string
+    {
+        return $this->adaptiveThinking()['tier'] ?? null;
+    }
 
     /**
      * Path (on the public disk) to the photo the user uploaded with this turn, if any.
@@ -113,10 +161,24 @@ BLOCK;
 
     public function providerOptions(Lab|string $provider): array
     {
-        return [
-            'temperature' => 0.8,
-            'max_tokens' => 2048,
+        $thinking = $this->adaptiveThinking();
+
+        $options = [
+            'max_tokens' => $thinking['enabled'] ? 4096 + $thinking['budget'] : 2048,
         ];
+
+        if ($provider === Lab::Anthropic && $thinking['enabled']) {
+            $options['thinking'] = [
+                'type' => 'enabled',
+                'budget_tokens' => $thinking['budget'],
+            ];
+            // Extended thinking requires temperature = 1.
+            $options['temperature'] = 1.0;
+        } else {
+            $options['temperature'] = 0.8;
+        }
+
+        return $options;
     }
 
     public function model(): string

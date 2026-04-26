@@ -27,9 +27,9 @@ class Character extends Model
         'superpowers' => 'array',
     ];
 
-    public function agent(?string $photoPath = null): Agent
+    public function agent(?string $photoPath = null, ?string $userMessage = null): Agent
     {
-        return new ($this->agent_class)($this, $photoPath);
+        return new ($this->agent_class)($this, $photoPath, $userMessage);
     }
 
     protected function tagline(): Attribute

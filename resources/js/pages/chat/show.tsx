@@ -159,14 +159,25 @@ export default function ChatShow({ character, conversation, messages: initialMes
 
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                router.visit('/chat');
+            if (e.key !== 'Escape') return;
+            e.preventDefault();
+            if (clearOpen) {
+                setClearOpen(false);
+                return;
             }
+            if (activePowerup) {
+                setActivePowerup(null);
+                return;
+            }
+            if (historyOpen) {
+                setHistoryOpen(false);
+                return;
+            }
+            router.visit('/chat');
         };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
-    }, []);
+    }, [clearOpen, activePowerup, historyOpen]);
 
     useEcho<{
         job_id: string;

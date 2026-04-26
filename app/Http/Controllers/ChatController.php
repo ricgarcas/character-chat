@@ -141,7 +141,7 @@ class ChatController extends Controller
             $attachments[] = AiImage::fromStorage($photoPath, 'public');
         }
 
-        $agent = $character->agent($photoPath);
+        $agent = $character->agent($photoPath, $request->message);
         $isNewConversation = ! $request->conversation_id;
 
         if ($request->conversation_id) {

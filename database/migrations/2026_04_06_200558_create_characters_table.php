@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('avatar')->nullable();
             $table->string('agent_class'); // e.g. App\Agents\DaliAgent
-            $table->string('model')->default('claude-sonnet-4-5');
+            $table->string('model')->default('claude-opus-4-7');
             $table->boolean('active')->default(true);
             $table->json('superpowers')->nullable(); // list of available tools/superpowers
             $table->timestamps();
