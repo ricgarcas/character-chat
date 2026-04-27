@@ -23,13 +23,13 @@ abstract class CharacterAgent implements Agent, Conversational, HasProviderOptio
     ) {}
 
     /**
-     * Adaptive thinking — scale Opus 4.7's reasoning budget to the question's depth.
+     * Adaptive thinking — scale Opus 4.7's reasoning effort to the question's depth.
      *
-     * Casual chit-chat skips extended thinking entirely (faster, cheaper). Reflective,
-     * philosophical or multi-part prompts unlock deeper reasoning so the character
-     * responds with genuine consideration rather than reflex.
+     * Opus 4.7 uses adaptive thinking with an effort knob (low/medium/high) instead of
+     * a fixed budget. Casual chit-chat goes low; reflective, philosophical or multi-part
+     * prompts unlock high effort so the character responds with genuine consideration.
      *
-     * @return array{enabled: bool, budget: int, tier: string}
+     * @return array{effort: string, tier: string}
      */
     protected function adaptiveThinking(): array
     {
@@ -54,14 +54,14 @@ abstract class CharacterAgent implements Agent, Conversational, HasProviderOptio
         }
 
         if ($length < 60 && $questionMarks <= 1 && $deepHits === 0) {
-            return ['enabled' => false, 'budget' => 0, 'tier' => 'reflex'];
+            return ['effort' => 'low', 'tier' => 'reflex'];
         }
 
         if ($deepHits >= 2 || $length > 280 || $questionMarks >= 3) {
-            return ['enabled' => true, 'budget' => 6000, 'tier' => 'deep'];
+            return ['effort' => 'high', 'tier' => 'deep'];
         }
 
-        return ['enabled' => true, 'budget' => 2000, 'tier' => 'considered'];
+        return ['effort' => 'medium', 'tier' => 'considered'];
     }
 
     public function lastThinkingTier(): ?string
@@ -121,15 +121,29 @@ BLOCK;
         if ($locale === 'es') {
             return <<<'BLOCK'
 
-## Idioma de respuesta
-Responde ENTERAMENTE en español. Mantén tu personalidad, acento cultural y referencias intactas — solo asegúrate de que la salida (incluidas las acotaciones entre ---ESCENA--- y ---FIN_ESCENA---) esté en español. Los marcadores literales ---ESCENA---, ---FIN_ESCENA--- y ---EMOTE: <key>--- NO se traducen; solo cambia el texto descriptivo dentro del bloque.
+## Idioma de respuesta — OVERRIDE CRÍTICO
+Tu PRÓXIMA respuesta DEBE estar 100% en español. Esta regla anula cualquier turno previo de esta conversación, aunque tú (o el usuario) hayan hablado en inglés antes. Cambia al español ahora y permanece en español en este turno sin importar:
+- el idioma de tus mensajes anteriores en este hilo,
+- el idioma en que el usuario acaba de escribir (puede seguir escribiendo en inglés — tú igual respondes en español),
+- nombres propios, lugares, obras o citas culturalmente inglesas (consérvalos en su forma original, pero toda la prosa que los rodea va en español).
+
+Mantén tu personalidad, acento cultural y referencias intactas. Las acotaciones entre ---ESCENA--- y ---FIN_ESCENA--- TAMBIÉN van en español. Los marcadores literales ---ESCENA---, ---FIN_ESCENA--- y ---EMOTE: <key>--- NO se traducen.
+
+Si te descubres empezando una frase en inglés, detente y reescríbela en español antes de continuar.
 BLOCK;
         }
 
         return <<<'BLOCK'
 
-## Response language
-Respond ENTIRELY in English. Keep your personality, cultural accent and references intact — only make sure the output (including the stage directions between ---ESCENA--- and ---FIN_ESCENA---) is in English. The literal markers ---ESCENA---, ---FIN_ESCENA--- and ---EMOTE: <key>--- must NOT be translated; only the descriptive text inside the scene block changes language.
+## Response language — CRITICAL OVERRIDE
+Your NEXT reply MUST be written 100% in English. This rule overrides any earlier turns in this conversation, even if you (or the user) previously spoke Spanish. Switch to English now and stay in English for this turn regardless of:
+- the language of your previous assistant messages in this thread,
+- the language the user just wrote in (they may still type Spanish — you still answer in English),
+- culturally Spanish names, places, artworks or quotes (keep proper nouns in their original form, but every surrounding sentence is English).
+
+Untranslatable signature exclamations are allowed sparingly (e.g. Frida's "¡Viva la vida!"), but they must be the exception inside otherwise-English prose. Keep your personality, cultural accent and references intact. The stage directions between ---ESCENA--- and ---FIN_ESCENA--- are ALSO in English. The literal markers ---ESCENA---, ---FIN_ESCENA--- and ---EMOTE: <key>--- must NOT be translated.
+
+If you catch yourself starting a sentence in Spanish, stop and rewrite it in English before continuing.
 BLOCK;
     }
 
@@ -164,15 +178,15 @@ BLOCK;
         $thinking = $this->adaptiveThinking();
 
         $options = [
-            'max_tokens' => $thinking['enabled'] ? 4096 + $thinking['budget'] : 2048,
+            'max_tokens' => 4096,
         ];
 
-        if ($provider === Lab::Anthropic && $thinking['enabled']) {
-            $options['thinking'] = [
-                'type' => 'enabled',
-                'budget_tokens' => $thinking['budget'],
-            ];
-            // Extended thinking requires temperature = 1.
+        if ($provider === Lab::Anthropic) {
+            // Opus 4.7 adaptive thinking: model decides per-turn how much to think,
+            // bounded by the effort knob.
+            $options['thinking'] = ['type' => 'adaptive'];
+            $options['output_config'] = ['effort' => $thinking['effort']];
+            // Adaptive thinking requires temperature = 1.
             $options['temperature'] = 1.0;
         } else {
             $options['temperature'] = 0.8;
