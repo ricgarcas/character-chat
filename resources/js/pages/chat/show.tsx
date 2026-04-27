@@ -28,6 +28,7 @@ import PowerupBar, { type Powerup } from '@/components/PowerupBar';
 import PowerupModal from '@/components/PowerupModal';
 import { useT } from '@/lib/i18n';
 import { LocaleToggle } from '@/components/locale-toggle';
+import { PowerOffButton } from '@/components/power-off-button';
 import { debugLog } from '@/lib/debug-log';
 import { Reload as Trash } from 'pixelarticons/react';
 import Balatro from '@/components/Balatro';
@@ -535,6 +536,7 @@ export default function ChatShow({ character, conversation, messages: initialMes
             <Head title={`Chat with ${character.name}`} />
 
             <LocaleToggle fixed accent={accent} />
+            <PowerOffButton />
 
             <div className="relative min-h-screen flex items-center justify-center px-4 py-12 sm:px-6 sm:py-16">
                 <div className="fixed inset-0 z-0">
