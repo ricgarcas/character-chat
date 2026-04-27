@@ -118,24 +118,6 @@ export default function Login({ status, canResetPassword }: Props) {
                         )}
                     </Form>
 
-                    {/* OAuth stub */}
-                    <div className="mt-6 flex items-center gap-2">
-                        <div className="dashed-separator flex-1" />
-                        <span className="font-display text-[9px] uppercase tracking-widest text-[var(--ink-faint)]">
-                            {t('auth.login.or')}
-                        </span>
-                        <div className="dashed-separator flex-1" />
-                    </div>
-
-                    <button
-                        type="button"
-                        disabled
-                        title={t('auth.login.coming_soon')}
-                        className="btn-sketch mt-4 w-full px-4 py-3 opacity-40"
-                    >
-                        {t('auth.login.google_soon')}
-                    </button>
-
                     <p className="mt-8 text-center font-display text-[9px] uppercase tracking-widest text-[var(--ink-faint)]">
                         {t('auth.login.no_account')}{' '}
                         <Link
