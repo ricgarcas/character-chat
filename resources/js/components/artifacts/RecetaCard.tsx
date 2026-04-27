@@ -1,6 +1,14 @@
-import { useState } from 'react';
-import { Copy, Check } from 'pixelarticons/react';
-import { Notebook, X } from '@/components/icons/retro';
+import { useState, type ComponentType } from 'react';
+import {
+    Copy,
+    Check,
+    User,
+    Clock,
+    Notebook,
+    Heart,
+    Fire,
+    ListBox,
+} from 'pixelarticons/react';
 import type { RecetaArtifact } from '@/types/chat';
 import { useT } from '@/lib/i18n';
 
@@ -10,7 +18,6 @@ interface Props {
 }
 
 export default function RecetaCard({ data, accent }: Props) {
-    const [open, setOpen] = useState(false);
     const [copied, setCopied] = useState(false);
     const t = useT();
 
@@ -22,110 +29,123 @@ export default function RecetaCard({ data, accent }: Props) {
     };
 
     return (
-        <>
-            <button
-                type="button"
-                onClick={() => setOpen(true)}
-                className="inline-flex items-center gap-2 border-2 border-[var(--ink)] px-3 py-1.5 transition hover:translate-y-[-1px]"
-                style={{
-                    backgroundColor: accent,
-                    boxShadow: `3px 3px 0 0 var(--ink)`,
-                    imageRendering: 'pixelated',
-                }}
+        <div
+            className="flex w-full flex-col bg-[#f5ecd9] text-[#2b1d0e]"
+            style={{
+                maxHeight: '85vh',
+                border: '3px solid var(--ink)',
+                boxShadow: `8px 8px 0 0 ${accent}`,
+                imageRendering: 'pixelated',
+            }}
+        >
+            <div
+                className="flex items-center justify-between border-b-2 border-[var(--ink)] px-3 py-1.5"
+                style={{ backgroundColor: accent }}
             >
-                <Notebook width={14} height={14} className="text-[var(--bg)]" />
-                <span className="font-display text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--bg)]">
-                    {t('chat.show.view_receta')}
+                <span className="flex items-center gap-2 font-display text-[10px] uppercase tracking-widest text-[var(--bg)]">
+                    <Notebook width={14} height={14} />
+                    {t('receta.title')}
                 </span>
-            </button>
+            </div>
 
-            {open && (
-                <div
-                    className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
-                    onClick={() => setOpen(false)}
-                >
-                    <div
-                        className="flex w-full max-w-lg flex-col bg-[#f5ecd9]"
-                        style={{
-                            maxHeight: '85vh',
-                            border: '3px solid var(--ink)',
-                            boxShadow: `8px 8px 0 0 ${accent}`,
-                            imageRendering: 'pixelated',
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div
-                            className="flex items-center justify-between border-b-2 border-[var(--ink)] px-3 py-1.5"
-                            style={{ backgroundColor: accent }}
-                        >
-                            <span className="font-display text-[9px] uppercase tracking-widest text-[var(--bg)]">
-                                ★ Recetario de la Casa Azul ★
-                            </span>
-                            <button
-                                onClick={() => setOpen(false)}
-                                className="font-display text-[9px] uppercase tracking-widest text-[var(--bg)] flex items-center gap-1 hover:opacity-80"
-                            >
-                                <X width={12} height={12} />
-                            </button>
-                        </div>
-
-                        <div className="flex-1 overflow-y-auto px-4 py-3 text-[#2b1d0e]">
-                            <h3 className="font-display text-lg leading-tight font-bold uppercase tracking-wide">
-                                {data.title}
-                            </h3>
-                            <p className="mt-0.5 font-body text-xs italic opacity-70">
-                                {data.servings} · {data.time}
-                            </p>
-
-                            <div className="mt-3">
-                                <p className="font-display text-[9px] uppercase tracking-widest opacity-60">
-                                    Ingredientes
-                                </p>
-                                <ul className="mt-1 grid grid-cols-1 gap-x-3 gap-y-0.5 sm:grid-cols-2">
-                                    {data.ingredients.map((ing, i) => (
-                                        <li key={i} className="font-body text-sm leading-snug">
-                                            <span className="opacity-60">{ing.amount}</span>{' '}
-                                            <span>{ing.name}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            <div className="mt-3">
-                                <p className="font-display text-[9px] uppercase tracking-widest opacity-60">
-                                    Cómo se hace
-                                </p>
-                                <ol className="mt-1 space-y-1">
-                                    {data.steps.map((step, i) => (
-                                        <li key={i} className="font-body text-sm leading-snug">
-                                            <span className="font-display font-bold opacity-70">{i + 1}.</span>{' '}
-                                            {step}
-                                        </li>
-                                    ))}
-                                </ol>
-                            </div>
-
-                            <div className="mt-3 border-l-2 border-[var(--ink)] pl-3">
-                                <p className="font-display text-[9px] uppercase tracking-widest opacity-60">
-                                    Nota de Frida
-                                </p>
-                                <p className="mt-0.5 font-body text-sm italic leading-snug">
-                                    {data.frida_note}
-                                </p>
-                            </div>
-
-                            <button
-                                onClick={handleCopyShoppingList}
-                                className="mt-4 flex items-center gap-1.5 border-2 border-[var(--ink)] bg-[var(--bg-deep)] px-2.5 py-1 font-display text-[9px] uppercase tracking-widest text-[var(--ink)] transition hover:translate-y-[-1px]"
-                                style={{ boxShadow: '2px 2px 0 0 var(--ink)' }}
-                            >
-                                {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                                {copied ? 'Copiado' : 'Lista de compras'}
-                            </button>
-                        </div>
-                    </div>
+            <div className="flex-1 overflow-y-auto px-5 py-4">
+                <h3 className="font-display text-lg leading-tight font-bold uppercase tracking-wide">
+                    {data.title}
+                </h3>
+                <div className="mt-2 flex flex-wrap items-center gap-3 font-body text-xs">
+                    <span className="inline-flex items-center gap-1 opacity-75">
+                        <User width={12} height={12} />
+                        {data.servings}
+                    </span>
+                    <span className="inline-flex items-center gap-1 opacity-75">
+                        <Clock width={12} height={12} />
+                        {data.time}
+                    </span>
                 </div>
-            )}
-        </>
+
+                <div className="my-4 h-px w-full" style={{ background: 'repeating-linear-gradient(90deg, var(--ink) 0 4px, transparent 4px 8px)' }} />
+
+                <SectionHeader label={t('receta.ingredients')} accent={accent} icon={ListBox} />
+                <ul className="mt-2 grid grid-cols-1 gap-x-4 gap-y-1 sm:grid-cols-2">
+                    {data.ingredients.map((ing, i) => (
+                        <li key={i} className="font-body text-sm leading-snug">
+                            <span className="font-display text-[10px] uppercase tracking-wider opacity-50">
+                                {ing.amount}
+                            </span>{' '}
+                            <span>{ing.name}</span>
+                        </li>
+                    ))}
+                </ul>
+
+                <div className="my-4 h-px w-full" style={{ background: 'repeating-linear-gradient(90deg, var(--ink) 0 4px, transparent 4px 8px)' }} />
+
+                <SectionHeader label={t('receta.steps')} accent={accent} icon={Fire} />
+                <ol className="mt-2 space-y-2">
+                    {data.steps.map((step, i) => (
+                        <li key={i} className="flex gap-3 font-body text-sm leading-snug">
+                            <span
+                                className="flex h-6 w-6 shrink-0 items-center justify-center border-2 border-[var(--ink)] font-display text-[10px] font-bold"
+                                style={{ backgroundColor: accent, color: 'var(--bg)' }}
+                            >
+                                {i + 1}
+                            </span>
+                            <span className="pt-0.5">{step}</span>
+                        </li>
+                    ))}
+                </ol>
+
+                <div className="my-4 h-px w-full" style={{ background: 'repeating-linear-gradient(90deg, var(--ink) 0 4px, transparent 4px 8px)' }} />
+
+                <div
+                    className="border-l-4 px-3 py-2"
+                    style={{ borderColor: accent, backgroundColor: 'rgba(0,0,0,0.04)' }}
+                >
+                    <p
+                        className="inline-flex items-center gap-1.5 font-display text-[10px] font-bold uppercase tracking-widest"
+                        style={{ color: accent }}
+                    >
+                        <Heart width={12} height={12} />
+                        {t('receta.note')}
+                    </p>
+                    <p className="mt-1 font-body text-sm italic leading-snug">
+                        {data.frida_note}
+                    </p>
+                </div>
+
+                <button
+                    onClick={handleCopyShoppingList}
+                    className="mt-5 inline-flex items-center gap-2 border-2 border-[var(--ink)] px-3 py-1.5 font-display text-[10px] font-bold uppercase tracking-widest transition hover:translate-y-[-1px]"
+                    style={{
+                        backgroundColor: copied ? accent : 'var(--bg-deep)',
+                        color: copied ? 'var(--bg)' : 'var(--ink)',
+                        boxShadow: `3px 3px 0 0 ${accent}`,
+                    }}
+                >
+                    {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                    {copied ? t('receta.copied') : t('receta.shopping_list')}
+                </button>
+            </div>
+        </div>
+    );
+}
+
+type IconCmp = ComponentType<{ width?: number | string; height?: number | string; className?: string }>;
+
+function SectionHeader({ label, accent, icon: Icon }: { label: string; accent: string; icon: IconCmp }) {
+    return (
+        <div className="flex items-center gap-2">
+            <span
+                className="flex h-5 w-5 items-center justify-center border-2 border-[var(--ink)]"
+                style={{ backgroundColor: accent }}
+            >
+                <Icon width={10} height={10} className="text-[var(--bg)]" />
+            </span>
+            <span
+                className="font-display text-[11px] font-bold uppercase tracking-[0.2em]"
+                style={{ color: accent }}
+            >
+                {label}
+            </span>
+        </div>
     );
 }
