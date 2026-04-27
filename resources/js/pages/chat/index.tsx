@@ -184,7 +184,7 @@ export default function ChatIndex({ characters }: { characters: Character[] }) {
 
     return (
         <>
-            <Head title={t('chat.index.title')} />
+            <Head title="Choose your character" />
 
             <LocaleToggle
                 fixed

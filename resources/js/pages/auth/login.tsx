@@ -13,7 +13,7 @@ export default function Login({ status, canResetPassword }: Props) {
     const t = useT();
     return (
         <>
-            <Head title="> LOG IN" />
+            <Head title="Log in" />
 
             <LocaleToggle fixed />
 

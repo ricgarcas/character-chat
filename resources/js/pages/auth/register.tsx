@@ -7,7 +7,7 @@ export default function Register() {
     const t = useT();
     return (
         <>
-            <Head title="> SIGN UP" />
+            <Head title="Sign up" />
 
             <LocaleToggle fixed />
 

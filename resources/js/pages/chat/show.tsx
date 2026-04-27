@@ -532,7 +532,7 @@ export default function ChatShow({ character, conversation, messages: initialMes
 
     return (
         <>
-            <Head title={`> CHAT // ${character.name}`} />
+            <Head title={`Chat with ${character.name}`} />
 
             <LocaleToggle fixed accent={accent} />
 
