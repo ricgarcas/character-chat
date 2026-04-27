@@ -1,19 +1,13 @@
 import { Form, Head, Link } from '@inertiajs/react';
-import { store } from '@/routes/login';
-import { request } from '@/routes/password';
+import { store } from '@/routes/register';
 import { useT } from '@/lib/i18n';
 import { LocaleToggle } from '@/components/locale-toggle';
 
-type Props = {
-    status?: string;
-    canResetPassword: boolean;
-};
-
-export default function Login({ status, canResetPassword }: Props) {
+export default function Register() {
     const t = useT();
     return (
         <>
-            <Head title="> LOG IN" />
+            <Head title="> SIGN UP" />
 
             <LocaleToggle fixed />
 
@@ -24,34 +18,26 @@ export default function Login({ status, canResetPassword }: Props) {
                             className="font-display text-xl uppercase tracking-tight text-[var(--ink)]"
                             style={{ textShadow: '3px 3px 0 var(--pixel-shadow)' }}
                         >
-                            {t('auth.login.title')}
+                            {t('auth.register.title')}
                         </h1>
                         <p className="mt-3 font-body text-base text-[var(--ink-light)]">
-                            {t('auth.login.subtitle')}
+                            {t('auth.register.subtitle')}
                         </p>
                     </div>
 
-                    {status && (
-                        <div className="mb-4 border-2 border-[var(--accent-dali)] bg-[var(--bg-deep)] px-3 py-2 text-center font-body text-sm text-[var(--accent-dali)]">
-                            {status}
-                        </div>
-                    )}
-
                     <Form
                         action={store()}
-                        resetOnSuccess={['password']}
+                        resetOnSuccess={['password', 'password_confirmation']}
                         className="flex flex-col gap-4"
                     >
                         {({ processing, errors }) => (
                             <>
-                                <input type="hidden" name="remember" value="1" />
-
                                 <div className="flex flex-col gap-1">
                                     <label
                                         htmlFor="email"
                                         className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)]"
                                     >
-                                        {t('auth.login.email')}
+                                        {t('auth.register.email')}
                                     </label>
                                     <input
                                         id="email"
@@ -60,7 +46,7 @@ export default function Login({ status, canResetPassword }: Props) {
                                         required
                                         autoFocus
                                         autoComplete="email"
-                                        placeholder={t('auth.login.email_placeholder')}
+                                        placeholder={t('auth.register.email_placeholder')}
                                         className="input-sketch px-3 py-2 font-body text-base"
                                     />
                                     {errors.email && (
@@ -71,29 +57,19 @@ export default function Login({ status, canResetPassword }: Props) {
                                 </div>
 
                                 <div className="flex flex-col gap-1">
-                                    <div className="flex items-center justify-between">
-                                        <label
-                                            htmlFor="password"
-                                            className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)]"
-                                        >
-                                            {t('auth.login.password')}
-                                        </label>
-                                        {canResetPassword && (
-                                            <a
-                                                href={request().url}
-                                                className="font-display text-[9px] uppercase tracking-widest text-[var(--ink-faint)] underline-offset-2 hover:text-[var(--ink)] hover:underline"
-                                            >
-                                                {t('auth.login.forgot')}
-                                            </a>
-                                        )}
-                                    </div>
+                                    <label
+                                        htmlFor="password"
+                                        className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)]"
+                                    >
+                                        {t('auth.register.password')}
+                                    </label>
                                     <input
                                         id="password"
                                         type="password"
                                         name="password"
                                         required
-                                        autoComplete="current-password"
-                                        placeholder={t('auth.login.password_placeholder')}
+                                        autoComplete="new-password"
+                                        placeholder={t('auth.register.password_placeholder')}
                                         className="input-sketch px-3 py-2 font-body text-base"
                                     />
                                     {errors.password && (
@@ -101,6 +77,24 @@ export default function Login({ status, canResetPassword }: Props) {
                                             ▌ {errors.password}
                                         </p>
                                     )}
+                                </div>
+
+                                <div className="flex flex-col gap-1">
+                                    <label
+                                        htmlFor="password_confirmation"
+                                        className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)]"
+                                    >
+                                        {t('auth.register.password_confirm')}
+                                    </label>
+                                    <input
+                                        id="password_confirmation"
+                                        type="password"
+                                        name="password_confirmation"
+                                        required
+                                        autoComplete="new-password"
+                                        placeholder={t('auth.register.password_placeholder')}
+                                        className="input-sketch px-3 py-2 font-body text-base"
+                                    />
                                 </div>
 
                                 <button
@@ -112,37 +106,19 @@ export default function Login({ status, canResetPassword }: Props) {
                                         color: 'var(--bg)',
                                     }}
                                 >
-                                    {processing ? t('auth.login.loading') : t('auth.login.start')}
+                                    {processing ? t('auth.register.loading') : t('auth.register.create')}
                                 </button>
                             </>
                         )}
                     </Form>
 
-                    {/* OAuth stub */}
-                    <div className="mt-6 flex items-center gap-2">
-                        <div className="dashed-separator flex-1" />
-                        <span className="font-display text-[9px] uppercase tracking-widest text-[var(--ink-faint)]">
-                            {t('auth.login.or')}
-                        </span>
-                        <div className="dashed-separator flex-1" />
-                    </div>
-
-                    <button
-                        type="button"
-                        disabled
-                        title={t('auth.login.coming_soon')}
-                        className="btn-sketch mt-4 w-full px-4 py-3 opacity-40"
-                    >
-                        {t('auth.login.google_soon')}
-                    </button>
-
                     <p className="mt-8 text-center font-display text-[9px] uppercase tracking-widest text-[var(--ink-faint)]">
-                        {t('auth.login.no_account')}{' '}
+                        {t('auth.register.have_account')}{' '}
                         <Link
-                            href="/register"
+                            href="/login"
                             className="text-[var(--ink)] underline-offset-2 hover:underline"
                         >
-                            {t('auth.login.sign_up')}
+                            {t('auth.register.log_in')}
                         </Link>
                     </p>
                 </div>
