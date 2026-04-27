@@ -197,7 +197,7 @@ BLOCK;
 
     public function model(): string
     {
-        return $this->character->model;
+        return \App\Enums\ChatModel::current()->modelId();
     }
 
     public function character(): Character

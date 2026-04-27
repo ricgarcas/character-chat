@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ChatModel;
 use App\Models\Character;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -154,7 +155,7 @@ class ChatController extends Controller
             $request->message,
             attachments: $attachments,
             provider: 'anthropic',
-            model: $character->model,
+            model: ChatModel::current()->modelId(),
         );
 
         // Wrap the response to inject conversation_id at the end
