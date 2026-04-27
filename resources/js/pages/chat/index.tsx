@@ -5,6 +5,7 @@ import PixelAvatar from '@/components/pixel-avatar';
 import { useT } from '@/lib/i18n';
 import { sfx } from '@/lib/sfx';
 import { LocaleToggle } from '@/components/locale-toggle';
+import { PowerOffButton } from '@/components/power-off-button';
 import Balatro from '@/components/Balatro';
 import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
 import {
@@ -190,6 +191,7 @@ export default function ChatIndex({ characters }: { characters: Character[] }) {
                 fixed
                 accent={characterAccent[characters[selected]?.slug] ?? 'var(--accent-dali)'}
             />
+            <PowerOffButton />
 
             <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-10">
                 <div className="fixed inset-0 z-0">
