@@ -6,6 +6,11 @@
     "nav.chat": "Chat",
     "nav.settings": "Settings",
     "nav.logout": "Log out",
+    "nav.power_off": "Power off",
+    "nav.power_off_title": "Power off?",
+    "nav.power_off_description": "This will sign you out and return you to the login screen.",
+    "nav.power_off_confirm": "Yes, sign out",
+    "nav.power_off_cancel": "Cancel",
 
     "auth.login.title": "★ INSERT COIN ★",
     "auth.login.subtitle": "Choose your character and start the conversation",

@@ -1,15 +1,13 @@
 import { Form, Head, Link } from '@inertiajs/react';
 import { store } from '@/routes/login';
-import { request } from '@/routes/password';
 import { useT } from '@/lib/i18n';
 import { LocaleToggle } from '@/components/locale-toggle';
 
 type Props = {
     status?: string;
-    canResetPassword: boolean;
 };
 
-export default function Login({ status, canResetPassword }: Props) {
+export default function Login({ status }: Props) {
     const t = useT();
     return (
         <>
@@ -71,22 +69,12 @@ export default function Login({ status, canResetPassword }: Props) {
                                 </div>
 
                                 <div className="flex flex-col gap-1">
-                                    <div className="flex items-center justify-between">
-                                        <label
-                                            htmlFor="password"
-                                            className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)]"
-                                        >
-                                            {t('auth.login.password')}
-                                        </label>
-                                        {canResetPassword && (
-                                            <a
-                                                href={request().url}
-                                                className="font-display text-[9px] uppercase tracking-widest text-[var(--ink-faint)] underline-offset-2 hover:text-[var(--ink)] hover:underline"
-                                            >
-                                                {t('auth.login.forgot')}
-                                            </a>
-                                        )}
-                                    </div>
+                                    <label
+                                        htmlFor="password"
+                                        className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)]"
+                                    >
+                                        {t('auth.login.password')}
+                                    </label>
                                     <input
                                         id="password"
                                         type="password"

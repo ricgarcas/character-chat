@@ -6,6 +6,11 @@
     "nav.chat": "Chat",
     "nav.settings": "Ajustes",
     "nav.logout": "Cerrar sesión",
+    "nav.power_off": "Apagar",
+    "nav.power_off_title": "¿Apagar?",
+    "nav.power_off_description": "Cerrarás sesión y volverás a la pantalla de inicio.",
+    "nav.power_off_confirm": "Sí, salir",
+    "nav.power_off_cancel": "Cancelar",
 
     "auth.login.title": "★ INSERT COIN ★",
     "auth.login.subtitle": "elige tu personaje y empieza la conversación",

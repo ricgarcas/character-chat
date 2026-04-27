@@ -27,7 +27,7 @@ export default function Register() {
 
                     <Form
                         action={store()}
-                        resetOnSuccess={['password', 'password_confirmation']}
+                        resetOnSuccess={['password']}
                         className="flex flex-col gap-4"
                     >
                         {({ processing, errors }) => (
@@ -77,24 +77,6 @@ export default function Register() {
                                             ▌ {errors.password}
                                         </p>
                                     )}
-                                </div>
-
-                                <div className="flex flex-col gap-1">
-                                    <label
-                                        htmlFor="password_confirmation"
-                                        className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)]"
-                                    >
-                                        {t('auth.register.password_confirm')}
-                                    </label>
-                                    <input
-                                        id="password_confirmation"
-                                        type="password"
-                                        name="password_confirmation"
-                                        required
-                                        autoComplete="new-password"
-                                        placeholder={t('auth.register.password_placeholder')}
-                                        className="input-sketch px-3 py-2 font-body text-base"
-                                    />
                                 </div>
 
                                 <button

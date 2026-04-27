@@ -1,4 +1,5 @@
 import { createInertiaApp } from '@inertiajs/react';
+import { PowerOffButton } from '@/components/power-off-button';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
 import AppLayout from '@/layouts/app-layout';
@@ -17,6 +18,7 @@ createInertiaApp({
     layout: (name) => {
         switch (true) {
             case name === 'auth/login':
+            case name === 'auth/register':
             case name.startsWith('chat/'):
                 return null;
             case name.startsWith('auth/'):
@@ -29,7 +31,12 @@ createInertiaApp({
     },
     strictMode: true,
     withApp(app) {
-        return <TooltipProvider delayDuration={0}>{app}</TooltipProvider>;
+        return (
+            <TooltipProvider delayDuration={0}>
+                {app}
+                <PowerOffButton />
+            </TooltipProvider>
+        );
     },
     progress: {
         color: '#4B5563',
