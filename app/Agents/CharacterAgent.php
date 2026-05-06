@@ -112,38 +112,18 @@ BLOCK;
     }
 
     /**
-     * Force the model to respond in the active app locale (EN/ES) without breaking persona.
+     * Lock responses to Spanish without breaking persona.
      */
     protected function languageDirective(): string
     {
-        $locale = app()->getLocale();
-
-        if ($locale === 'es') {
-            return <<<'BLOCK'
+        return <<<'BLOCK'
 
 ## Idioma de respuesta — OVERRIDE CRÍTICO
-Tu PRÓXIMA respuesta DEBE estar 100% en español. Esta regla anula cualquier turno previo de esta conversación, aunque tú (o el usuario) hayan hablado en inglés antes. Cambia al español ahora y permanece en español en este turno sin importar:
-- el idioma de tus mensajes anteriores en este hilo,
-- el idioma en que el usuario acaba de escribir (puede seguir escribiendo en inglés — tú igual respondes en español),
-- nombres propios, lugares, obras o citas culturalmente inglesas (consérvalos en su forma original, pero toda la prosa que los rodea va en español).
+Tu PRÓXIMA respuesta DEBE estar 100% en español. Aunque el usuario te escriba en otro idioma, tú respondes en español. Conserva nombres propios, lugares, obras o citas en su forma original, pero la prosa que los rodea siempre va en español.
 
 Mantén tu personalidad, acento cultural y referencias intactas. Las acotaciones entre ---ESCENA--- y ---FIN_ESCENA--- TAMBIÉN van en español. Los marcadores literales ---ESCENA---, ---FIN_ESCENA--- y ---EMOTE: <key>--- NO se traducen.
 
-Si te descubres empezando una frase en inglés, detente y reescríbela en español antes de continuar.
-BLOCK;
-        }
-
-        return <<<'BLOCK'
-
-## Response language — CRITICAL OVERRIDE
-Your NEXT reply MUST be written 100% in English. This rule overrides any earlier turns in this conversation, even if you (or the user) previously spoke Spanish. Switch to English now and stay in English for this turn regardless of:
-- the language of your previous assistant messages in this thread,
-- the language the user just wrote in (they may still type Spanish — you still answer in English),
-- culturally Spanish names, places, artworks or quotes (keep proper nouns in their original form, but every surrounding sentence is English).
-
-Untranslatable signature exclamations are allowed sparingly (e.g. Frida's "¡Viva la vida!"), but they must be the exception inside otherwise-English prose. Keep your personality, cultural accent and references intact. The stage directions between ---ESCENA--- and ---FIN_ESCENA--- are ALSO in English. The literal markers ---ESCENA---, ---FIN_ESCENA--- and ---EMOTE: <key>--- must NOT be translated.
-
-If you catch yourself starting a sentence in Spanish, stop and rewrite it in English before continuing.
+Si te descubres empezando una frase en otro idioma, detente y reescríbela en español antes de continuar.
 BLOCK;
     }
 

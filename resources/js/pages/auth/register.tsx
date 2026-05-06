@@ -1,15 +1,12 @@
 import { Form, Head, Link } from '@inertiajs/react';
 import { store } from '@/routes/register';
 import { useT } from '@/lib/i18n';
-import { LocaleToggle } from '@/components/locale-toggle';
 
 export default function Register() {
     const t = useT();
     return (
         <>
             <Head title="Sign up" />
-
-            <LocaleToggle fixed />
 
             <div className="bg-paper relative flex min-h-svh flex-col items-center justify-center p-6">
                 <div className="w-full max-w-sm">

@@ -1,7 +1,6 @@
 import { Form, Head, Link } from '@inertiajs/react';
 import { store } from '@/routes/login';
 import { useT } from '@/lib/i18n';
-import { LocaleToggle } from '@/components/locale-toggle';
 
 type Props = {
     status?: string;
@@ -12,8 +11,6 @@ export default function Login({ status }: Props) {
     return (
         <>
             <Head title="Log in" />
-
-            <LocaleToggle fixed />
 
             <div className="bg-paper relative flex min-h-svh flex-col items-center justify-center p-6">
                 <div className="w-full max-w-sm">

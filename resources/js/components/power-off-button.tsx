@@ -26,10 +26,9 @@ export function PowerOffButton() {
                 onClick={() => setOpen(true)}
                 aria-label={t('nav.power_off')}
                 title={t('nav.power_off')}
-                className="fixed top-4 left-4 z-50 inline-flex items-center justify-center border-2 border-[var(--ink)] bg-[var(--bg-deep)] p-2 text-[var(--ink-faint)] transition hover:text-[var(--ink)]"
-                style={{ boxShadow: `3px 3px 0 0 ${accent}` }}
+                className="fixed top-4 left-4 z-50 inline-flex items-center justify-center p-1 text-[var(--ink-faint)]/60 transition hover:text-[var(--ink)]"
             >
-                <Power className="h-4 w-4" />
+                <Power className="h-7 w-7" />
             </button>
 
             {open && (

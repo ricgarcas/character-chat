@@ -1,7 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { Message as MessageCircle, SettingsCog as Settings } from 'pixelarticons/react';
 import AppLogo from '@/components/app-logo';
-import { LocaleToggle } from '@/components/locale-toggle';
 import { useT } from '@/lib/i18n';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -43,9 +42,8 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                     </nav>
                 </div>
 
-                {/* Right: Locale + User */}
+                {/* Right: User */}
                 <div className="flex items-center gap-3">
-                <LocaleToggle />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <button className="flex h-8 w-8 items-center justify-center rounded-full ring-1 ring-neutral-700 transition hover:ring-neutral-500">

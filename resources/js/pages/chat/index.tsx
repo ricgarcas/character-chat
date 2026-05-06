@@ -4,7 +4,6 @@ import type { Character } from '@/types';
 import PixelAvatar from '@/components/pixel-avatar';
 import { useT } from '@/lib/i18n';
 import { sfx } from '@/lib/sfx';
-import { LocaleToggle } from '@/components/locale-toggle';
 import { PowerOffButton } from '@/components/power-off-button';
 import Balatro from '@/components/Balatro';
 import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
@@ -187,10 +186,6 @@ export default function ChatIndex({ characters }: { characters: Character[] }) {
         <>
             <Head title="Choose your character" />
 
-            <LocaleToggle
-                fixed
-                accent={characterAccent[characters[selected]?.slug] ?? 'var(--accent-dali)'}
-            />
             <PowerOffButton />
 
             <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-10">

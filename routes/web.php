@@ -2,12 +2,9 @@
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DebugLogController;
-use App\Http\Controllers\LocaleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect('/chat'))->name('home');
-
-Route::post('locale', [LocaleController::class, 'update'])->name('locale.update');
 
 Route::post('debug/log', [DebugLogController::class, 'store'])->name('debug.log');
 
