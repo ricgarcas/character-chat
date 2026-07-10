@@ -50,7 +50,6 @@ const superpowerIcon: Record<string, PhosphorIcon> = {
     existential_analysis: Key,
     feminist_critique: GenderFemale,
     philosophical_debate: Scales,
-    dream_analysis: MoonStars,
     free_association: LinkSimple,
     psychoanalytic_library: BookOpen,
 };

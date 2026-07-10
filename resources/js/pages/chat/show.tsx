@@ -21,7 +21,7 @@ import {
     Egg,
     VenusSymbol as GenderFemale,
 } from '@/components/icons/retro';
-import PixelAvatar from '@/components/pixel-avatar';
+import { useCharacterPhaser } from '@/hooks/useCharacterPhaser';
 import ArtifactCard from '@/components/artifacts/ArtifactCard';
 import ToolBadge, { infoTypeFromToolName } from '@/components/artifacts/ToolBadge';
 import PowerupBar, { type Powerup } from '@/components/PowerupBar';
@@ -143,6 +143,8 @@ export default function ChatShow({ character, conversation, messages: initialMes
     const [streamingArtifacts, setStreamingArtifacts] = useState<Artifact[]>([]);
     const [streamingToolName, setStreamingToolName] = useState<string | null>(null);
     const [conversationId, setConversationId] = useState<string | null>(conversation);
+    const sceneRef = useRef<HTMLDivElement>(null);
+    const threadRef = useRef<HTMLDivElement>(null);
     const [moodPulse, setMoodPulse] = useState(0);
     const [historyOpen, setHistoryOpen] = useState(false);
     const [pendingImage, setPendingImage] = useState<File | null>(null);
@@ -219,7 +221,6 @@ export default function ChatShow({ character, conversation, messages: initialMes
     const streamingDialogo = parsed.dialogo;
 
     const lastAssistant = [...messages].reverse().find((m) => m.role === 'assistant');
-    const lastUser = [...messages].reverse().find((m) => m.role === 'user');
 
     const lastEmote: EmoteKey =
         streamingToolName ? 'thinking' :
@@ -227,12 +228,24 @@ export default function ChatShow({ character, conversation, messages: initialMes
         lastAssistant?.emote ??
         'neutral';
 
-    const currentEscena = isStreaming ? streamingEscena : lastAssistant?.escena ?? null;
-    const currentDialog = isStreaming ? streamingDialogo : lastAssistant?.content ?? null;
-
     useEffect(() => {
         setMoodPulse((p) => p + 1);
     }, [lastEmote]);
+
+    // Keep the novel thread pinned to the latest line
+    useEffect(() => {
+        const el = threadRef.current;
+        if (el) el.scrollTo({ top: el.scrollHeight });
+    }, [messages, streamingContent]);
+
+    const phaserRef = useCharacterPhaser(sceneRef, character, lastEmote);
+
+    // Pipe tool activations into Phaser
+    useEffect(() => {
+        if (streamingToolName) {
+            phaserRef.current?.events.emit('tool:active', streamingToolName);
+        }
+    }, [streamingToolName]);
 
     const handleFileSelect = (file: File | null) => {
         if (!file) return;
@@ -553,7 +566,7 @@ export default function ChatShow({ character, conversation, messages: initialMes
                 </div>
                 <div className="relative z-10 w-full flex items-center justify-center">
                 <div
-                    className="relative flex w-full max-w-lg flex-col overflow-hidden"
+                    className="relative flex w-full max-w-lg flex-col overflow-hidden lg:max-w-7xl"
                     style={{
                         height: 'min(85vh, 960px)',
                         backgroundColor: 'var(--bg-deep)',
@@ -594,39 +607,14 @@ export default function ChatShow({ character, conversation, messages: initialMes
                         )}
                     </div>
 
-                    {/* SCENE — fixed height so dialog/artifacts scroll independently */}
-                    <div
-                        className="relative flex h-[420px] flex-shrink-0 flex-col items-center justify-end overflow-hidden"
-                        style={{
-                            backgroundImage: `url(/backgrounds/${character.slug}.png)`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center bottom',
-                            imageRendering: 'pixelated',
-                        }}
-                    >
-                        {/* Bottom-up dissolve */}
-                        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[var(--bg-deep)] via-black/40 to-transparent" />
+                    {/* BODY — stacks on mobile, splits side-by-side on desktop */}
+                    <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
 
-                        {/* Acotación ribbon — top-center */}
-                        {currentEscena && (
-                            <div className="animate-fade-in-up absolute top-4 left-1/2 z-10 w-[90%] max-w-xl -translate-x-1/2">
-                                <div className="acotacion-bar px-4 py-2">
-                                    <p className="text-center font-body text-base leading-[1.05] italic text-[var(--ink)]">
-                                        ~ {currentEscena} ~
-                                    </p>
-                                </div>
-                            </div>
-                        )}
+                    {/* SCENE — Phaser canvas + DOM overlays */}
+                    <div className="relative flex h-[420px] flex-shrink-0 overflow-hidden lg:h-auto lg:w-[calc(58%_+_50px)] lg:border-r-4 lg:border-[var(--ink)]">
 
-                        {/* Character */}
-                        <div
-                            key={moodPulse}
-                            className="animate-mood-bounce relative z-0"
-                        >
-                            <div className="animate-idle-wiggle">
-                                <PixelAvatar character={character} emote={lastEmote} size={340} />
-                            </div>
-                        </div>
+                        {/* Phaser canvas fills the entire scene */}
+                        <div ref={sceneRef} className="absolute inset-0" />
 
                         {/* POWER-UPS — bottom-right of scene */}
                         {showPowerups && (
@@ -669,84 +657,144 @@ export default function ChatShow({ character, conversation, messages: initialMes
                         </div>
                     </div>
 
-                    {/* DIALOG BOX — flex-1 so this is the only scrolling region */}
-                    <div className="relative flex min-h-0 flex-1 flex-col border-t-4 border-[var(--ink)] bg-[var(--bg-deep)]">
-                        {/* Last YOU echo bubble — full width, left aligned */}
-                        {lastUser && (
-                            <div className="px-4 pt-4 pb-2">
-                                <div
-                                    className="relative flex w-full items-start gap-3 border-2 border-[var(--ink)] bg-[var(--bg)] px-3 py-2"
-                                    style={{ boxShadow: '3px 3px 0 0 var(--ink)' }}
-                                >
-                                    {lastUser.image_url && (
-                                        <img
-                                            src={lastUser.image_url}
-                                            alt={t('chat.show.your_photo')}
-                                            className="h-12 w-12 flex-shrink-0 border-2 border-[var(--ink)] object-cover"
-                                        />
-                                    )}
-                                    <div className="min-w-0 flex-1">
-                                        <p className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)] mb-1">
-                                            {t('chat.show.you')}
-                                        </p>
-                                        <p className="truncate font-body text-base text-[var(--ink)]">
-                                            {lastUser.content}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                    {/* CHAT COLUMN — dialog + input, right side on desktop */}
+                    <div className="flex min-h-0 flex-1 flex-col">
 
-                        <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-5 pb-5">
-                            {currentDialog ? (
-                                <MarkdownMessage
-                                    className="font-body text-lg leading-[1.05] text-[var(--ink)]"
-                                    streaming={isStreaming}
-                                    accent={accent}
-                                >
-                                    {currentDialog}
-                                </MarkdownMessage>
-                            ) : isStreaming ? (
-                                <p className="font-body text-lg italic text-[var(--ink-faint)] animate-pulse">
-                                    {streamingToolName === 'retrato_frida'
-                                        ? t('chat.show.painting', { name: character.name })
-                                        : streamingToolName === 'receta_de_coyoacan'
-                                          ? t('chat.show.writing_receta', { name: character.name })
-                                          : streamingToolName
-                                            ? t('chat.show.preparing', { name: character.name })
-                                            : t('chat.show.thinking', { name: character.name })}
-                                </p>
-                            ) : (
+                    {/* DIALOG BOX — novel-style thread; every turn persists */}
+                    <div className="relative flex min-h-0 flex-1 flex-col border-t-4 border-[var(--ink)] bg-[var(--bg-deep)] lg:border-t-0">
+                        <div
+                            ref={threadRef}
+                            className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-5 py-5"
+                        >
+                            {messages.length === 0 && !isStreaming && (
                                 <p className="font-body text-lg italic text-[var(--ink-faint)]">
                                     {t('chat.show.say_hi', { name: character.name })}
                                 </p>
                             )}
 
-                            {/* Artifacts (streaming or last assistant) */}
-                            {(() => {
-                                const liveArtifacts = isStreaming ? streamingArtifacts : lastAssistant?.artifacts ?? [];
-                                const streamingType = isStreaming ? infoTypeFromToolName(streamingToolName) : null;
-                                const alreadyHasStreamingType =
-                                    streamingType && liveArtifacts.some((a) => a.artifact_type === streamingType);
-                                const showStreamingBadge = streamingType && !alreadyHasStreamingType;
-                                if (liveArtifacts.length === 0 && !showStreamingBadge) return null;
-                                return (
-                                    <div className="mt-4 space-y-3">
-                                        {liveArtifacts.map((artifact, i) => (
-                                            <ArtifactCard
-                                                key={i}
-                                                artifact={artifact}
-                                                accent={accent}
-                                                characterName={character.name}
-                                                characterSlug={character.slug}
-                                            />
-                                        ))}
-                                        {showStreamingBadge && streamingType && (
-                                            <ToolBadge mode="streaming" artifactType={streamingType} accent={accent} />
+                            {messages.map((msg) =>
+                                msg.role === 'user' ? (
+                                    /* USER turn */
+                                    <div key={msg.id} className="flex flex-col gap-1">
+                                        <p className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)]">
+                                            &gt; {t('chat.show.you')}
+                                        </p>
+                                        <div
+                                            className="flex items-start gap-3 border-2 border-[var(--ink)] bg-[var(--bg)] px-3 py-2"
+                                            style={{ boxShadow: '3px 3px 0 0 var(--ink)' }}
+                                        >
+                                            {msg.image_url && (
+                                                <img
+                                                    src={msg.image_url}
+                                                    alt={t('chat.show.your_photo')}
+                                                    className="h-12 w-12 flex-shrink-0 border-2 border-[var(--ink)] object-cover"
+                                                />
+                                            )}
+                                            <p className="min-w-0 flex-1 whitespace-pre-wrap font-body text-base text-[var(--ink)]">
+                                                {msg.content}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    /* ASSISTANT turn — stage direction above the line */
+                                    <div key={msg.id} className="flex flex-col gap-2">
+                                        {msg.escena && (
+                                            <div className="acotacion-bar px-4 py-2">
+                                                <p className="text-center font-body text-base leading-[1.1] italic text-[var(--ink)]">
+                                                    ~ {msg.escena} ~
+                                                </p>
+                                            </div>
+                                        )}
+                                        <p
+                                            className="font-display text-[10px] uppercase tracking-widest"
+                                            style={{ color: accent }}
+                                        >
+                                            &gt; {character.name}
+                                        </p>
+                                        <MarkdownMessage
+                                            className="font-body text-lg leading-[1.15] text-[var(--ink)]"
+                                            accent={accent}
+                                        >
+                                            {msg.content}
+                                        </MarkdownMessage>
+                                        {msg.artifacts && msg.artifacts.length > 0 && (
+                                            <div className="space-y-3">
+                                                {msg.artifacts.map((artifact, i) => (
+                                                    <ArtifactCard
+                                                        key={i}
+                                                        artifact={artifact}
+                                                        accent={accent}
+                                                        characterName={character.name}
+                                                        characterSlug={character.slug}
+                                                    />
+                                                ))}
+                                            </div>
                                         )}
                                     </div>
-                                );
-                            })()}
+                                ),
+                            )}
+
+                            {/* Streaming assistant turn — appends live, then settles into the thread */}
+                            {isStreaming && (
+                                <div className="flex flex-col gap-2">
+                                    {streamingEscena && (
+                                        <div className="acotacion-bar px-4 py-2">
+                                            <p className="text-center font-body text-base leading-[1.1] italic text-[var(--ink)]">
+                                                ~ {streamingEscena} ~
+                                            </p>
+                                        </div>
+                                    )}
+                                    <p
+                                        className="font-display text-[10px] uppercase tracking-widest"
+                                        style={{ color: accent }}
+                                    >
+                                        &gt; {character.name}
+                                    </p>
+                                    {streamingDialogo ? (
+                                        <MarkdownMessage
+                                            className="font-body text-lg leading-[1.15] text-[var(--ink)]"
+                                            streaming
+                                            accent={accent}
+                                        >
+                                            {streamingDialogo}
+                                        </MarkdownMessage>
+                                    ) : (
+                                        <p className="font-body text-lg italic text-[var(--ink-faint)] animate-pulse">
+                                            {streamingToolName === 'retrato_frida'
+                                                ? t('chat.show.painting', { name: character.name })
+                                                : streamingToolName === 'receta_de_coyoacan'
+                                                  ? t('chat.show.writing_receta', { name: character.name })
+                                                  : streamingToolName
+                                                    ? t('chat.show.preparing', { name: character.name })
+                                                    : t('chat.show.thinking', { name: character.name })}
+                                        </p>
+                                    )}
+                                    {(() => {
+                                        const streamingType = infoTypeFromToolName(streamingToolName);
+                                        const alreadyHasType =
+                                            streamingType &&
+                                            streamingArtifacts.some((a) => a.artifact_type === streamingType);
+                                        const showBadge = streamingType && !alreadyHasType;
+                                        if (streamingArtifacts.length === 0 && !showBadge) return null;
+                                        return (
+                                            <div className="space-y-3">
+                                                {streamingArtifacts.map((artifact, i) => (
+                                                    <ArtifactCard
+                                                        key={i}
+                                                        artifact={artifact}
+                                                        accent={accent}
+                                                        characterName={character.name}
+                                                        characterSlug={character.slug}
+                                                    />
+                                                ))}
+                                                {showBadge && streamingType && (
+                                                    <ToolBadge mode="streaming" artifactType={streamingType} accent={accent} />
+                                                )}
+                                            </div>
+                                        );
+                                    })()}
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -772,6 +820,8 @@ export default function ChatShow({ character, conversation, messages: initialMes
                                 <Send className="h-4 w-4" />
                             </button>
                         </form>
+                    </div>
+                    </div>
                     </div>
                 </div>
                 </div>

@@ -4,9 +4,10 @@ import { useT } from '@/lib/i18n';
 interface Props {
     data: ImagePendingArtifact['data'];
     accent: string;
+    characterName?: string;
 }
 
-export default function ImagePendingCard({ data, accent }: Props) {
+export default function ImagePendingCard({ data, accent, characterName: _characterName }: Props) {
     const t = useT();
     const hasError = !!data.error;
     const badge = hasError ? '⚠ ERROR' : t('chat.show.painting_badge');
