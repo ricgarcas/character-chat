@@ -1,30 +1,9 @@
-import { useEffect, useState, type ComponentType, type ReactNode } from 'react';
+import { useEffect, useState, type ComponentType } from 'react';
 import { Eye, Moon, Lightbulb as Brain, Shield, Potion as CookingPot } from 'pixelarticons/react';
-import { X, PaintBrush, Egg } from '@/components/icons/retro';
+import { X } from '@/components/icons/retro';
 import { useT } from '@/lib/i18n';
-import type {
-    Artifact,
-    DefensesArtifact,
-    DreamAnalysisArtifact,
-    ParanoidCriticalArtifact,
-    ReadingArtifact,
-    RecetaArtifact,
-    UnconsciousFaceArtifact,
-} from '@/types/chat';
-import RecetaCard from './RecetaCard';
-import ReadingCard from './ReadingCard';
-import DreamAnalysisCard from './DreamAnalysisCard';
-import DefensesCard from './DefensesCard';
-import UnconsciousFaceCard from './UnconsciousFaceCard';
-import ParanoidCriticalCard from './ParanoidCriticalCard';
-
-type InfoArtifact =
-    | RecetaArtifact
-    | ReadingArtifact
-    | DreamAnalysisArtifact
-    | DefensesArtifact
-    | UnconsciousFaceArtifact
-    | ParanoidCriticalArtifact;
+import type { Artifact } from '@/types/chat';
+import InfoArtifactRenderer, { type InfoArtifact } from './InfoArtifactRenderer';
 
 type IconCmp = ComponentType<{ width?: number | string; height?: number | string; className?: string }>;
 
@@ -135,20 +114,10 @@ export default function ToolBadge(props: Props) {
                         >
                             <X width={14} height={14} />
                         </button>
-                        <ArtifactRenderer artifact={props.artifact} accent={props.accent} />
+                        <InfoArtifactRenderer artifact={props.artifact} accent={props.accent} />
                     </div>
                 </div>
             )}
         </>
     );
-}
-
-function ArtifactRenderer({ artifact, accent }: { artifact: InfoArtifact; accent: string }): ReactNode {
-    if (artifact.artifact_type === 'receta') return <RecetaCard data={artifact.data} accent={accent} />;
-    if (artifact.artifact_type === 'reading') return <ReadingCard data={artifact.data} accent={accent} />;
-    if (artifact.artifact_type === 'dream_analysis') return <DreamAnalysisCard data={artifact.data} accent={accent} />;
-    if (artifact.artifact_type === 'defenses') return <DefensesCard data={artifact.data} accent={accent} />;
-    if (artifact.artifact_type === 'unconscious_face') return <UnconsciousFaceCard data={artifact.data} accent={accent} />;
-    if (artifact.artifact_type === 'paranoid_critical') return <ParanoidCriticalCard data={artifact.data} accent={accent} />;
-    return null;
 }

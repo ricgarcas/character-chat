@@ -27,6 +27,7 @@ import ToolBadge, { infoTypeFromToolName } from '@/components/artifacts/ToolBadg
 import PowerupBar, { type Powerup } from '@/components/PowerupBar';
 import PowerupModal from '@/components/PowerupModal';
 import { useT } from '@/lib/i18n';
+import { characterAccent, characterAccentInk } from '@/lib/accents';
 import { PowerOffButton } from '@/components/power-off-button';
 import { debugLog } from '@/lib/debug-log';
 import { Reload as Trash } from 'pixelarticons/react';
@@ -55,20 +56,6 @@ function tryParseArtifact(raw: string): Artifact | null {
     }
     return null;
 }
-
-const characterAccent: Record<string, string> = {
-    dali: 'var(--accent-dali)',
-    freud: 'var(--accent-freud)',
-    frida: 'var(--accent-frida)',
-    beauvoir: 'var(--accent-beauvoir)',
-};
-
-const characterAccentInk: Record<string, string> = {
-    dali: 'var(--bg)',
-    freud: 'var(--ink)',
-    frida: 'var(--ink)',
-    beauvoir: 'var(--ink)',
-};
 
 const VALID_EMOTES: ReadonlyArray<EmoteKey> = ['neutral', 'happy', 'thinking', 'surprised'];
 
