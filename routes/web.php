@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DebugLogController;
+use App\Http\Controllers\PortfolioController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect('/chat'))->name('home');
@@ -14,6 +15,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('chat/{character:slug}/{conversationId}', [ChatController::class, 'show'])->name('chat.show');
     Route::post('chat/{character:slug}/send', [ChatController::class, 'send'])->name('chat.send');
     Route::delete('chat/{character:slug}/conversation', [ChatController::class, 'clear'])->name('chat.clear');
+
+    Route::get('portafolio', [PortfolioController::class, 'index'])->name('portfolio.index');
 });
 
 require __DIR__.'/settings.php';
