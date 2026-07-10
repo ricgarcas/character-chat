@@ -1,7 +1,7 @@
 # Roster — Curaduría de Personajes
 
-> Última actualización: 2026-05-06
-> Estado: pendiente de curar
+> Última actualización: 2026-07-10
+> Estado: pendiente de curar · criterios teen-first añadidos
 
 ## Criterio de selección
 1. **Reconocimiento universal** en el mundo hispanohablante.
@@ -9,12 +9,21 @@
 3. **Diversidad temática**: arte, ciencia, filosofía, literatura, historia LatAm.
 4. **Diversidad demográfica**: género, geografía, época.
 5. **Material disponible**: cartas, ensayos, biografías que permitan voz fiel.
+6. **Aptitud teen** *(nuevo)*: temas y temperamento que funcionan con un usuario de 10-16 sin capa de seguridad extra. La seguridad se resuelve por curaduría, no por filtros.
+7. **Potencial de taller** *(nuevo)*: ¿qué puede *crear* el teen con esta figura? (poema, experimento mental, invento, retrato, interpretación).
 
 ## Ya construidos (4)
-- Frida Kahlo
-- Salvador Dalí
-- Sigmund Freud
-- Simone de Beauvoir
+- Frida Kahlo — teen-first ✓
+- Salvador Dalí — teen-first ✓
+- Simone de Beauvoir — teen-first ✓
+- Sigmund Freud — **despriorizado del roster destacado teen** (análisis de sueños y sexualidad infantil es justo lo que la curaduría filtra). Se mantiene disponible para el segmento adulto; no se borra.
+
+## Próximas adiciones (teen-first, material ya en vault/repo)
+- **Sor Juana Inés de la Cruz** — taller poético; además currículo SEP, el papá la reconoce.
+- **Albert Einstein** — experimentos mentales; `app/Tools/Einstein/` ya existe (vacío, esperándolo).
+- **Leonardo da Vinci** — cuaderno de inventos; energía maker.
+
+> Las sesiones iterativas arrancan con ~6 figuras; el resto llega cuando el loop taller/portafolio esté validado.
 
 ## Candidatos a curar (lluvia inicial — para filtrar a 6-11 más)
 

@@ -9,7 +9,11 @@ Plan vivo para convertir el proyecto de hackathon en un SaaS de edutainment hisp
 4. [`03-edutainment-features.md`](./03-edutainment-features.md) — features más allá del chat
 
 ## Decisiones lockeadas
-- **Audiencia**: B2C edutainment, no escuelas (al menos no v1).
+- **Audiencia**: B2C edutainment teen-first (padre paga, hijo 10-16 usa), no escuelas en v1.
+- **Pedagogía**: colaborar-con-IA (criterio, no "prompt engineering") — explícita en marketing, invisible en producto. Ver spec `docs/superpowers/specs/2026-07-10-taller-portafolio-design.md`.
+- **Vehículo**: taller de co-creación + portafolio (loop base ya construido).
+- **Seguridad**: por curaduría de roster + protocolo de angustia, sin capa de edad.
+- **Proceso**: producto primero (sesiones iterativas Ric → amigos), marketing al final con datos.
 - **Idioma**: español-only (mercado: MX + LatAm + España).
 - **Catálogo**: curado, 10-15 figuras al lanzar, sin UGC.
 - **Pricing**: Gratis (10 msg/día) · Curioso $99 MXN · Erudito $199 MXN.

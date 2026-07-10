@@ -1,6 +1,8 @@
 # Features Edutainment — Más allá del chat
 
-> Última actualización: 2026-05-06
+> Última actualización: 2026-07-10
+
+> **Nota de pivote (2026-07-10):** el loop base **taller de co-creación + portafolio** ya está construido (ver spec `docs/superpowers/specs/2026-07-10-taller-portafolio-design.md` y plan `docs/superpowers/plans/2026-07-10-taller-portafolio.md`). Los "cursos / rutas guiadas" de abajo se redefinen como **talleres guiados (camino B)**: se montan sobre el scaffolding de `artifacts` (columna `taller_key` ya existe) — catálogo en config + un bloque de prompt por taller, sin motor nuevo. La pedagogía de colaborar-con-IA es transversal (invisible en producto, explícita en marketing), no un curso aparte de "AI literacy".
 
 ## Tesis
 **El chat solo es contenido, no aprendizaje.** Para que padres y curiosos paguen $99-199 MXN/mes en LatAm, necesitamos justificación emocional + retención + diferenciación clara vs. ChatGPT/Character.AI.

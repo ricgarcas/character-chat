@@ -1,6 +1,7 @@
 # Roadmap — De Hackathon a SaaS
 
-> Última actualización: 2026-05-06
+> Última actualización: 2026-07-10
+> Pivote teen-first: producto primero, marketing al final. El desarrollo se hace por sesiones iterativas (Ric juega → amigos cercanos → capa de marketing con datos reales). Ver spec `docs/superpowers/specs/2026-07-10-taller-portafolio-design.md`.
 
 Cinco fases. Cada una entrega valor real; nada de "construir todo y luego lanzar".
 
@@ -25,12 +26,20 @@ Cinco fases. Cada una entrega valor real; nada de "construir todo y luego lanzar
 
 **Frontend**: `resources/js/lib/i18n.ts` simplificado — importa `lang/es.json` directo, mantiene API `useT()` estable. Eliminados: `components/locale-toggle.tsx`, `routes/locale/`, `actions/App/Http/Controllers/LocaleController.ts`. `<LocaleToggle>` retirado de `auth/login`, `auth/register`, `chat/index`, `chat/show`, `app-header`. `types/global.d.ts` sin props locale. Build OK; 43 tests verdes.
 
-## Fase 1 — Roster + calidad · 1-2 semanas
-**Antes de monetizar, el producto tiene que estar bueno.**
-- [ ] Definir las 10-15 figuras finales (ver `02-roster.md`).
+## Fase 1 — Roster teen-first + loop taller/portafolio · 1-2 semanas
+**Antes de monetizar, el producto tiene que estar bueno — y probado personalmente.**
+
+### Loop taller/portafolio (hecho — plan `docs/superpowers/plans/2026-07-10-taller-portafolio.md`)
+- [x] `artifacts` como entidad de primera clase (+ `status`/`parent_id`/`taller_key` para escalar a talleres guiados y proyectos sin re-migrar).
+- [x] `ArtifactService` persiste cada artefacto al cierre del turno; resuelve imágenes async.
+- [x] `coCreationBlock` + protocolo de angustia en todos los agents (maestro de taller, no máquina expendedora).
+- [x] Página `/portafolio` con las tarjetas existentes reusadas; caption "✦ En tu portafolio" en el chat.
+
+### Roster + calidad (pendiente)
+- [ ] Definir las 10-15 figuras finales teen-first (ver `02-roster.md`): próximas — Sor Juana, Einstein, Da Vinci.
 - [ ] Por cada personaje: agent class con voz, guardrails, 1-3 superpowers, pixel art (4 emotes) y background.
 - [ ] Compartir superpowers cuando aplique (ej. "pintar tu retrato" para todos los pintores).
-- [ ] QA de calidad: jugar 30+ conversaciones por personaje, ajustar prompts.
+- [ ] QA de calidad: sesiones iterativas de Ric (30+ conversaciones por personaje) contra el checklist de conducta de co-creación; luego amigos cercanos.
 - [ ] Tests Pest para que cada agent class siga el contrato.
 
 ## Fase 2 — Infraestructura SaaS · 2-3 semanas (core)
@@ -65,6 +74,7 @@ Cinco fases. Cada una entrega valor real; nada de "construir todo y luego lanzar
 - [ ] **Después** integración MercadoPago (OXXO/SPEI/débito MX) — más complejo, dejar para cuando Stripe esté sólido.
 
 ## Fase 3 — Funnel de adquisición · 1-2 semanas
+> **La capa de marketing va al final, con datos.** No se arma hasta que las sesiones iterativas (Ric → amigos cercanos) validen que el producto tiene alma y retiene. El marketing informa desde el uso real, no desde suposiciones.
 - [ ] Landing en `/` (no redirect a `/chat`): hero animado de un personaje, propuesta de valor, CTA "habla gratis con Frida".
 - [ ] Onboarding sin fricción: probar Frida con 3 mensajes sin registrarse, luego "regístrate para seguir".
 - [ ] Email de bienvenida + drip simple (Resend).
