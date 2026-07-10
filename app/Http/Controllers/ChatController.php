@@ -159,7 +159,7 @@ class ChatController extends Controller
         );
 
         // Wrap the response to inject conversation_id at the end
-        return response()->stream(function () use ($agentResponse, $agent, $isNewConversation, $character) {
+        return response()->stream(function () use ($agentResponse, $agent, $isNewConversation, $character, $request) {
             // Disable output buffering for real-time streaming
             while (ob_get_level() > 0) {
                 ob_end_flush();
@@ -180,6 +180,12 @@ class ChatController extends Controller
                         ->whereNull('character_slug')
                         ->update(['character_slug' => $character->slug]);
                 }
+
+                app(\App\Services\ArtifactService::class)->persistFromConversation(
+                    conversationId: $convId,
+                    userId: $request->user()->id,
+                    character: $character,
+                );
 
                 echo 'data: '.json_encode(['conversation_id' => $convId])."\n\n";
                 flush();

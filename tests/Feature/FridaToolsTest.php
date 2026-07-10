@@ -1,13 +1,14 @@
 <?php
 
+use App\Jobs\GenerateImageJob;
 use App\Models\User;
 use App\Tools\Frida\LeerteLaCara;
 use App\Tools\Frida\RecetaDeCoyoacan;
 use App\Tools\Frida\RetratoFrida;
 use Database\Seeders\CharacterSeeder;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Ai\Image;
 use Laravel\Ai\Tools\Request;
 
 beforeEach(function () {
@@ -76,11 +77,13 @@ it('retrato tool returns error artifact when no photo is attached', function () 
         ->and($payload['data']['message'])->toContain('foto');
 });
 
-it('retrato tool generates a portrait when a photo is attached', function () {
+it('retrato tool dispatches the paint job and returns a pending artifact', function () {
     Storage::fake('public');
     Storage::disk('public')->put('uploads/1/me.jpg', 'fake-photo-bytes');
+    Queue::fake();
 
-    Image::fake([base64_encode('fake-png-bytes')]);
+    $user = User::factory()->create();
+    $this->actingAs($user);
 
     $tool = new RetratoFrida('uploads/1/me.jpg');
 
@@ -91,11 +94,14 @@ it('retrato tool generates a portrait when a photo is attached', function () {
 
     $payload = json_decode($result, true);
 
-    expect($payload['artifact_type'])->toBe('portrait')
+    expect($payload['artifact_type'])->toBe('image_pending')
         ->and($payload['data']['title'])->toBe('Raíz y vuelo')
-        ->and($payload['data']['image_url'])->toContain('storage/generated/frida/');
+        ->and($payload['data']['kind'])->toBe('portrait')
+        ->and($payload['data']['job_id'])->not->toBeEmpty();
 
-    Image::assertGenerated(fn ($prompt) => $prompt->contains('Frida Kahlo'));
+    Queue::assertPushed(GenerateImageJob::class, fn ($job) => $job->kind === 'portrait'
+        && $job->userId === $user->id
+        && $job->sourcePhotoPath === 'uploads/1/me.jpg');
 });
 
 it('chat send endpoint stores uploaded image on the public disk', function () {
