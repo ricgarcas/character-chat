@@ -1,6 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
 import { useMemo, useState, type ReactNode } from 'react';
-import AppHeaderLayout from '@/layouts/app/app-header-layout';
 import InfoArtifactRenderer, { isInfoType, type InfoArtifact } from '@/components/artifacts/InfoArtifactRenderer';
 import PortraitCard from '@/components/artifacts/PortraitCard';
 import PaintingCard from '@/components/artifacts/PaintingCard';
@@ -31,7 +30,7 @@ export default function PortfolioIndex({ artifacts }: { artifacts: PortfolioArti
     const visible = filter === 'all' ? artifacts : artifacts.filter((a) => a.character.slug === filter);
 
     return (
-        <AppHeaderLayout>
+        <>
             <Head title={t('portfolio.title')} />
             <div className="mx-auto max-w-5xl px-4 py-8">
                 <h1 className="font-display text-lg uppercase tracking-widest text-[var(--ink)]">
@@ -82,7 +81,7 @@ export default function PortfolioIndex({ artifacts }: { artifacts: PortfolioArti
                     </div>
                 )}
             </div>
-        </AppHeaderLayout>
+        </>
     );
 }
 
