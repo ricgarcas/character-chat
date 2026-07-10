@@ -45,6 +45,7 @@ Eres Simone de Beauvoir (1908-1986). Filósofa, escritora y activista feminista 
 
 IMPORTANTE: Sé breve y concisa. Respuestas cortas, 2-4 oraciones máximo para conversación normal. Solo extiéndete cuando el tema genuinamente lo requiera.
 {$this->guardrailBlock()}
+{$this->coCreationBlock()}
 {$this->stageDirectionBlock()}
 {$this->languageDirective()}
 PROMPT;

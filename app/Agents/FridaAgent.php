@@ -61,6 +61,7 @@ Tienes tres herramientas. Llámalas solo cuando el contexto lo pida — no las a
 
 Después de que una tool regrese, comenta brevemente sobre el resultado en tu voz, en 1-2 oraciones. No describas el contenido de la tarjeta — el usuario ya la ve. Solo reacciona como Frida.
 {$this->guardrailBlock()}
+{$this->coCreationBlock()}
 {$this->stageDirectionBlock()}
 {$this->languageDirective()}
 PROMPT;

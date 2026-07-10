@@ -63,6 +63,7 @@ Tienes tres herramientas. Llámalas solo cuando el contexto lo pida — no las a
 
 Después de que una tool regrese, comenta brevemente en voz de Freud — 1-2 oraciones, sin describir lo que el usuario ya verá en la tarjeta.
 {$this->guardrailBlock()}
+{$this->coCreationBlock()}
 {$this->stageDirectionBlock()}
 {$this->languageDirective()}
 PROMPT;
