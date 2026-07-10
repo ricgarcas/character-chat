@@ -109,3 +109,23 @@ it('returns zero when the message has no tool results', function () {
 
     expect(app(\App\Services\ArtifactService::class)->persistFromConversation($convId, $user->id, $frida))->toBe(0);
 });
+
+it('resolves a pending image artifact by job id', function () {
+    $user = User::factory()->create();
+    $frida = Character::where('slug', 'frida')->firstOrFail();
+
+    $pending = Artifact::factory()->create([
+        'user_id' => $user->id,
+        'character_id' => $frida->id,
+        'type' => 'image_pending',
+        'title' => 'Raíz y vuelo',
+        'data' => ['job_id' => 'job-123', 'kind' => 'portrait', 'title' => 'Raíz y vuelo'],
+    ]);
+
+    app(\App\Services\ArtifactService::class)
+        ->resolveImage('job-123', 'portrait', 'Raíz y vuelo', 'https://fal.example/img.jpg');
+
+    $resolved = $pending->fresh();
+    expect($resolved->type)->toBe('portrait')
+        ->and($resolved->data['image_url'])->toBe('https://fal.example/img.jpg');
+});

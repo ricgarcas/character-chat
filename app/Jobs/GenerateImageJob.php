@@ -55,6 +55,13 @@ class GenerateImageJob implements ShouldQueue
                 ],
             ]);
 
+            app(\App\Services\ArtifactService::class)->resolveImage(
+                jobId: $this->jobId,
+                kind: $this->kind,
+                title: $this->title,
+                imageUrl: $result['url'],
+            );
+
             event(new ImageReady(
                 userId: $this->userId,
                 jobId: $this->jobId,

@@ -69,4 +69,20 @@ class ArtifactService
 
         return $created;
     }
+
+    /**
+     * Convierte un artifact image_pending en su tipo final cuando la imagen terminó.
+     */
+    public function resolveImage(string $jobId, string $kind, string $title, string $imageUrl): void
+    {
+        Artifact::query()
+            ->where('type', 'image_pending')
+            ->where('data->job_id', $jobId)
+            ->get()
+            ->each(fn (Artifact $artifact) => $artifact->update([
+                'type' => $kind,
+                'title' => $title,
+                'data' => ['title' => $title, 'image_url' => $imageUrl],
+            ]));
+    }
 }
