@@ -4,7 +4,16 @@
     "locale.switch": "Idioma",
 
     "nav.chat": "Chat",
+    "nav.portfolio": "Portafolio",
     "nav.settings": "Ajustes",
+
+    "portfolio.title": "Mi portafolio",
+    "portfolio.subtitle": "Todo lo que has creado con tus maestros",
+    "portfolio.empty_title": "Tu taller está vacío",
+    "portfolio.empty_body": "Frida tiene un caballete esperándote.",
+    "portfolio.empty_cta": "Ir al taller",
+    "portfolio.filter_all": "Todos",
+    "chat.artifact_saved": "En tu portafolio",
     "nav.logout": "Cerrar sesión",
     "nav.power_off": "Apagar",
     "nav.power_off_title": "¿Apagar?",

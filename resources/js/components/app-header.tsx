@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Message as MessageCircle, SettingsCog as Settings } from 'pixelarticons/react';
+import { Message as MessageCircle, SettingsCog as Settings, Image as ImageIcon } from 'pixelarticons/react';
 import AppLogo from '@/components/app-logo';
 import { useT } from '@/lib/i18n';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -11,6 +11,7 @@ import {
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
 import { index as chatIndex } from '@/routes/chat';
+import { index as portfolioIndex } from '@/routes/portfolio';
 import type { BreadcrumbItem } from '@/types';
 
 type Props = {
@@ -38,6 +39,13 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                         >
                             <MessageCircle className="h-4 w-4" />
                             {t('nav.chat')}
+                        </Link>
+                        <Link
+                            href={portfolioIndex.url()}
+                            className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm text-neutral-400 transition hover:bg-neutral-800 hover:text-white"
+                        >
+                            <ImageIcon className="h-4 w-4" />
+                            {t('nav.portfolio')}
                         </Link>
                     </nav>
                 </div>

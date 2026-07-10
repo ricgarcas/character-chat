@@ -1,6 +1,7 @@
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useEcho } from '@laravel/echo-react';
 import { send } from '@/routes/chat';
+import { index as portfolioIndex } from '@/routes/portfolio';
 import type { Artifact, Character, ChatMessage, EmoteKey } from '@/types/chat';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import {
@@ -707,13 +708,23 @@ export default function ChatShow({ character, conversation, messages: initialMes
                                         {msg.artifacts && msg.artifacts.length > 0 && (
                                             <div className="space-y-3">
                                                 {msg.artifacts.map((artifact, i) => (
-                                                    <ArtifactCard
-                                                        key={i}
-                                                        artifact={artifact}
-                                                        accent={accent}
-                                                        characterName={character.name}
-                                                        characterSlug={character.slug}
-                                                    />
+                                                    <div key={i}>
+                                                        <ArtifactCard
+                                                            artifact={artifact}
+                                                            accent={accent}
+                                                            characterName={character.name}
+                                                            characterSlug={character.slug}
+                                                        />
+                                                        {artifact.artifact_type !== 'image_pending' &&
+                                                            artifact.artifact_type !== 'error' && (
+                                                                <Link
+                                                                    href={portfolioIndex.url()}
+                                                                    className="mt-1 inline-block font-display text-[9px] uppercase tracking-widest text-[var(--ink)]/50 transition hover:text-[var(--ink)]"
+                                                                >
+                                                                    ✦ {t('chat.artifact_saved')}
+                                                                </Link>
+                                                            )}
+                                                    </div>
                                                 ))}
                                             </div>
                                         )}
