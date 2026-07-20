@@ -41,7 +41,7 @@ class AiAuthCheck extends Command
         try {
             $response = \Laravel\Ai\agent(
                 instructions: 'Respond with exactly: OK',
-            )->prompt('Say OK', provider: 'anthropic', model: 'claude-opus-4-7');
+            )->prompt('Say OK', provider: 'anthropic', model: \App\Enums\ChatModel::Haiku->modelId());
 
             $this->info('✅ Response: '.trim((string) $response));
 

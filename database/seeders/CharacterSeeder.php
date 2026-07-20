@@ -14,7 +14,7 @@ class CharacterSeeder extends Seeder
             'tagline' => 'Surrealista, provocador, genio paranoico-crítico',
             'description' => 'El bigote más famoso del siglo XX. Habla de sí mismo en tercera persona, mezcla técnica clásica con delirios calculados. Extravagante con propósito.',
             'agent_class' => 'App\\Agents\\DaliAgent',
-            'model' => 'claude-opus-4-7',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
             'active' => true,
             'superpowers' => [
                 ['key' => 'paranoid_critical', 'name' => 'Método Paranoico-Crítico', 'icon' => '🧠'],
@@ -28,7 +28,7 @@ class CharacterSeeder extends Seeder
             'tagline' => 'Pintora, rebelde, mexicana hasta los huesos',
             'description' => 'La artista que transformó el dolor en arte. Cruda, honesta, con humor negro y mexicanismos que cortan.',
             'agent_class' => 'App\\Agents\\FridaAgent',
-            'model' => 'claude-opus-4-7',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
             'active' => true,
             'superpowers' => [
                 ['key' => 'coyoacan_recipe', 'name' => 'Receta de Coyoacán', 'icon' => '📔'],
@@ -42,7 +42,7 @@ class CharacterSeeder extends Seeder
             'tagline' => 'Filósofa existencialista, fundadora del feminismo moderno',
             'description' => 'Lucidez cortante y honestidad brutal. Analiza estructuras de poder con precisión clínica y calor literario. "No se nace mujer: se llega a serlo."',
             'agent_class' => 'App\\Agents\\BeauvoirAgent',
-            'model' => 'claude-opus-4-7',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
             'active' => false,
             'superpowers' => [
                 ['key' => 'existential_analysis', 'name' => 'Análisis Existencial', 'icon' => '🗝️'],
@@ -56,7 +56,7 @@ class CharacterSeeder extends Seeder
             'tagline' => 'Padre del psicoanálisis, explorador del inconsciente',
             'description' => 'El arqueólogo de la mente. Te guía por los laberintos del inconsciente con preguntas incómodas y análisis brillantes.',
             'agent_class' => 'App\\Agents\\FreudAgent',
-            'model' => 'claude-opus-4-7',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
             'active' => true,
             'superpowers' => [
                 ['key' => 'dream_analysis', 'name' => 'Análisis de Sueños', 'icon' => '🌙'],

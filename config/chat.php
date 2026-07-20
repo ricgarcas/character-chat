@@ -6,12 +6,15 @@ return [
     | Chat model
     |--------------------------------------------------------------------------
     |
-    | Which Anthropic model the character agents talk through. Both options
-    | use adaptive extended thinking; Opus is the heavier, more reflective
-    | choice and Sonnet is the cheaper, snappier one.
+    | Which model tier the character agents talk through by default for
+    | reflex/considered turns. "deep" turns always escalate to the "opus"
+    | tier regardless of this setting (see CharacterAgent::model()).
     |
-    | Supported: "opus-4-7", "sonnet-4-6"
+    | Tiers map to concrete model ids in App\Enums\ChatModel — bump the
+    | version there when Anthropic ships a new generation, not here.
+    |
+    | Supported: "haiku", "sonnet", "opus"
     */
 
-    'model' => env('CHAT_MODEL', 'opus-4-7'),
+    'model' => env('CHAT_MODEL', 'sonnet'),
 ];

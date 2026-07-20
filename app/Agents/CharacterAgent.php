@@ -182,7 +182,7 @@ BLOCK;
         ];
 
         if ($provider === Lab::Anthropic) {
-            // Opus 4.7 adaptive thinking: model decides per-turn how much to think,
+            // Adaptive thinking: model decides per-turn how much to think,
             // bounded by the effort knob.
             $options['thinking'] = ['type' => 'adaptive'];
             $options['output_config'] = ['effort' => $thinking['effort']];
@@ -195,8 +195,16 @@ BLOCK;
         return $options;
     }
 
+    /**
+     * Sonnet 5 handles reflex/considered turns; deep turns (long, philosophical,
+     * multi-question) escalate to Opus 4.8 for genuinely harder reasoning.
+     */
     public function model(): string
     {
+        if ($this->adaptiveThinking()['tier'] === 'deep') {
+            return \App\Enums\ChatModel::Opus->modelId();
+        }
+
         return \App\Enums\ChatModel::current()->modelId();
     }
 
