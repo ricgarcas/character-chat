@@ -15,8 +15,7 @@ beforeEach(function () {
 it('is public and renders the landing page for guests', function () {
     get('/')
         ->assertOk()
-        // shouldExist: false — la página React llega en la Task 3.
-        ->assertInertia(fn ($page) => $page->component('landing', false));
+        ->assertInertia(fn ($page) => $page->component('landing'));
 });
 
 it('redirects authenticated users straight to the chat', function () {

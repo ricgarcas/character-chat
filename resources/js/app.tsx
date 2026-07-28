@@ -1,10 +1,10 @@
 import { createInertiaApp } from '@inertiajs/react';
+import { configureEcho } from '@laravel/echo-react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import { configureEcho } from '@laravel/echo-react';
 
 configureEcho({
     broadcaster: 'reverb',
@@ -18,6 +18,7 @@ createInertiaApp({
         switch (true) {
             case name === 'auth/login':
             case name === 'auth/register':
+            case name === 'landing':
             case name.startsWith('chat/'):
                 return null;
             case name.startsWith('auth/'):

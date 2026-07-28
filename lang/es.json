@@ -2,11 +2,9 @@
     "locale.en": "EN",
     "locale.es": "ES",
     "locale.switch": "Idioma",
-
     "nav.chat": "Chat",
     "nav.portfolio": "Portafolio",
     "nav.settings": "Ajustes",
-
     "portfolio.title": "Mi portafolio",
     "portfolio.subtitle": "Todo lo que has creado con tus maestros",
     "portfolio.empty_title": "Tu taller está vacío",
@@ -20,7 +18,6 @@
     "nav.power_off_description": "Cerrarás sesión y volverás a la pantalla de inicio.",
     "nav.power_off_confirm": "Sí, salir",
     "nav.power_off_cancel": "Cancelar",
-
     "auth.login.title": "★ INSERT COIN ★",
     "auth.login.subtitle": "elige tu personaje y empieza la conversación",
     "auth.login.email": "Email",
@@ -36,7 +33,6 @@
     "auth.login.invite_only": "acceso solo por invitación",
     "auth.login.no_account": "¿sin cuenta?",
     "auth.login.sign_up": "regístrate",
-
     "auth.register.title": "★ NUEVO JUGADOR ★",
     "auth.register.subtitle": "crea tu cuenta y empieza la conversación",
     "auth.register.email": "Email",
@@ -48,7 +44,6 @@
     "auth.register.create": "▶ crear",
     "auth.register.have_account": "¿ya tienes cuenta?",
     "auth.register.log_in": "entrar",
-
     "chat.index.title": "ELIGE TU PERSONAJE",
     "chat.index.power_ups": "SUPERPODERES",
     "chat.index.press_to_talk": "PULSA PARA HABLAR",
@@ -60,7 +55,6 @@
     "chat.index.enter_to_talk": "para hablar",
     "chat.index.previous": "Anterior",
     "chat.index.next": "Siguiente",
-
     "chat.show.back": "VOLVER",
     "chat.show.log": "HISTORIAL",
     "chat.show.you": "> TÚ",
@@ -108,7 +102,6 @@
     "powerup.modal.upload_photo": "Subir foto",
     "powerup.modal.cancel": "Cancelar",
     "powerup.modal.activate": "Activar",
-
     "settings.profile.title": "Ajustes de perfil",
     "settings.profile.heading": "Información de perfil",
     "settings.profile.description": "Actualiza tu nombre y dirección de email",
@@ -118,13 +111,10 @@
     "settings.profile.email_placeholder": "Correo electrónico",
     "settings.profile.save": "Guardar",
     "settings.profile.saved": "Guardado",
-
     "settings.appearance.title": "Apariencia",
     "settings.appearance.description": "Actualiza la apariencia de tu cuenta",
-
     "settings.language.title": "Idioma",
     "settings.language.description": "Elige el idioma para la interfaz y las respuestas de los personajes",
-
     "powerup.frida.receta.label": "Receta de la Casa Azul",
     "powerup.frida.receta.description": "Frida te entrega una receta de las que cocinaba para Diego, en su libreta de cocina.",
     "powerup.frida.receta.prompt": "Quiero una receta tuya — pregúntame qué se me antoja.",
@@ -134,7 +124,6 @@
     "powerup.frida.retrato.label": "Píntame al óleo",
     "powerup.frida.retrato.description": "Frida hace un retrato tuyo en su estilo. Necesita una foto tuya para empezar.",
     "powerup.frida.retrato.prompt": "Aquí está mi foto — quiero que me pintes al óleo.",
-
     "powerup.dali.huevo.label": "Pinta un cuadro surreal",
     "powerup.dali.huevo.description": "Dalí inventa un cuadro surreal a partir de algo tuyo. Te preguntará qué.",
     "powerup.dali.huevo.prompt": "Quiero que inventes un cuadro surreal para mí — pregúntame de qué.",
@@ -144,7 +133,6 @@
     "powerup.dali.retrato.label": "Méteme en un cuadro",
     "powerup.dali.retrato.description": "Dalí te pinta en un paisaje surrealista. Necesita una foto tuya para empezar.",
     "powerup.dali.retrato.prompt": "Aquí está mi foto — quiero que me pintes en uno de tus cuadros.",
-
     "powerup.beauvoir.analiza.label": "Analiza una situación",
     "powerup.beauvoir.analiza.description": "Simone disecciona una situación tuya con mirada existencialista. Te va a preguntar cuál.",
     "powerup.beauvoir.analiza.prompt": "Quiero que analices una situación mía — pregúntame cuál.",
@@ -154,7 +142,6 @@
     "powerup.beauvoir.lectura.label": "Ruta de lectura",
     "powerup.beauvoir.lectura.description": "Simone arma un árbol de lecturas para entender su pensamiento.",
     "powerup.beauvoir.lectura.prompt": "Dame una ruta de lecturas para entender tu pensamiento.",
-
     "powerup.freud.sueno.label": "Analiza un sueño",
     "powerup.freud.sueno.description": "Freud interpreta un sueño tuyo. Te pedirá que se lo cuentes.",
     "powerup.freud.sueno.prompt": "Quiero que analicemos un sueño mío — pídeme que te lo cuente.",
@@ -163,5 +150,11 @@
     "powerup.freud.defensas.prompt": "Quiero que analices mis mecanismos de defensa — pídeme una situación concreta para examinar.",
     "powerup.freud.rostro.label": "Lee mi rostro",
     "powerup.freud.rostro.description": "Freud observa tu cara y especula sobre lo que delata. Necesita una foto tuya.",
-    "powerup.freud.rostro.prompt": "Aquí tiene mi foto — quiero que lea mi rostro como psicoanalista."
+    "powerup.freud.rostro.prompt": "Aquí tiene mi foto — quiero que lea mi rostro como psicoanalista.",
+    "landing.hero.eyebrow": "TALLER DE CO-CREACIÓN",
+    "landing.hero.title": "No chatees con un bot. Crea algo con Frida.",
+    "landing.hero.subtitle": "Muni es un taller donde figuras que cambiaron el mundo te ayudan a hacer algo tuyo: un poema, un invento, un retrato. No te dan la respuesta — te sacan la mejor versión de tu idea.",
+    "landing.hero.cta_primary": "EMPIEZA GRATIS",
+    "landing.hero.cta_secondary": "Ya tengo cuenta",
+    "landing.hero.scroll_hint": "Sigue bajando"
 }
