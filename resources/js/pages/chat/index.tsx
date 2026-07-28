@@ -1,149 +1,16 @@
 import { Head, router } from '@inertiajs/react';
-import { create } from '@/routes/chat';
-import type { Character } from '@/types';
-import PixelAvatar from '@/components/pixel-avatar';
+import { ArrowLeft, ArrowRight, Gamepad } from 'pixelarticons/react';
+import { useEffect, useState } from 'react';
+import Balatro from '@/components/Balatro';
+import { CharacterCard } from '@/components/character-card';
+import { PowerOffButton } from '@/components/power-off-button';
+import TiltCard from '@/components/tilt-card';
+import { accentFor } from '@/lib/accents';
 import { useT } from '@/lib/i18n';
 import { sfx } from '@/lib/sfx';
-import { PowerOffButton } from '@/components/power-off-button';
-import Balatro from '@/components/Balatro';
-import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
-import {
-    ArrowLeft,
-    ArrowRight,
-    Eye,
-    Moon as MoonStars,
-    ColorsSwatch as Palette,
-    Home as House,
-    Scale as Scales,
-    Link as LinkSimple,
-    BookOpen,
-    Lightbulb as Brain,
-    Zap,
-    Gamepad,
-    Sparkles,
-    Potion as CookingPot,
-    Shield,
-} from 'pixelarticons/react';
-import {
-    Notebook,
-    Key,
-    VenusSymbol as GenderFemale,
-    PaintBrush,
-    Egg,
-} from '@/components/icons/retro';
+import { create } from '@/routes/chat';
+import type { Character } from '@/types';
 
-type PhosphorIcon = ComponentType<{ width?: number | string; height?: number | string; className?: string; style?: React.CSSProperties }>;
-
-const superpowerIcon: Record<string, PhosphorIcon> = {
-    paranoid_critical: Brain,
-    pintar_surreal: Egg,
-    retrato_dali: PaintBrush,
-    artwork_analysis: Palette,
-    visual_diary: Notebook,
-    casa_azul_tour: House,
-    coyoacan_recipe: CookingPot,
-    face_reading: Eye,
-    frida_portrait: PaintBrush,
-    dream_analysis: MoonStars,
-    defenses: Shield,
-    unconscious_face: Eye,
-    existential_analysis: Key,
-    feminist_critique: GenderFemale,
-    philosophical_debate: Scales,
-    free_association: LinkSimple,
-    psychoanalytic_library: BookOpen,
-};
-
-const roleIcon: Record<string, PhosphorIcon> = {
-    dali: Eye,
-    frida: Palette,
-    beauvoir: Scales,
-    freud: Brain,
-};
-
-const characterAccent: Record<string, string> = {
-    dali: 'var(--accent-dali)',
-    freud: 'var(--accent-freud)',
-    frida: 'var(--accent-frida)',
-    beauvoir: 'var(--accent-beauvoir)',
-};
-
-interface CardMeta {
-    role: string;
-    quote: string;
-}
-
-const characterMeta: Record<string, CardMeta> = {
-    dali: {
-        role: 'SURREALIST',
-        quote: '"La única diferencia entre yo y un loco es que yo no estoy loco."',
-    },
-    frida: {
-        role: 'PAINTER',
-        quote: '"Pies, para qué los quiero si tengo alas para volar."',
-    },
-    beauvoir: {
-        role: 'PHILOSOPHER',
-        quote: '"No se nace mujer: se llega a serlo."',
-    },
-    freud: {
-        role: 'ANALYST',
-        quote: '"De tus vulnerabilidades saldrá tu fortaleza."',
-    },
-};
-
-interface TiltCardProps {
-    enabled: boolean;
-    accent: string;
-    glowEnabled?: boolean;
-    children: ReactNode;
-}
-
-function TiltCard({ enabled, accent, glowEnabled = true, children }: TiltCardProps) {
-    const ref = useRef<HTMLDivElement>(null);
-    const innerRef = useRef<HTMLDivElement>(null);
-
-    const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!enabled || !ref.current || !innerRef.current) return;
-        const rect = ref.current.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const y = (e.clientY - rect.top) / rect.height;
-        const rx = (0.5 - y) * 14;
-        const ry = (x - 0.5) * 14;
-        innerRef.current.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
-    };
-
-    const handleLeave = () => {
-        if (innerRef.current) innerRef.current.style.transform = '';
-    };
-
-    return (
-        <div
-            ref={ref}
-            onMouseMove={handleMove}
-            onMouseLeave={handleLeave}
-            className="relative"
-            style={enabled ? { perspective: '900px' } : undefined}
-        >
-            {glowEnabled && enabled && (
-                <div
-                    aria-hidden
-                    className="pointer-events-none absolute -inset-6 rounded-md blur-2xl"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.18)', zIndex: -1 }}
-                />
-            )}
-            <div
-                ref={innerRef}
-                className="relative"
-                style={{
-                    transition: 'transform 200ms ease-out',
-                }}
-            >
-                {children}
-            </div>
-        </div>
-    );
-}
 
 export default function ChatIndex({ characters }: { characters: Character[] }) {
     const t = useT();
@@ -177,6 +44,7 @@ export default function ChatIndex({ characters }: { characters: Character[] }) {
             }
         };
         window.addEventListener('keydown', handler);
+
         return () => window.removeEventListener('keydown', handler);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selected, characters]);
@@ -227,8 +95,15 @@ export default function ChatIndex({ characters }: { characters: Character[] }) {
                         {characters.map((character, i) => {
                             // shortest circular offset (-floor(n/2)..floor(n/2))
                             let off = i - selected;
-                            if (off > n / 2) off -= n;
-                            if (off < -n / 2) off += n;
+
+                            if (off > n / 2) {
+off -= n;
+}
+
+                            if (off < -n / 2) {
+off += n;
+}
+
                             const abs = Math.abs(off);
 
                             const isCenter = off === 0;
@@ -240,9 +115,6 @@ export default function ChatIndex({ characters }: { characters: Character[] }) {
                             const scale = isCenter ? 1 : 0.72;
                             const z = isCenter ? 30 : 20;
                             const opacity = visible ? (isCenter ? 1 : 0.55) : 0;
-
-                            const accent = characterAccent[character.slug] ?? 'var(--ink)';
-                            const meta = characterMeta[character.slug];
 
                             return (
                                 <div
@@ -270,120 +142,14 @@ export default function ChatIndex({ characters }: { characters: Character[] }) {
                                 >
                                     {/* Breathing wrapper — only on center */}
                                     <div className={isCenter ? 'animate-card-breathe' : ''}>
-                                    <TiltCard enabled={isCenter} accent={accent} glowEnabled>
-                                    {/* TCG Card */}
-                                    <div
-                                        key={isCenter ? `center-${selected}` : `side-${i}`}
-                                        className={`relative flex h-[620px] flex-col bg-[var(--bg-deep)] overflow-hidden ${isCenter ? 'animate-card-land' : ''}`}
-                                        style={{
-                                            border: '3px solid var(--ink)',
-                                            boxShadow: isCenter
-                                                ? `0 0 0 2px var(--bg), 8px 8px 0 0 ${accent}`
-                                                : `0 0 0 2px var(--bg), 4px 4px 0 0 ${accent}`,
-                                        }}
-                                    >
-                                        {/* Top band: role centered, taller */}
-                                        <div
-                                            className="flex items-center justify-center border-b-2 border-[var(--ink)] px-3 py-3"
-                                            style={{ backgroundColor: accent }}
-                                        >
-                                            <span
-                                                className="flex items-center gap-2 font-display text-sm uppercase font-bold tracking-[0.3em]"
-                                                style={{ color: 'var(--bg)', textShadow: '1px 1px 0 var(--pixel-shadow)' }}
-                                            >
-                                                {(() => {
-                                                    const RoleIcon = roleIcon[character.slug] ?? Sparkles;
-                                                    return (
-                                                        <>
-                                                            <RoleIcon width={16} height={16} />
-                                                            {t(`chat.role.${character.slug}`)}
-                                                            <RoleIcon width={16} height={16} />
-                                                        </>
-                                                    );
-                                                })()}
-                                            </span>
+                                    <TiltCard enabled={isCenter} glowEnabled>
+                                        <div className={isCenter ? 'animate-card-land' : ''}>
+                                            <CharacterCard
+                                                character={character}
+                                                highlighted={isCenter}
+                                                footerLabel={isCenter ? t('chat.index.press_to_talk') : null}
+                                            />
                                         </div>
-
-                                        {/* Art window: bg + avatar */}
-                                        <div
-                                            className="relative flex flex-1 items-end justify-center overflow-hidden border-b-2 border-[var(--ink)]"
-                                            style={{
-                                                backgroundImage: `url(/backgrounds/${character.slug}.png)`,
-                                                backgroundSize: 'cover',
-                                                backgroundPosition: 'center',
-                                                imageRendering: 'pixelated',
-                                            }}
-                                        >
-                                            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[var(--bg-deep)] via-black/30 to-transparent" />
-                                            {isCenter && (
-                                                <div
-                                                    key={`glow-${selected}`}
-                                                    className="animate-gentle-glow pointer-events-none absolute inset-0 z-10 mix-blend-screen"
-                                                    style={{
-                                                        background:
-                                                            'radial-gradient(circle at 50% 40%, rgba(255,255,255,0.15), transparent 70%)',
-                                                    }}
-                                                />
-                                            )}
-                                            <div className="relative z-0">
-                                                <PixelAvatar character={character} emote="neutral" size={300} />
-                                            </div>
-                                        </div>
-
-                                        {/* Bento grid */}
-                                        <div className="bg-[var(--bg-deep)] p-2 space-y-1.5">
-                                            {/* Hero row: name centered */}
-                                            <div className="border-2 border-[var(--ink)] bg-[var(--bg)] px-2.5 py-3">
-                                                <h2
-                                                    className="text-center font-display text-[14px] uppercase font-bold tracking-wider text-[var(--ink)]"
-                                                    style={{ textShadow: '2px 2px 0 var(--pixel-shadow)' }}
-                                                >
-                                                    {character.name}
-                                                </h2>
-                                            </div>
-
-                                            {/* Superpowers */}
-                                            <div className="border-2 border-[var(--ink)] bg-[var(--bg)]">
-                                                <div
-                                                    className="flex items-center justify-center gap-2 border-b-2 border-[var(--ink)] px-2 py-1 text-center font-display text-[9px] uppercase font-bold tracking-[0.25em]"
-                                                    style={{ backgroundColor: accent, color: 'var(--bg)' }}
-                                                >
-                                                    <Zap width={12} height={12} />
-                                                    {t('chat.index.power_ups')}
-                                                    <Zap width={12} height={12} />
-                                                </div>
-                                                <div className="flex flex-col gap-1.5 p-2">
-                                                    {character.superpowers?.slice(0, 3).map((sp) => {
-                                                        const Icon = superpowerIcon[sp.key];
-                                                        return (
-                                                            <div
-                                                                key={sp.key}
-                                                                className="flex items-center gap-2"
-                                                            >
-                                                                {Icon ? (
-                                                                    <Icon width={16} height={16} style={{ color: accent }} />
-                                                                ) : (
-                                                                    <span className="text-[14px]">{sp.icon}</span>
-                                                                )}
-                                                                <span className="truncate font-display text-[10px] uppercase font-bold tracking-wider text-[var(--ink)]">
-                                                                    {sp.name}
-                                                                </span>
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                            </div>
-
-                                            {isCenter && (
-                                                <div
-                                                    className="flex items-center justify-center border-2 border-[var(--ink)] px-2 py-2 font-display text-[11px] uppercase font-bold tracking-widest animate-pixel-blink"
-                                                    style={{ backgroundColor: accent, color: 'var(--bg)', boxShadow: '2px 2px 0 0 var(--ink)' }}
-                                                >
-                                                    {t('chat.index.press_to_talk')}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
                                     </TiltCard>
                                     </div>
                                 </div>
@@ -421,18 +187,22 @@ export default function ChatIndex({ characters }: { characters: Character[] }) {
                     <div className="flex items-center gap-2">
                         {characters.map((_, i) => {
                             const active = i === selected;
+
                             return (
                                 <button
                                     key={i}
                                     onClick={() => {
-                                        if (i !== selected) sfx.select();
+                                        if (i !== selected) {
+sfx.select();
+}
+
                                         setSelected(i);
                                     }}
                                     aria-label={`Go to ${i + 1}`}
                                     className="relative h-4 w-4 border-2 border-[var(--ink)] transition"
                                     style={{
                                         backgroundColor: active
-                                            ? characterAccent[characters[i].slug] ?? 'var(--ink)'
+                                            ? accentFor(characters[i].slug)
                                             : 'var(--bg)',
                                         boxShadow: active ? '2px 2px 0 0 var(--ink)' : 'none',
                                     }}
