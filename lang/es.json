@@ -183,5 +183,19 @@
     "landing.showcase.eyebrow": "HECHO AQUI",
     "landing.showcase.title": "Nada de esto existía antes de una conversación.",
     "landing.showcase.subtitle": "Todo lo que creas se queda en tu portafolio. Esto salió del nuestro.",
-    "landing.showcase.with": "con"
+    "landing.showcase.with": "con",
+    "landing.padres.eyebrow": "PARA QUIEN PAGA LA SUSCRIPCION",
+    "landing.padres.title": "No está pidiéndole a una máquina que le resuelva la vida.",
+    "landing.padres.body": "Está aprendiendo a trabajar con una: a preguntar con precisión, a rechazar el primer resultado, a decidir qué sirve. Esa es la habilidad que va a valer más conforme las herramientas se vuelvan más potentes.",
+    "landing.padres.point1_title": "Se niegan a hacer la tarea",
+    "landing.padres.point1_body": "Si le pide a Frida que le escriba el ensayo de la escuela, Frida se niega — en personaje — y le propone crear algo propio.",
+    "landing.padres.point2_title": "Roster curado, no catalogo infinito",
+    "landing.padres.point2_body": "Cada figura se elige y se construye a mano pensando en un usuario de 10 a 16. La seguridad se resuelve por curaduría, no por filtros.",
+    "landing.padres.point3_title": "El portafolio es la prueba",
+    "landing.padres.point3_body": "Todo lo que crea queda guardado. Puede verlo cuando quiera, sin leer una sola conversación.",
+    "landing.pricing.eyebrow": "PRECIOS",
+    "landing.pricing.title": "Empieza gratis. En serio gratis.",
+    "landing.pricing.subtitle": "Los planes de paga llegan pronto. Mientras tanto, el plan gratuito no pide tarjeta.",
+    "landing.pricing.cta_free": "EMPIEZA GRATIS",
+    "landing.pricing.soon": "PRONTO"
 }

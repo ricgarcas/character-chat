@@ -2,6 +2,8 @@ import { Head } from '@inertiajs/react';
 import AntiTarea from '@/components/landing/anti-tarea';
 import ComoFunciona from '@/components/landing/como-funciona';
 import Hero from '@/components/landing/hero';
+import ParaPadres from '@/components/landing/para-padres';
+import Pricing from '@/components/landing/pricing';
 import Roster from '@/components/landing/roster';
 import Showcase from '@/components/landing/showcase';
 import type { Character } from '@/types/chat';
@@ -38,7 +40,7 @@ export interface LandingProps {
     pricing: PricingTier[];
 }
 
-export default function Landing({ featured, upcoming, showcase }: LandingProps) {
+export default function Landing({ featured, upcoming, showcase, pricing }: LandingProps) {
     return (
         <>
             <Head title="Crea algo con quienes cambiaron el mundo" />
@@ -48,6 +50,8 @@ export default function Landing({ featured, upcoming, showcase }: LandingProps) 
                 <Roster featured={featured} upcoming={upcoming} />
                 <ComoFunciona />
                 <Showcase showcase={showcase} />
+                <ParaPadres />
+                <Pricing pricing={pricing} />
             </main>
         </>
     );
