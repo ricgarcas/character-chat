@@ -1,4 +1,6 @@
 import { Head } from '@inertiajs/react';
+import AntiTarea from '@/components/landing/anti-tarea';
+import ComoFunciona from '@/components/landing/como-funciona';
 import Hero from '@/components/landing/hero';
 import type { Character } from '@/types/chat';
 
@@ -37,6 +39,8 @@ export default function Landing() {
             <Head title="Crea algo con quienes cambiaron el mundo" />
             <main className="bg-[var(--bg)]">
                 <Hero />
+                <AntiTarea />
+                <ComoFunciona />
             </main>
         </>
     );
