@@ -1,9 +1,5 @@
 <?php
 
-test('home redirects guests to login via /chat auth gate', function () {
-    $response = $this->get(route('home'));
-
-    $response->assertRedirect('/chat');
-
+test('the chat is behind the auth gate for guests', function () {
     $this->get('/chat')->assertRedirect('/login');
 });

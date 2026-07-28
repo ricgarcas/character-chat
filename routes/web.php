@@ -2,10 +2,11 @@
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DebugLogController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PortfolioController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => redirect('/chat'))->name('home');
+Route::get('/', [LandingController::class, 'index'])->name('home');
 
 Route::post('debug/log', [DebugLogController::class, 'store'])->name('debug.log');
 
