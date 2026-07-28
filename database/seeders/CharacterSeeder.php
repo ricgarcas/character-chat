@@ -43,7 +43,7 @@ class CharacterSeeder extends Seeder
             'description' => 'Lucidez cortante y honestidad brutal. Analiza estructuras de poder con precisión clínica y calor literario. "No se nace mujer: se llega a serlo."',
             'agent_class' => 'App\\Agents\\BeauvoirAgent',
             'model' => \App\Enums\ChatModel::current()->modelId(),
-            'active' => false,
+            'active' => true,
             'superpowers' => [
                 ['key' => 'existential_analysis', 'name' => 'Análisis Existencial', 'icon' => '🗝️'],
                 ['key' => 'feminist_critique', 'name' => 'Crítica Feminista', 'icon' => '♀️'],

@@ -151,7 +151,7 @@
     "powerup.freud.rostro.label": "Lee mi rostro",
     "powerup.freud.rostro.description": "Freud observa tu cara y especula sobre lo que delata. Necesita una foto tuya.",
     "powerup.freud.rostro.prompt": "Aquí tiene mi foto — quiero que lea mi rostro como psicoanalista.",
-    "landing.hero.eyebrow": "TALLER DE CO-CREACIÓN",
+    "landing.hero.eyebrow": "TALLER DE CO-CREACION",
     "landing.hero.title": "No chatees con un bot. Crea algo con Frida.",
     "landing.hero.subtitle": "Muni es un taller donde figuras que cambiaron el mundo te ayudan a hacer algo tuyo: un poema, un invento, un retrato. No te dan la respuesta — te sacan la mejor versión de tu idea.",
     "landing.hero.cta_primary": "EMPIEZA GRATIS",
@@ -163,7 +163,7 @@
     "landing.antitarea.beat1_body": "Antes de darte nada, quieren saber qué estás intentando decir. La pregunta correcta vale más que la respuesta rápida.",
     "landing.antitarea.beat2_title": "Lo primero es un borrador",
     "landing.antitarea.beat2_body": "Nunca es la versión final. Es el punto de partida que vas a romper y rehacer.",
-    "landing.antitarea.beat3_title": "Lo terminas tú",
+    "landing.antitarea.beat3_title": "El final es tuyo",
     "landing.antitarea.beat3_body": "Tú decides qué se queda. Lo que sale al final es tuyo, y se nota.",
     "landing.como.eyebrow": "COMO FUNCIONA",
     "landing.como.title": "Cuatro pasos y ya tienes algo tuyo.",
@@ -174,5 +174,10 @@
     "landing.como.step3_title": "Iteran juntos",
     "landing.como.step3_body": "Te retan, propones, corriges. Dos o tres vueltas.",
     "landing.como.step4_title": "Queda en tu portafolio",
-    "landing.como.step4_body": "Todo lo que creas se guarda. Es tuyo para siempre."
+    "landing.como.step4_body": "Todo lo que creas se guarda. Es tuyo para siempre.",
+    "landing.roster.eyebrow": "EL ROSTER",
+    "landing.roster.title": "Pocos, pero de verdad.",
+    "landing.roster.subtitle": "Cada personaje está construido a mano: su voz, su forma de trabajar, sus superpoderes. No es un catálogo infinito de bots genéricos.",
+    "landing.roster.play": "HABLA CON",
+    "landing.roster.locked": "PROXIMAMENTE"
 }

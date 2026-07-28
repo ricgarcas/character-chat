@@ -2,6 +2,7 @@ import { Head } from '@inertiajs/react';
 import AntiTarea from '@/components/landing/anti-tarea';
 import ComoFunciona from '@/components/landing/como-funciona';
 import Hero from '@/components/landing/hero';
+import Roster from '@/components/landing/roster';
 import type { Character } from '@/types/chat';
 
 export interface UpcomingFigure {
@@ -33,13 +34,14 @@ export interface LandingProps {
     pricing: PricingTier[];
 }
 
-export default function Landing() {
+export default function Landing({ featured, upcoming }: LandingProps) {
     return (
         <>
             <Head title="Crea algo con quienes cambiaron el mundo" />
             <main className="bg-[var(--bg)]">
                 <Hero />
                 <AntiTarea />
+                <Roster featured={featured} upcoming={upcoming} />
                 <ComoFunciona />
             </main>
         </>
