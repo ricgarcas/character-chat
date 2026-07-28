@@ -1,6 +1,7 @@
 import { Head } from '@inertiajs/react';
 import AntiTarea from '@/components/landing/anti-tarea';
 import ComoFunciona from '@/components/landing/como-funciona';
+import FinalCta from '@/components/landing/final-cta';
 import Hero from '@/components/landing/hero';
 import ParaPadres from '@/components/landing/para-padres';
 import Pricing from '@/components/landing/pricing';
@@ -33,17 +34,23 @@ export interface PricingTier {
     features: string[];
 }
 
+export interface LandingMeta {
+    title: string;
+    description: string;
+}
+
 export interface LandingProps {
     featured: Pick<Character, 'id' | 'slug' | 'name' | 'tagline' | 'superpowers'>[];
     upcoming: UpcomingFigure[];
     showcase: ShowcaseItem[];
     pricing: PricingTier[];
+    meta: LandingMeta;
 }
 
-export default function Landing({ featured, upcoming, showcase, pricing }: LandingProps) {
+export default function Landing({ featured, upcoming, showcase, pricing, meta }: LandingProps) {
     return (
         <>
-            <Head title="Crea algo con quienes cambiaron el mundo" />
+            <Head title={meta.title} />
             <main className="bg-[var(--bg)]">
                 <Hero />
                 <AntiTarea />
@@ -52,6 +59,7 @@ export default function Landing({ featured, upcoming, showcase, pricing }: Landi
                 <Showcase showcase={showcase} />
                 <ParaPadres />
                 <Pricing pricing={pricing} />
+                <FinalCta />
             </main>
         </>
     );

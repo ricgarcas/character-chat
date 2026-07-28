@@ -33,6 +33,24 @@
         <link rel="icon" href="/favicon.png" type="image/png">
         <link rel="apple-touch-icon" href="/favicon.png">
 
+        {{--
+            Meta de compartir, renderizada en servidor a propósito: los crawlers de
+            Twitter/Facebook no ejecutan JS, así que un <Head> de Inertia no les llega.
+            Solo la landing necesita indexarse; el resto de la app va tras login.
+        --}}
+        @if ($page['component'] === 'landing')
+            <meta name="description" content="{{ $ogDescription }}">
+            <meta property="og:type" content="website">
+            <meta property="og:title" content="{{ $ogTitle }}">
+            <meta property="og:description" content="{{ $ogDescription }}">
+            <meta property="og:image" content="{{ url('/og.png') }}">
+            <meta property="og:url" content="{{ url('/') }}">
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:title" content="{{ $ogTitle }}">
+            <meta name="twitter:description" content="{{ $ogDescription }}">
+            <meta name="twitter:image" content="{{ url('/og.png') }}">
+        @endif
+
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />

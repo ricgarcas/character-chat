@@ -197,5 +197,10 @@
     "landing.pricing.title": "Empieza gratis. En serio gratis.",
     "landing.pricing.subtitle": "Los planes de paga llegan pronto. Mientras tanto, el plan gratuito no pide tarjeta.",
     "landing.pricing.cta_free": "EMPIEZA GRATIS",
-    "landing.pricing.soon": "PRONTO"
+    "landing.pricing.soon": "PRONTO",
+    "landing.final.title": "Frida está esperando.",
+    "landing.final.subtitle": "Diez mensajes al día, gratis, sin tarjeta. Trae una idea a medias.",
+    "landing.final.cta": "EMPIEZA GRATIS",
+    "landing.footer.tagline": "Conversa con sabios. Crea con ellos.",
+    "landing.footer.made": "Hecho en México"
 }

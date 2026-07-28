@@ -14,11 +14,18 @@ class LandingController extends Controller
             return redirect()->route('chat.index');
         }
 
+        $meta = config('landing.meta');
+
         return Inertia::render('landing', [
             'featured' => $this->featuredCharacters(),
             'upcoming' => config('landing.upcoming'),
             'showcase' => config('landing.showcase'),
             'pricing' => config('landing.pricing'),
+            'meta' => $meta,
+        ])->withViewData([
+            // Las etiquetas Open Graph se renderizan en servidor: los crawlers no ejecutan JS.
+            'ogTitle' => $meta['title'],
+            'ogDescription' => $meta['description'],
         ]);
     }
 

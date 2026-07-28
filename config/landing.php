@@ -4,6 +4,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Meta de compartir
+    |--------------------------------------------------------------------------
+    |
+    | Fuente única para el <title> del cliente y para las etiquetas Open Graph
+    | que resources/views/app.blade.php renderiza en servidor.
+    */
+
+    'meta' => [
+        'title' => 'Crea algo con quienes cambiaron el mundo',
+        'description' => 'Muni es un taller donde figuras como Frida Kahlo, Dalí y Simone de Beauvoir te ayudan a crear algo tuyo. No te hacen la tarea: te hacen mejor.',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Personajes destacados
     |--------------------------------------------------------------------------
     |

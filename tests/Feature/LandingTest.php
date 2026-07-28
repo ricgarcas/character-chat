@@ -43,6 +43,25 @@ it('silently skips featured slugs that do not exist in the database', function (
         ->assertInertia(fn ($page) => $page->has('featured', 1)->where('featured.0.slug', 'frida'));
 });
 
+it('renders Open Graph tags server-side, since crawlers do not run JS', function () {
+    $this->withoutVite();
+
+    $response = get('/')->assertOk();
+
+    $response->assertSee('property="og:title"', false)
+        ->assertSee('property="og:image"', false)
+        ->assertSee('name="twitter:card"', false)
+        ->assertSee(config('landing.meta.description'), false)
+        ->assertSee(url('/og.png'), false);
+});
+
+it('does not leak the landing Open Graph tags into other pages', function () {
+    actingAs(User::factory()->create())
+        ->get('/chat')
+        ->assertOk()
+        ->assertDontSee('property="og:title"', false);
+});
+
 it('passes upcoming, showcase and pricing from config', function () {
     get('/')->assertInertia(fn ($page) => $page
         ->has('upcoming')
