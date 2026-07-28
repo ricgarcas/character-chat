@@ -49,6 +49,21 @@ Everything a teen co-creates is a first-class **artifact**, so the *taller* has 
 - `app/Services/ArtifactService.php` persists artifacts from tool results at the end of each chat turn. Image artifacts start `image_pending` and are resolved by `GenerateImageJob` (via `job_id`).
 - `/portafolio` (`PortfolioController@index`, `resources/js/pages/portfolio/index.tsx`) is the pixel-art gallery of everything the teen made.
 
+## Landing pública (`/`)
+`/` ya no redirige a `/chat`: sirve una landing de marketing teen-first (`LandingController@index` → página Inertia `landing`). Un usuario autenticado que visita `/` se redirige a `/chat`.
+- **Datos editoriales en `config/landing.php`** — personajes destacados, figuras "próximamente", showcase, precios y meta de compartir. Un slug de `featured` que no exista en la DB se omite en silencio.
+- **Copy en `lang/es.json`** bajo claves `landing.*`. Regla: los titulares en `font-display` (Press Start 2P) **no llevan vocales acentuadas en mayúscula** — la fuente no tiene esos glifos y se degradan a minúscula.
+- **Secciones** en `resources/js/components/landing/`, una por archivo, montadas en orden por `resources/js/pages/landing.tsx`: hero → anti-tarea → roster → cómo funciona → showcase → para papás → precios → CTA final.
+- **Etiquetas Open Graph en `resources/views/app.blade.php`**, renderizadas en servidor y sólo cuando el componente es `landing`. Los crawlers de redes no ejecutan JS, así que un `<Head>` de Inertia no les llega.
+- Sin sfx; toda animación respeta `prefers-reduced-motion` vía `useReducedMotion` (`resources/js/hooks/use-reduced-motion.ts`).
+- Assets placeholder pendientes de sustituir: `public/showcase/*.png` y `public/og.png`.
+
+## Componentes de carta compartidos
+La carta TCG vive en `resources/js/components/character-card.tsx` y la usan **tanto `/chat` como la landing**:
+- `CharacterCard` — carta jugable (banda de rol, ventana de arte, bento de superpoderes, banda de CTA opcional).
+- `LockedCharacterCard` — figura aún no construida; dibuja una silueta `?` en vez de cargar avatares que no existen.
+- `TiltCard` (`components/tilt-card.tsx`) y los mapas de rol/icono/cita (`lib/character-meta.ts`) también son compartidos. Los acentos por personaje siguen en `lib/accents.ts`.
+
 ## Per-character tools
 Characters expose their own `laravel/ai` tools under `app/Tools/<Character>/` — e.g. `Frida/{RetratoFrida,LeerteLaCara,RecetaDeCoyoacan}`, `Dali/{RetratoDali,PintarSurreal,MetodoParanoicoCritico}`, `Freud/{RostroInconsciente,AnalisisSueno,MecanismosDefensa}`. Image tools go through `app/Services/ImageGeneration`.
 
@@ -57,8 +72,9 @@ Characters expose their own `laravel/ai` tools under `app/Tools/<Character>/` �
 - Model enum: `app/Enums/ChatModel.php` · chat config: `config/chat.php`
 - Chat controller: `app/Http/Controllers/ChatController.php` (`send` streams SSE)
 - Portfolio controller: `app/Http/Controllers/PortfolioController.php`
+- Landing controller: `app/Http/Controllers/LandingController.php` · config: `config/landing.php`
 - Artifacts: `app/Models/Artifact.php`, `app/Services/ArtifactService.php`
 - Per-character tools: `app/Tools/<Character>/`
-- React pages: `resources/js/pages/chat/show.tsx`, `resources/js/pages/portfolio/index.tsx`
+- React pages: `resources/js/pages/chat/show.tsx`, `resources/js/pages/portfolio/index.tsx`, `resources/js/pages/landing.tsx`
 - Routes: `routes/web.php`
 - Seeder (canonical character data): `database/seeders/CharacterSeeder.php`
