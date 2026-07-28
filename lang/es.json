@@ -179,5 +179,9 @@
     "landing.roster.title": "Pocos, pero de verdad.",
     "landing.roster.subtitle": "Cada personaje está construido a mano: su voz, su forma de trabajar, sus superpoderes. No es un catálogo infinito de bots genéricos.",
     "landing.roster.play": "HABLA CON",
-    "landing.roster.locked": "PROXIMAMENTE"
+    "landing.roster.locked": "PROXIMAMENTE",
+    "landing.showcase.eyebrow": "HECHO AQUI",
+    "landing.showcase.title": "Nada de esto existía antes de una conversación.",
+    "landing.showcase.subtitle": "Todo lo que creas se queda en tu portafolio. Esto salió del nuestro.",
+    "landing.showcase.with": "con"
 }

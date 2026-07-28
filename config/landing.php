@@ -43,10 +43,10 @@ return [
     */
 
     'showcase' => [
-        ['title' => 'Raíz y vuelo', 'character' => 'frida', 'kind' => 'Retrato', 'image' => '/showcase/retrato-frida.png'],
-        ['title' => 'El reloj que llegó tarde', 'character' => 'dali', 'kind' => 'Objeto surrealista', 'image' => '/showcase/objeto-dali.png'],
-        ['title' => 'Carta a los diecisiete', 'character' => 'beauvoir', 'kind' => 'Ensayo breve', 'image' => '/showcase/ensayo-beauvoir.png'],
-        ['title' => 'Autorretrato con antenas', 'character' => 'frida', 'kind' => 'Retrato', 'image' => '/showcase/retrato-antenas.png'],
+        ['title' => 'Raíz y vuelo', 'character' => 'frida', 'character_name' => 'Frida', 'kind' => 'Retrato', 'image' => '/showcase/retrato-frida.png'],
+        ['title' => 'El reloj que llegó tarde', 'character' => 'dali', 'character_name' => 'Dalí', 'kind' => 'Objeto surrealista', 'image' => '/showcase/objeto-dali.png'],
+        ['title' => 'Carta a los diecisiete', 'character' => 'beauvoir', 'character_name' => 'Simone', 'kind' => 'Ensayo breve', 'image' => '/showcase/ensayo-beauvoir.png'],
+        ['title' => 'Autorretrato con antenas', 'character' => 'frida', 'character_name' => 'Frida', 'kind' => 'Retrato', 'image' => '/showcase/retrato-antenas.png'],
     ],
 
     /*
