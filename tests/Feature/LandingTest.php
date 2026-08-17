@@ -1,73 +1,23 @@
 <?php
 
 use App\Models\User;
-use Database\Seeders\CharacterSeeder;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
-beforeEach(function () {
-    $this->seed(CharacterSeeder::class);
-    // La página React se crea en la Task 3; sin build no está en el manifest de Vite.
-    $this->withoutVite();
-});
+// Landing pública pausada (sin guardrails de costo todavía). Los tests de la
+// landing original viven en git — restaurarlos junto con LandingController@index.
 
-it('is public and renders the landing page for guests', function () {
-    get('/')
-        ->assertOk()
-        ->assertInertia(fn ($page) => $page->component('landing'));
+it('redirects guests to the login page', function () {
+    get('/')->assertRedirect(route('login', absolute: false));
 });
 
 it('redirects authenticated users straight to the chat', function () {
     actingAs(User::factory()->create())
         ->get('/')
-        ->assertRedirect('/chat');
+        ->assertRedirect(route('chat.index', absolute: false));
 });
 
-it('passes the featured characters from config, in config order', function () {
-    config()->set('landing.featured', ['dali', 'frida']);
-
-    get('/')->assertInertia(fn ($page) => $page
-        ->has('featured', 2)
-        ->where('featured.0.slug', 'dali')
-        ->where('featured.1.slug', 'frida')
-        ->has('featured.0.superpowers')
-    );
-});
-
-it('silently skips featured slugs that do not exist in the database', function () {
-    config()->set('landing.featured', ['frida', 'no-existe']);
-
-    get('/')
-        ->assertOk()
-        ->assertInertia(fn ($page) => $page->has('featured', 1)->where('featured.0.slug', 'frida'));
-});
-
-it('renders Open Graph tags server-side, since crawlers do not run JS', function () {
-    $this->withoutVite();
-
-    $response = get('/')->assertOk();
-
-    $response->assertSee('property="og:title"', false)
-        ->assertSee('property="og:image"', false)
-        ->assertSee('name="twitter:card"', false)
-        ->assertSee(config('landing.meta.description'), false)
-        ->assertSee(url('/og.png'), false);
-});
-
-it('does not leak the landing Open Graph tags into other pages', function () {
-    actingAs(User::factory()->create())
-        ->get('/chat')
-        ->assertOk()
-        ->assertDontSee('property="og:title"', false);
-});
-
-it('passes upcoming, showcase and pricing from config', function () {
-    get('/')->assertInertia(fn ($page) => $page
-        ->has('upcoming')
-        ->has('showcase')
-        ->has('pricing', 3)
-        ->where('pricing.0.available', true)
-        ->where('pricing.1.available', false)
-    );
+it('does not expose a public registration route', function () {
+    get('/register')->assertNotFound();
 });

@@ -3,7 +3,7 @@ import { Check } from 'pixelarticons/react';
 import SectionHeading from '@/components/landing/section-heading';
 import { useT } from '@/lib/i18n';
 import type { LandingProps } from '@/pages/landing';
-import { register } from '@/routes';
+import { login } from '@/routes';
 
 type Props = Pick<LandingProps, 'pricing'>;
 
@@ -59,7 +59,7 @@ export default function Pricing({ pricing }: Props) {
                         <div className="mt-8">
                             {tier.available ? (
                                 <Link
-                                    href={register()}
+                                    href={login()}
                                     className="block border-2 border-[var(--ink)] bg-[var(--accent-frida)] px-4 py-3 text-center font-display text-[10px] font-bold uppercase tracking-widest text-[var(--ink)] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_var(--ink)]"
                                     style={{ boxShadow: '4px 4px 0 0 var(--ink)' }}
                                 >

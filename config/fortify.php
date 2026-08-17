@@ -144,7 +144,7 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        // Features::registration(), — registro público pausado hasta tener guardrails de costo
         Features::resetPasswords(),
         Features::twoFactorAuthentication([
             'confirm' => true,

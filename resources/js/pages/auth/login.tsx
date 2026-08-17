@@ -1,4 +1,4 @@
-import { Form, Head, Link } from '@inertiajs/react';
+import { Form, Head } from '@inertiajs/react';
 import { store } from '@/routes/login';
 import { useT } from '@/lib/i18n';
 
@@ -103,15 +103,6 @@ export default function Login({ status }: Props) {
                         )}
                     </Form>
 
-                    <p className="mt-8 text-center font-display text-[9px] uppercase tracking-widest text-[var(--ink-faint)]">
-                        {t('auth.login.no_account')}{' '}
-                        <Link
-                            href="/register"
-                            className="text-[var(--ink)] underline-offset-2 hover:underline"
-                        >
-                            {t('auth.login.sign_up')}
-                        </Link>
-                    </p>
                 </div>
             </div>
         </>

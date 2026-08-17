@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 import PixelAvatar from '@/components/pixel-avatar';
 import { useT } from '@/lib/i18n';
-import { register } from '@/routes';
+import { login } from '@/routes';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Muni';
 
@@ -27,7 +27,7 @@ export default function FinalCta() {
                     {t('landing.final.subtitle')}
                 </p>
                 <Link
-                    href={register()}
+                    href={login()}
                     className="mt-9 inline-block border-2 border-[var(--ink)] bg-[var(--accent-frida)] px-8 py-4 font-display text-[12px] font-bold uppercase tracking-widest text-[var(--ink)] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_var(--ink)]"
                     style={{ boxShadow: '5px 5px 0 0 var(--ink)' }}
                 >

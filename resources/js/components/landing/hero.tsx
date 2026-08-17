@@ -4,7 +4,7 @@ import Balatro from '@/components/Balatro';
 import PixelAvatar from '@/components/pixel-avatar';
 import { useReducedMotion } from '@/hooks/use-reduced-motion';
 import { useT } from '@/lib/i18n';
-import { login, register } from '@/routes';
+import { login } from '@/routes';
 import type { EmoteKey } from '@/types/chat';
 
 const EMOTE_CYCLE: EmoteKey[] = ['neutral', 'thinking', 'happy'];
@@ -60,7 +60,7 @@ export default function Hero() {
 
                     <div className="mt-9 flex flex-wrap items-center gap-4">
                         <Link
-                            href={register()}
+                            href={login()}
                             className="border-2 border-[var(--ink)] bg-[var(--accent-frida)] px-6 py-3 font-display text-[12px] font-bold uppercase tracking-widest text-[var(--ink)] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_var(--ink)]"
                             style={{ boxShadow: '5px 5px 0 0 var(--ink)' }}
                         >
