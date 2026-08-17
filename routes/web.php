@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DebugLogController;
+use App\Http\Controllers\Estudio\EstudioController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Middleware\EnsureLocalEnvironment;
 use Illuminate\Support\Facades\Route;
 
 // Landing pública pausada — restaurar LandingController@index aquí cuando se reactive.
@@ -18,6 +20,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('chat/{character:slug}/conversation', [ChatController::class, 'clear'])->name('chat.clear');
 
     Route::get('portafolio', [PortfolioController::class, 'index'])->name('portfolio.index');
+});
+
+// Estudio de Assets — herramienta interna. Las rutas SIEMPRE se registran
+// (Wayfinder las necesita en el build); el middleware las esconde fuera de local.
+Route::middleware([EnsureLocalEnvironment::class])->prefix('estudio')->name('estudio.')->group(function () {
+    Route::get('/', [EstudioController::class, 'index'])->name('index');
 });
 
 require __DIR__.'/settings.php';
