@@ -69,4 +69,4 @@
 - [ ] Seeder actualizado.
 - [ ] QA: 30+ conversaciones de Ric contra checklist de co-creación.
 
-> La generación y gestión de assets se moverá al sistema de multimedia (en diseño — ver specs futuros en `docs/superpowers/specs/`).
+> Los assets se producen con el Estudio (`/estudio`, solo local) — spec: `docs/superpowers/specs/2026-08-17-escena-y-estudio-assets-design.md`.

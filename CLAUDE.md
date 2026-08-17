@@ -64,6 +64,14 @@ La carta TCG vive en `resources/js/components/character-card.tsx` y la usan **ta
 - `LockedCharacterCard` — figura aún no construida; dibuja una silueta `?` en vez de cargar avatares que no existen.
 - `TiltCard` (`components/tilt-card.tsx`) y los mapas de rol/icono/cita (`lib/character-meta.ts`) también son compartidos. Los acentos por personaje siguen en `lib/accents.ts`.
 
+## Estudio de Assets (`/estudio`, solo local)
+Herramienta interna que produce los assets del roster. Spec: `docs/superpowers/specs/2026-08-17-escena-y-estudio-assets-design.md`.
+- Rutas **siempre registradas** tras `EnsureLocalEnvironment` (404 fuera de `local`/`testing`). Nunca condicionar rutas por entorno: rompe la generación de Wayfinder en el build de prod.
+- Pipeline: `AssetRequest` (nace borrador con prompt editable) → `GenerateAssetCandidatesJob` (3 candidatos vía `openai/gpt-image-2` en fal) → galería de revisión → `PublishAssetAction` normaliza con GD y escribe a `public/` (los PNG publicados se commitean).
+- **Cadena de consistencia**: `sprite:neutral` y `background` son text-to-image; los otros emotes y el busto se generan *editando* el neutral aprobado, así el personaje no cambia entre poses. Un emote sin fuente aprobada se rechaza con 422.
+- Config editorial (14 figuras, plantillas de prompt, modelos): `config/estudio.php`. Specs: sprites 1024×1536 transparentes, busto 1024×1024, fondo 1024×1536.
+- Si gpt-image ignora `background: transparent`, poner `ESTUDIO_TRANSPARENCY=rembg` en `.env` para encadenar remove-background.
+
 ## Per-character tools
 Characters expose their own `laravel/ai` tools under `app/Tools/<Character>/` — e.g. `Frida/{RetratoFrida,LeerteLaCara,RecetaDeCoyoacan}`, `Dali/{RetratoDali,PintarSurreal,MetodoParanoicoCritico}`, `Freud/{RostroInconsciente,AnalisisSueno,MecanismosDefensa}`. Image tools go through `app/Services/ImageGeneration`.
 
