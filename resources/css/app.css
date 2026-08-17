@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Outfit:wght@400;500;600&display=swap');
 
 @import 'tailwindcss';
 
@@ -11,11 +11,11 @@
 
 @theme {
     --font-sans:
-        'VT323', ui-monospace, monospace,
+        'Outfit', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
-    --font-display: 'Press Start 2P', ui-monospace, monospace;
-    --font-body: 'VT323', ui-monospace, monospace;
+    --font-display: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Outfit', ui-sans-serif, system-ui, sans-serif;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -66,25 +66,25 @@
 }
 
 :root {
-    --background: #1a1a2e;
-    --foreground: #e6e6fa;
-    --card: #16213e;
-    --card-foreground: #e6e6fa;
-    --popover: #16213e;
-    --popover-foreground: #e6e6fa;
-    --primary: #e6e6fa;
-    --primary-foreground: #1a1a2e;
-    --secondary: #16213e;
-    --secondary-foreground: #e6e6fa;
-    --muted: #16213e;
-    --muted-foreground: #b8b8d0;
-    --accent: #16213e;
-    --accent-foreground: #e6e6fa;
+    --background: #f9f3e6;
+    --foreground: #3a2c14;
+    --card: #ffffff;
+    --card-foreground: #3a2c14;
+    --popover: #ffffff;
+    --popover-foreground: #3a2c14;
+    --primary: #ff9f43;
+    --primary-foreground: #4a2c00;
+    --secondary: #f1e7d0;
+    --secondary-foreground: #3a2c14;
+    --muted: #f1e7d0;
+    --muted-foreground: #8a7a5e;
+    --accent: #f1e7d0;
+    --accent-foreground: #3a2c14;
     --destructive: #ff5252;
     --destructive-foreground: #ffffff;
-    --border: #6b6b8b;
-    --input: #16213e;
-    --ring: #e6e6fa;
+    --border: #ecdfc0;
+    --input: #f1e7d0;
+    --ring: #ff9f43;
     --chart-1: oklch(0.646 0.222 41.116);
     --chart-2: oklch(0.6 0.118 184.704);
     --chart-3: oklch(0.398 0.07 227.392);
@@ -138,13 +138,29 @@
 
 /* ── 8-bit / NES — Design Tokens ── */
 :root {
-    --bg: #1a1a2e;
-    --bg-tile: #16213e;
-    --bg-deep: #0f0f1e;
-    --ink: #e6e6fa;
-    --ink-light: #b8b8d0;
-    --ink-faint: #6b6b8b;
-    --pixel-shadow: #000000;
+    /* Scrapbook vivo — papel y tinta (spec 2026-08-17-rediseno-scrapbook) */
+    --paper: #f9f3e6;
+    --paper-deep: #f1e7d0;
+    --surface: #ffffff;
+    --line: #ecdfc0;
+    --candy: #ff9f43;
+    --candy-deep: #d97e20;
+    --candy-ink: #4a2c00;
+
+    --shadow-tactile: 0 3px 0 var(--line);
+    --shadow-candy: 0 4px 0 var(--candy-deep);
+    --shadow-sticker: 0 8px 18px rgba(90, 66, 20, 0.18);
+    --shadow-diorama: 0 10px 24px rgba(90, 66, 20, 0.25);
+
+    /* Alias legacy: pantallas aún no migradas siguen leyendo estos nombres */
+    --bg: var(--paper);
+    --bg-tile: #f4ecd9;
+    --bg-deep: var(--paper-deep);
+    --ink: #3a2c14;
+    --ink-light: #6b5b3e;
+    --ink-soft: #8a7a5e;
+    --ink-faint: #b3a488;
+    --pixel-shadow: var(--line);
     --pixel-highlight: #ffffff;
 
     /* Character accents — saturated NES-style */
@@ -167,26 +183,28 @@
     }
 
     body {
-        @apply bg-background text-foreground;
-        background-color: var(--bg);
+        background-color: var(--paper);
         color: var(--ink);
         font-family: var(--font-body);
-        font-size: 18px;
-        image-rendering: pixelated;
-        text-rendering: geometricPrecision;
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
     }
 
-    img,
-    canvas {
+    /* El pixel art se declara explícitamente; la UI nunca se pixela. */
+    canvas,
+    img[src^='/sprites/'],
+    img[src^='/avatars/'],
+    img[src^='/backgrounds/'],
+    img[src^='/props/'] {
         image-rendering: pixelated;
-        image-rendering: crisp-edges;
     }
 
     h1,
     h2,
     h3 {
         font-family: var(--font-display);
-        letter-spacing: 0.02em;
+        font-weight: 900;
+        letter-spacing: -0.01em;
     }
 }
 
@@ -482,4 +500,65 @@
         0 0 0 2px var(--bg),
         4px 4px 0 0 var(--pixel-shadow);
     image-rendering: pixelated;
+}
+
+/* ── Scrapbook vivo ───────────────────────────────────────────── */
+.btn-candy {
+    background: var(--candy);
+    color: var(--candy-ink);
+    border-radius: 12px;
+    box-shadow: var(--shadow-candy);
+    font-family: var(--font-display);
+    font-weight: 800;
+    transition:
+        transform 80ms ease-out,
+        box-shadow 80ms ease-out;
+}
+.btn-candy:not(:disabled):active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--candy-deep);
+}
+
+.btn-soft {
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: 12px;
+    box-shadow: var(--shadow-tactile);
+    font-family: var(--font-display);
+    font-weight: 800;
+    transition:
+        transform 80ms ease-out,
+        box-shadow 80ms ease-out;
+}
+.btn-soft:not(:disabled):active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--line);
+}
+
+/* Cinta adhesiva de los elementos "pegados" */
+.sticker-tape::before {
+    content: '';
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    width: 44%;
+    height: 18px;
+    transform: translateX(-50%) rotate(2deg);
+    background: rgba(255, 224, 150, 0.85);
+    border-radius: 2px;
+    z-index: 3;
+}
+
+@keyframes emote-pop {
+    from {
+        transform: rotate(4deg) scale(1.12);
+    }
+    to {
+        transform: rotate(4deg) scale(1);
+    }
+}
+
+:focus-visible {
+    outline: 2px solid var(--candy);
+    outline-offset: 2px;
 }
