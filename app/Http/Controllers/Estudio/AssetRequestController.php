@@ -70,6 +70,9 @@ class AssetRequestController extends Controller
     {
         $data = $request->validate(['prompt' => ['required', 'string', 'max:4000']]);
 
+        // Un batch nuevo retira los candidatos aún sin decidir del anterior.
+        $assetRequest->candidates()->where('status', 'candidate')->update(['status' => 'rejected']);
+
         $assetRequest->update(['prompt' => $data['prompt'], 'status' => 'pending', 'error' => null]);
 
         GenerateAssetCandidatesJob::dispatch($assetRequest->id);

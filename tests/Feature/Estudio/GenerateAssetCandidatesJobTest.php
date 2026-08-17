@@ -52,7 +52,8 @@ it('generates emote sprites as edits of the source image', function () {
 
     expect($request->fresh())->status->toBe('ready_for_review');
 
-    Http::assertSent(fn ($req) => str_contains($req->url(), 'fal.run')
+    // El path base de gpt-image ignora image_urls: los edits DEBEN ir a /edit.
+    Http::assertSent(fn ($req) => str_contains($req->url(), 'gpt-image-2/edit')
         && (isset($req['image_urls']) || isset($req['image_url'])));
 });
 

@@ -15,6 +15,9 @@ return [
 
     'models' => [
         'default' => 'openai/gpt-image-2',
+        // El path base es text-to-image e IGNORA image_urls sin error;
+        // las ediciones (emotes, busto) van al path /edit.
+        'edit' => 'openai/gpt-image-2/edit',
         'rembg' => 'fal-ai/birefnet',
     ],
 

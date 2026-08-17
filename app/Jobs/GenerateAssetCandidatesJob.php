@@ -28,7 +28,9 @@ class GenerateAssetCandidatesJob implements ShouldQueue
             $fal = app(FalImageService::class);
 
             $opts = [
-                'model' => config('estudio.models.default'),
+                'model' => $request->source_path
+                    ? config('estudio.models.edit')
+                    : config('estudio.models.default'),
                 'num_images' => config('estudio.candidates_per_batch'),
                 'folder' => "asset-staging/{$request->character_slug}",
                 'output_format' => 'png',

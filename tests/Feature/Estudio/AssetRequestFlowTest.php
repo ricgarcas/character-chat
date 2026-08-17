@@ -28,8 +28,12 @@ it('creates a draft request with a composed prompt WITHOUT dispatching', functio
 });
 
 it('blocks emote sprites without an approved neutral source (kontext chain)', function () {
+    // Figura ficticia: las reales del roster van acumulando assets publicados
+    // en public/ y dejarían de estar "sin fuente".
+    config(['estudio.figures.test-flow' => ['name' => 'Figura Flow', 'visual' => 'x', 'scene' => 'y']]);
+
     post(route('estudio.requests.store'), [
-        'character_slug' => 'sor-juana', 'type' => 'sprite', 'emote' => 'happy',
+        'character_slug' => 'test-flow', 'type' => 'sprite', 'emote' => 'happy',
     ])->assertSessionHasErrors('emote');
 
     expect(AssetRequest::count())->toBe(0);
