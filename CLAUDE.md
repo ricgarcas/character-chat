@@ -64,6 +64,16 @@ La carta TCG vive en `resources/js/components/character-card.tsx` y la usan **ta
 - `LockedCharacterCard` — figura aún no construida; dibuja una silueta `?` en vez de cargar avatares que no existen.
 - `TiltCard` (`components/tilt-card.tsx`) y los mapas de rol/icono/cita (`lib/character-meta.ts`) también son compartidos. Los acentos por personaje siguen en `lib/accents.ts`.
 
+## Mundo visual — "Scrapbook vivo"
+Spec: `docs/superpowers/specs/2026-08-17-rediseno-scrapbook-design.md` · plan: `docs/superpowers/plans/2026-08-17-rediseno-scrapbook.md`.
+- Papel cálido + calcomanías + botones caramelo. Tokens en `resources/css/app.css` (`--paper`, `--ink`, `--candy`, `--shadow-*`) y utilidades `.btn-candy` / `.btn-soft` / `.sticker-tape`. Tipografía: **Nunito** display, **Outfit** cuerpo.
+- **El pixel art (sprites/fondos/bustos) es ilustración enmarcada, nunca chrome de UI.** `image-rendering: pixelated` sólo aplica a `canvas` y a imágenes bajo `/sprites|/avatars|/backgrounds|/props`.
+- Iconos: `@phosphor-icons/react` con `weight="bold"`. **Emojis sólo para las caritas de emote** (`resources/js/lib/emotes.ts`); todo lo demás es Phosphor.
+- Rotaciones de calcomanía **deterministas** por posición (nunca aleatorias, o la UI baila entre renders).
+- Shell: `components/shell/app-shell.tsx` (nav + tab bar móvil + menú de pausa) montado en chat, portafolio y settings desde `app.tsx`. `portfolioCount` se comparte desde `HandleInertiaRequests`.
+- Taller: `components/taller/{diorama-card,move-menu,artifact-sticker}.tsx`. La acotación de escena se dibuja **dentro** del diorama como subtítulo; el emote es una pastilla afuera. Cada artifact nuevo cae como calcomanía y dispara confetti una vez (respetando `useReducedMotion`).
+- La landing (pausada) y `/estudio` conservan el estilo viejo a propósito.
+
 ## Estudio de Assets (`/estudio`, solo local)
 Herramienta interna que produce los assets del roster. Spec: `docs/superpowers/specs/2026-08-17-escena-y-estudio-assets-design.md`.
 - Rutas **siempre registradas** tras `EnsureLocalEnvironment` (404 fuera de `local`/`testing`). Nunca condicionar rutas por entorno: rompe la generación de Wayfinder en el build de prod.
