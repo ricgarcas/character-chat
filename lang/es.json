@@ -44,7 +44,7 @@
     "auth.register.create": "▶ crear",
     "auth.register.have_account": "¿ya tienes cuenta?",
     "auth.register.log_in": "entrar",
-    "chat.index.title": "ELIGE TU PERSONAJE",
+    "chat.index.title": "Elige con quién crear",
     "chat.index.power_ups": "SUPERPODERES",
     "chat.index.press_to_talk": "PULSA PARA HABLAR",
     "chat.role.dali": "SURREALISTA",
@@ -212,5 +212,7 @@
     "landing.final.cta": "EMPIEZA GRATIS",
     "landing.footer.tagline": "Conversa con sabios. Crea con ellos.",
     "landing.footer.made": "Hecho en México",
-    "chat.show.send": "Enviar mensaje a {name}"
+    "chat.show.send": "Enviar mensaje a {name}",
+    "chat.index.subtitle": "Cada figura tiene su taller. Entra y hagan algo tuyo.",
+    "chat.index.upcoming": "pronto"
 }

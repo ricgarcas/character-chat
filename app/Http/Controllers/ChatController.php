@@ -14,10 +14,19 @@ class ChatController extends Controller
 {
     public function index()
     {
+        $characters = Character::where('active', true)->get();
+        $activeSlugs = $characters->pluck('slug');
+
+        // El roster lockeado vive en config/estudio.php; lo que aún no existe
+        // en la DB se muestra como carta bloqueada (colección incompleta).
+        $upcoming = collect(config('estudio.figures'))
+            ->reject(fn (array $figure, string $slug) => $activeSlugs->contains($slug))
+            ->map(fn (array $figure, string $slug) => ['slug' => $slug, 'name' => $figure['name']])
+            ->values();
+
         return Inertia::render('chat/index', [
-            'characters' => Character::where('active', true)
-                ->get()
-                ->map(fn (Character $c) => $this->serializeCharacter($c)),
+            'characters' => $characters->map(fn (Character $c) => $this->serializeCharacter($c)),
+            'upcoming' => $upcoming,
         ]);
     }
 
