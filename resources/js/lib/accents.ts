@@ -3,6 +3,7 @@ export const characterAccent: Record<string, string> = {
     freud: 'var(--accent-freud)',
     frida: 'var(--accent-frida)',
     beauvoir: 'var(--accent-beauvoir)',
+    'sor-juana': 'var(--accent-sor-juana)',
 };
 
 export const characterAccentInk: Record<string, string> = {
@@ -10,6 +11,7 @@ export const characterAccentInk: Record<string, string> = {
     freud: 'var(--ink)',
     frida: 'var(--ink)',
     beauvoir: 'var(--ink)',
+    'sor-juana': 'var(--ink)',
 };
 
 export function accentFor(slug: string): string {

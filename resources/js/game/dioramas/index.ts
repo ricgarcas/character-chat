@@ -3,6 +3,7 @@ import { fridaDiorama } from './frida';
 import { freudDiorama } from './freud';
 import { beauvoirDiorama } from './beauvoir';
 import { daliDiorama } from './dali';
+import { sorJuanaDiorama } from './sor-juana';
 
 /** Slug → diorama config. */
 export const dioramas: Record<string, DioramaConfig> = {
@@ -10,6 +11,7 @@ export const dioramas: Record<string, DioramaConfig> = {
     freud: freudDiorama,
     beauvoir: beauvoirDiorama,
     dali: daliDiorama,
+    'sor-juana': sorJuanaDiorama,
 };
 
 /**

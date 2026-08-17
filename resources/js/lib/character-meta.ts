@@ -38,6 +38,9 @@ export const superpowerIcon: Record<string, PixelIcon> = {
     philosophical_debate: Scales,
     free_association: LinkSimple,
     psychoanalytic_library: BookOpen,
+    taller_poetico: Notebook,
+    duelo_de_ingenio: Brain,
+    biblioteca_infinita: BookOpen,
 };
 
 export const roleIcon: Record<string, PixelIcon> = {
@@ -45,6 +48,7 @@ export const roleIcon: Record<string, PixelIcon> = {
     frida: Palette,
     beauvoir: Scales,
     freud: Brain,
+    'sor-juana': BookOpen,
 };
 
 export interface CharacterMeta {
@@ -69,5 +73,9 @@ export const characterMeta: Record<string, CharacterMeta> = {
     freud: {
         role: 'ANALISTA',
         quote: '"De tus vulnerabilidades saldrá tu fortaleza."',
+    },
+    'sor-juana': {
+        role: 'POETA',
+        quote: '"Yo no estudio por saber más, sino por ignorar menos."',
     },
 };

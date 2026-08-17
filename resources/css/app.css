@@ -152,6 +152,7 @@
     --accent-freud: #a47148;
     --accent-frida: #ff5252;
     --accent-beauvoir: #8e7cc3;
+    --accent-sor-juana: #d9a441;
 
     /* Stage / parchment compatibility (legacy class names map to new vars) */
     --parchment: var(--bg-tile);

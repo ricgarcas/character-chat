@@ -64,5 +64,19 @@ class CharacterSeeder extends Seeder
                 ['key' => 'unconscious_face', 'name' => 'Lo Que el Rostro Delata', 'icon' => '👁️'],
             ],
         ]);
+
+        Character::updateOrCreate(['slug' => 'sor-juana'], [
+            'name' => 'Sor Juana Inés de la Cruz',
+            'tagline' => 'La Décima Musa, poeta y defensora del derecho a aprender',
+            'description' => 'La niña que quiso ir a la universidad disfrazada de hombre y convirtió su celda en la biblioteca más grande de América. Ingenio barroco, rimas como acertijos y cero paciencia para quien le diga que no puede.',
+            'agent_class' => 'App\\Agents\\SorJuanaAgent',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
+            'active' => true,
+            'superpowers' => [
+                ['key' => 'taller_poetico', 'name' => 'Taller Poético', 'icon' => '✒️'],
+                ['key' => 'duelo_de_ingenio', 'name' => 'Duelo de Ingenio', 'icon' => '⚡'],
+                ['key' => 'biblioteca_infinita', 'name' => 'Biblioteca Infinita', 'icon' => '📚'],
+            ],
+        ]);
     }
 }

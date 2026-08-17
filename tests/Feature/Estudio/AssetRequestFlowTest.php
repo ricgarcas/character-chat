@@ -14,12 +14,16 @@ beforeEach(function () {
 });
 
 it('creates a draft request with a composed prompt WITHOUT dispatching', function () {
+    // Figura ficticia sin assets publicados: las reales acumulan archivos en
+    // public/ que se vuelven fuente legada y cambian el source_path esperado.
+    config(['estudio.figures.test-flow' => ['name' => 'Figura Flow', 'visual' => 'x', 'scene' => 'y']]);
+
     post(route('estudio.requests.store'), [
-        'character_slug' => 'sor-juana', 'type' => 'sprite', 'emote' => 'neutral',
+        'character_slug' => 'test-flow', 'type' => 'sprite', 'emote' => 'neutral',
     ])->assertRedirect();
 
     $request = AssetRequest::sole();
-    expect($request->prompt)->toContain('Sor Juana')
+    expect($request->prompt)->toContain('Figura Flow')
         ->and($request->status)->toBe('pending')
         ->and($request->source_path)->toBeNull();
 
