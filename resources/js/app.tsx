@@ -18,6 +18,7 @@ createInertiaApp({
         switch (true) {
             case name === 'auth/login':
             case name === 'landing':
+            case name.startsWith('estudio/'):
             case name.startsWith('chat/'):
                 return null;
             case name.startsWith('auth/'):
