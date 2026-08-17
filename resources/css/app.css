@@ -551,10 +551,10 @@
 
 @keyframes emote-pop {
     from {
-        transform: rotate(4deg) scale(1.12);
+        transform: scale(1.12);
     }
     to {
-        transform: rotate(4deg) scale(1);
+        transform: scale(1);
     }
 }
 

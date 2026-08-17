@@ -4,35 +4,19 @@ import { send } from '@/routes/chat';
 import { index as portfolioIndex } from '@/routes/portfolio';
 import type { Artifact, Character, ChatMessage, EmoteKey } from '@/types/chat';
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import {
-    ArrowLeft,
-    Send,
-    Potion as CookingPot,
-    Eye,
-    Moon,
-    Lightbulb as Brain,
-    Scale as Scales,
-    BookOpen,
-    Shield,
-} from 'pixelarticons/react';
-import {
-    Notebook as ScrollText,
-    X,
-    PaintBrush,
-    Egg,
-    VenusSymbol as GenderFemale,
-} from '@/components/icons/retro';
+import { ArrowLeft, ClockCounterClockwise, PaperPlaneRight, Trash, X } from '@phosphor-icons/react';
 import { useCharacterPhaser } from '@/hooks/useCharacterPhaser';
 import ArtifactCard from '@/components/artifacts/ArtifactCard';
 import ToolBadge, { infoTypeFromToolName } from '@/components/artifacts/ToolBadge';
-import PowerupBar, { type Powerup } from '@/components/PowerupBar';
+import { type Powerup } from '@/components/PowerupBar';
 import PowerupModal from '@/components/PowerupModal';
+import DioramaCard from '@/components/taller/diorama-card';
+import MoveMenu from '@/components/taller/move-menu';
+import ArtifactSticker from '@/components/taller/artifact-sticker';
+import { powerupIcon } from '@/lib/powerup-icons';
 import { useT } from '@/lib/i18n';
 import { characterAccent, characterAccentInk } from '@/lib/accents';
-import { PowerOffButton } from '@/components/power-off-button';
 import { debugLog } from '@/lib/debug-log';
-import { Reload as Trash } from 'pixelarticons/react';
-import Balatro from '@/components/Balatro';
 import { MarkdownMessage } from '@/components/chat/markdown-message';
 
 interface Props {
@@ -267,7 +251,6 @@ export default function ChatShow({ character, conversation, messages: initialMes
         await sendMessage(p.prompt, imageToSend, { previewUrl, hideUserBubble: true });
     };
 
-    const POWERUP_ICON_PROPS = { width: 22, height: 22 };
 
     const pw = (slug: string, key: string) => ({
         label: t(`powerup.${slug}.${key}.label`),
@@ -279,19 +262,19 @@ export default function ChatShow({ character, conversation, messages: initialMes
         frida: [
             {
                 key: 'receta',
-                icon: <CookingPot {...POWERUP_ICON_PROPS} />,
+                icon: powerupIcon('receta'),
                 ...pw('frida', 'receta'),
                 requiresPhoto: false,
             },
             {
                 key: 'cara',
-                icon: <Eye {...POWERUP_ICON_PROPS} />,
+                icon: powerupIcon('cara'),
                 ...pw('frida', 'cara'),
                 requiresPhoto: true,
             },
             {
                 key: 'retrato',
-                icon: <PaintBrush {...POWERUP_ICON_PROPS} />,
+                icon: powerupIcon('retrato'),
                 ...pw('frida', 'retrato'),
                 requiresPhoto: true,
             },
@@ -299,19 +282,19 @@ export default function ChatShow({ character, conversation, messages: initialMes
         dali: [
             {
                 key: 'paranoide',
-                icon: <Brain {...POWERUP_ICON_PROPS} />,
+                icon: powerupIcon('paranoide'),
                 ...pw('dali', 'paranoide'),
                 requiresPhoto: false,
             },
             {
                 key: 'huevo',
-                icon: <Egg {...POWERUP_ICON_PROPS} />,
+                icon: powerupIcon('huevo'),
                 ...pw('dali', 'huevo'),
                 requiresPhoto: false,
             },
             {
                 key: 'retrato',
-                icon: <PaintBrush {...POWERUP_ICON_PROPS} />,
+                icon: powerupIcon('retrato'),
                 ...pw('dali', 'retrato'),
                 requiresPhoto: true,
             },
@@ -319,39 +302,59 @@ export default function ChatShow({ character, conversation, messages: initialMes
         beauvoir: [
             {
                 key: 'analiza',
-                icon: <Scales {...POWERUP_ICON_PROPS} />,
+                icon: powerupIcon('analiza'),
                 ...pw('beauvoir', 'analiza'),
                 requiresPhoto: false,
             },
             {
                 key: 'critica',
-                icon: <GenderFemale {...POWERUP_ICON_PROPS} />,
+                icon: powerupIcon('critica'),
                 ...pw('beauvoir', 'critica'),
                 requiresPhoto: false,
             },
             {
                 key: 'lectura',
-                icon: <BookOpen {...POWERUP_ICON_PROPS} />,
+                icon: powerupIcon('lectura'),
                 ...pw('beauvoir', 'lectura'),
+                requiresPhoto: false,
+            },
+        ],
+        'sor-juana': [
+            {
+                key: 'taller',
+                icon: powerupIcon('taller'),
+                ...pw('sor-juana', 'taller'),
+                requiresPhoto: false,
+            },
+            {
+                key: 'duelo',
+                icon: powerupIcon('duelo'),
+                ...pw('sor-juana', 'duelo'),
+                requiresPhoto: false,
+            },
+            {
+                key: 'biblioteca',
+                icon: powerupIcon('biblioteca'),
+                ...pw('sor-juana', 'biblioteca'),
                 requiresPhoto: false,
             },
         ],
         freud: [
             {
                 key: 'sueno',
-                icon: <Moon {...POWERUP_ICON_PROPS} />,
+                icon: powerupIcon('sueno'),
                 ...pw('freud', 'sueno'),
                 requiresPhoto: false,
             },
             {
                 key: 'defensas',
-                icon: <Shield {...POWERUP_ICON_PROPS} />,
+                icon: powerupIcon('defensas'),
                 ...pw('freud', 'defensas'),
                 requiresPhoto: false,
             },
             {
                 key: 'rostro',
-                icon: <Eye {...POWERUP_ICON_PROPS} />,
+                icon: powerupIcon('cara'),
                 ...pw('freud', 'rostro'),
                 requiresPhoto: true,
             },
@@ -535,180 +538,112 @@ export default function ChatShow({ character, conversation, messages: initialMes
         <>
             <Head title={`Chat with ${character.name}`} />
 
-            <PowerOffButton />
+            <div className="mx-auto max-w-6xl px-4 py-6">
+                {/* Encabezado de la sesión */}
+                <div className="mb-5 flex items-center gap-3">
+                    <Link
+                        href="/chat"
+                        aria-label={t('chat.show.back')}
+                        className="btn-soft flex h-9 w-9 items-center justify-center"
+                    >
+                        <ArrowLeft size={18} weight="bold" />
+                    </Link>
+                    <h1 className="font-display text-2xl font-black text-[var(--ink)]">{character.name}</h1>
+                    <span
+                        className="hidden rounded-full px-3 py-1 font-display text-xs font-extrabold sm:inline"
+                        style={{ backgroundColor: `color-mix(in srgb, ${accent} 18%, white)`, color: accent }}
+                    >
+                        {character.tagline}
+                    </span>
 
-            <div className="relative min-h-screen flex items-center justify-center px-4 py-12 sm:px-6 sm:py-16">
-                <div className="fixed inset-0 z-0">
-                    <Balatro
-                        spinRotation={0}
-                        spinSpeed={2}
-                        color1="#bfc7c4"
-                        color2="#828587"
-                        color3="#0e0e0e"
-                        contrast={5.5}
-                        lighting={0.4}
-                        spinAmount={0.45}
-                        pixelFilter={500}
-                    />
-                    <div className="absolute inset-0 bg-black/80" />
-                </div>
-                <div className="relative z-10 w-full flex items-center justify-center">
-                <div
-                    className="relative flex w-full max-w-lg flex-col overflow-hidden lg:max-w-7xl"
-                    style={{
-                        height: 'min(85vh, 960px)',
-                        backgroundColor: 'var(--bg-deep)',
-                        border: '3px solid var(--ink)',
-                        boxShadow: `0 0 0 2px var(--bg-deep), 8px 8px 0 0 ${accent}`,
-                    }}
-                >
-                    {/* TOP BAR */}
-                    <div className="flex items-center justify-between border-b-2 border-[var(--ink)] bg-[var(--bg)] px-4 py-2 z-10">
-                        <a
-                            href="/chat"
-                            className="flex items-center gap-1.5 font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)] transition hover:text-[var(--ink)]"
-                        >
-                            <ArrowLeft className="h-3 w-3" />
-                            {t('chat.show.back')}
-                        </a>
-                        <h1
-                            className="font-display text-[11px] sm:text-xs uppercase font-bold tracking-[0.2em] px-3 py-1 border-2 border-[var(--ink)]"
-                            style={{
-                                backgroundColor: accent,
-                                color: 'var(--bg)',
-                                boxShadow: '2px 2px 0 0 var(--ink)',
-                            }}
-                        >
-                            {character.name}
-                        </h1>
-                        {messages.length > 0 ? (
+                    <div className="ml-auto flex items-center gap-2">
+                        {messages.length > 0 && (
                             <button
+                                type="button"
                                 onClick={() => setHistoryOpen(true)}
-                                className="flex items-center gap-1.5 border-2 border-[var(--ink)] bg-[var(--bg-deep)] px-2.5 py-1 font-display text-[9px] uppercase tracking-widest text-[var(--ink)] transition hover:translate-y-[-1px]"
-                                style={{ boxShadow: `2px 2px 0 0 ${accent}` }}
+                                className="btn-soft flex items-center gap-1.5 px-3 py-2 text-xs"
                             >
-                                <ScrollText className="h-3 w-3" />
-                                {t('chat.show.log')} · {messages.length}
+                                <ClockCounterClockwise size={16} weight="bold" />
+                                {messages.length}
                             </button>
-                        ) : (
-                            <span className="w-10" />
                         )}
+                        <button
+                            type="button"
+                            onClick={() => setClearOpen(true)}
+                            disabled={isStreaming}
+                            aria-label={t('chat.show.clear')}
+                            className="btn-soft flex h-9 w-9 items-center justify-center disabled:opacity-50"
+                        >
+                            <Trash size={16} weight="bold" />
+                        </button>
                     </div>
+                </div>
 
-                    {/* BODY — stacks on mobile, splits side-by-side on desktop */}
-                    <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-
-                    {/* SCENE — Phaser canvas + DOM overlays */}
-                    <div className="relative flex h-[420px] flex-shrink-0 overflow-hidden lg:h-auto lg:w-[calc(58%_+_50px)] lg:border-r-4 lg:border-[var(--ink)]">
-
-                        {/* Phaser canvas fills the entire scene */}
-                        <div ref={sceneRef} className="absolute inset-0" />
-
-                        {/* POWER-UPS — bottom-right of scene */}
-                        {showPowerups && (
-                            <PowerupBar
+                <div className="flex flex-col gap-6 lg:flex-row">
+                    {/* Diorama + movimientos */}
+                    <aside className="mx-auto w-full max-w-xs lg:mx-0 lg:w-[32%] lg:max-w-none lg:shrink-0">
+                        <div className="lg:sticky lg:top-20">
+                            <DioramaCard
+                                sceneRef={sceneRef}
+                                escena={isStreaming ? streamingEscena : (lastAssistant?.escena ?? null)}
+                                emote={lastEmote}
+                            />
+                            <MoveMenu
                                 powerups={characterPowerups}
-                                accent={accent}
-                                accentInk={accentInk}
-                                hasPhoto={!!pendingImage}
                                 disabled={isStreaming}
                                 onLaunch={handlePowerup}
                             />
-                        )}
-
-                        {/* CLEAR — bottom-left of scene */}
-                        <div className="absolute bottom-3 left-3 z-20">
-                            <button
-                                type="button"
-                                onClick={() => setClearOpen(true)}
-                                disabled={isStreaming}
-                                aria-label={t('chat.show.clear')}
-                                style={
-                                    {
-                                        '--pu-accent': accent,
-                                        '--pu-accent-ink': accentInk,
-                                        imageRendering: 'pixelated',
-                                    } as React.CSSProperties
-                                }
-                                className="btn-powerup group relative flex h-12 w-12 items-center justify-center bg-[var(--bg-deep)] not-disabled:hover:bg-[var(--pu-accent)] disabled:opacity-50"
-                            >
-                                <span className="powerup-icon flex h-7 w-7 items-center justify-center text-[var(--ink)] not-disabled:group-hover:text-[var(--pu-accent-ink)]">
-                                    <Trash width={22} height={22} />
-                                </span>
-                                <span
-                                    className="pointer-events-none absolute top-1/2 left-full ml-2 -translate-y-1/2 -translate-x-1 border-2 border-[var(--ink)] bg-[var(--bg)] px-2 py-1 font-display text-[9px] whitespace-nowrap text-[var(--ink)] uppercase tracking-widest opacity-0 transition-all duration-100 not-disabled:group-hover:translate-x-0 not-disabled:group-hover:opacity-100"
-                                    style={{ boxShadow: `2px 2px 0 0 ${accent}` }}
-                                >
-                                    {t('chat.show.clear')}
-                                </span>
-                            </button>
                         </div>
-                    </div>
+                    </aside>
 
-                    {/* CHAT COLUMN — dialog + input, right side on desktop */}
-                    <div className="flex min-h-0 flex-1 flex-col">
-
-                    {/* DIALOG BOX — novel-style thread; every turn persists */}
-                    <div className="relative flex min-h-0 flex-1 flex-col border-t-4 border-[var(--ink)] bg-[var(--bg-deep)] lg:border-t-0">
+                    {/* Conversación */}
+                    <section className="flex min-h-0 flex-1 flex-col">
                         <div
                             ref={threadRef}
-                            className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-5 py-5"
+                            className="flex max-h-[calc(100svh-17rem)] min-h-[22rem] flex-col gap-4 overflow-y-auto pr-1"
                         >
                             {messages.length === 0 && !isStreaming && (
-                                <p className="font-body text-lg italic text-[var(--ink-faint)]">
+                                <p className="font-body text-base italic text-[var(--ink-faint)]">
                                     {t('chat.show.say_hi', { name: character.name })}
                                 </p>
                             )}
 
                             {messages.map((msg) =>
                                 msg.role === 'user' ? (
-                                    /* USER turn */
-                                    <div key={msg.id} className="flex flex-col gap-1">
-                                        <p className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)]">
-                                            &gt; {t('chat.show.you')}
+                                    <div
+                                        key={msg.id}
+                                        className="ml-[16%] self-end rounded-[14px] rounded-br-[4px] bg-[#ffe3b3] px-4 py-2.5 shadow-[0_3px_0_#ecca8a]"
+                                    >
+                                        {msg.image_url && (
+                                            <img
+                                                src={msg.image_url}
+                                                alt={t('chat.show.your_photo')}
+                                                className="mb-2 h-14 w-14 rounded-lg object-cover"
+                                            />
+                                        )}
+                                        <p className="font-body text-[15px] leading-relaxed whitespace-pre-wrap text-[#4a3812]">
+                                            {msg.content}
                                         </p>
-                                        <div
-                                            className="flex items-start gap-3 border-2 border-[var(--ink)] bg-[var(--bg)] px-3 py-2"
-                                            style={{ boxShadow: '3px 3px 0 0 var(--ink)' }}
-                                        >
-                                            {msg.image_url && (
-                                                <img
-                                                    src={msg.image_url}
-                                                    alt={t('chat.show.your_photo')}
-                                                    className="h-12 w-12 flex-shrink-0 border-2 border-[var(--ink)] object-cover"
-                                                />
-                                            )}
-                                            <p className="min-w-0 flex-1 whitespace-pre-wrap font-body text-base text-[var(--ink)]">
-                                                {msg.content}
-                                            </p>
-                                        </div>
                                     </div>
                                 ) : (
-                                    /* ASSISTANT turn — stage direction above the line */
-                                    <div key={msg.id} className="flex flex-col gap-2">
-                                        {msg.escena && (
-                                            <div className="acotacion-bar px-4 py-2">
-                                                <p className="text-center font-body text-base leading-[1.1] italic text-[var(--ink)]">
-                                                    ~ {msg.escena} ~
-                                                </p>
-                                            </div>
-                                        )}
-                                        <p
-                                            className="font-display text-[10px] uppercase tracking-widest"
-                                            style={{ color: accent }}
-                                        >
-                                            &gt; {character.name}
+                                    <div
+                                        key={msg.id}
+                                        className="max-w-[92%] rounded-[14px] rounded-bl-[4px] bg-[var(--surface)] px-4 py-3 shadow-[var(--shadow-tactile)]"
+                                    >
+                                        <p className="mb-1 font-display text-xs font-extrabold" style={{ color: accent }}>
+                                            {character.name}
                                         </p>
                                         <MarkdownMessage
-                                            className="font-body text-lg leading-[1.15] text-[var(--ink)]"
+                                            className="font-body text-[15px] leading-relaxed text-[var(--ink)]"
                                             accent={accent}
                                         >
                                             {msg.content}
                                         </MarkdownMessage>
+
                                         {msg.artifacts && msg.artifacts.length > 0 && (
-                                            <div className="space-y-3">
+                                            <div className="mt-3 space-y-4">
                                                 {msg.artifacts.map((artifact, i) => (
-                                                    <div key={i}>
+                                                    <ArtifactSticker key={i} celebrate={false} accent={accent}>
                                                         <ArtifactCard
                                                             artifact={artifact}
                                                             accent={accent}
@@ -719,12 +654,12 @@ export default function ChatShow({ character, conversation, messages: initialMes
                                                             artifact.artifact_type !== 'error' && (
                                                                 <Link
                                                                     href={portfolioIndex.url()}
-                                                                    className="mt-1 inline-block font-display text-[9px] uppercase tracking-widest text-[var(--ink)]/50 transition hover:text-[var(--ink)]"
+                                                                    className="mt-1 inline-block font-display text-[11px] font-extrabold text-[var(--candy-deep)]"
                                                                 >
-                                                                    ✦ {t('chat.artifact_saved')}
+                                                                    {t('chat.artifact_saved')}
                                                                 </Link>
                                                             )}
-                                                    </div>
+                                                    </ArtifactSticker>
                                                 ))}
                                             </div>
                                         )}
@@ -732,32 +667,22 @@ export default function ChatShow({ character, conversation, messages: initialMes
                                 ),
                             )}
 
-                            {/* Streaming assistant turn — appends live, then settles into the thread */}
                             {isStreaming && (
-                                <div className="flex flex-col gap-2">
-                                    {streamingEscena && (
-                                        <div className="acotacion-bar px-4 py-2">
-                                            <p className="text-center font-body text-base leading-[1.1] italic text-[var(--ink)]">
-                                                ~ {streamingEscena} ~
-                                            </p>
-                                        </div>
-                                    )}
-                                    <p
-                                        className="font-display text-[10px] uppercase tracking-widest"
-                                        style={{ color: accent }}
-                                    >
-                                        &gt; {character.name}
+                                <div className="max-w-[92%] rounded-[14px] rounded-bl-[4px] bg-[var(--surface)] px-4 py-3 shadow-[var(--shadow-tactile)]">
+                                    <p className="mb-1 font-display text-xs font-extrabold" style={{ color: accent }}>
+                                        {character.name}
                                     </p>
+
                                     {streamingDialogo ? (
                                         <MarkdownMessage
-                                            className="font-body text-lg leading-[1.15] text-[var(--ink)]"
+                                            className="font-body text-[15px] leading-relaxed text-[var(--ink)]"
                                             streaming
                                             accent={accent}
                                         >
                                             {streamingDialogo}
                                         </MarkdownMessage>
                                     ) : (
-                                        <p className="font-body text-lg italic text-[var(--ink-faint)] animate-pulse">
+                                        <p className="animate-pulse font-body text-[15px] italic text-[var(--ink-faint)]">
                                             {streamingToolName === 'retrato_frida'
                                                 ? t('chat.show.painting', { name: character.name })
                                                 : streamingToolName === 'receta_de_coyoacan'
@@ -767,6 +692,7 @@ export default function ChatShow({ character, conversation, messages: initialMes
                                                     : t('chat.show.thinking', { name: character.name })}
                                         </p>
                                     )}
+
                                     {(() => {
                                         const streamingType = infoTypeFromToolName(streamingToolName);
                                         const alreadyHasType =
@@ -774,19 +700,29 @@ export default function ChatShow({ character, conversation, messages: initialMes
                                             streamingArtifacts.some((a) => a.artifact_type === streamingType);
                                         const showBadge = streamingType && !alreadyHasType;
                                         if (streamingArtifacts.length === 0 && !showBadge) return null;
+
                                         return (
-                                            <div className="space-y-3">
+                                            <div className="mt-3 space-y-4">
                                                 {streamingArtifacts.map((artifact, i) => (
-                                                    <ArtifactCard
+                                                    <ArtifactSticker
                                                         key={i}
-                                                        artifact={artifact}
+                                                        celebrate={artifact.artifact_type !== 'image_pending'}
                                                         accent={accent}
-                                                        characterName={character.name}
-                                                        characterSlug={character.slug}
-                                                    />
+                                                    >
+                                                        <ArtifactCard
+                                                            artifact={artifact}
+                                                            accent={accent}
+                                                            characterName={character.name}
+                                                            characterSlug={character.slug}
+                                                        />
+                                                    </ArtifactSticker>
                                                 ))}
                                                 {showBadge && streamingType && (
-                                                    <ToolBadge mode="streaming" artifactType={streamingType} accent={accent} />
+                                                    <ToolBadge
+                                                        mode="streaming"
+                                                        artifactType={streamingType}
+                                                        accent={accent}
+                                                    />
                                                 )}
                                             </div>
                                         );
@@ -794,11 +730,9 @@ export default function ChatShow({ character, conversation, messages: initialMes
                                 </div>
                             )}
                         </div>
-                    </div>
 
-                    {/* INPUT BAR */}
-                    <div className="border-t-2 border-[var(--ink)] bg-[var(--bg)] px-4 py-3">
-                        <form onSubmit={handleSubmit} className="flex items-stretch gap-2">
+                        {/* Input */}
+                        <form onSubmit={handleSubmit} className="mt-4 flex items-end gap-2">
                             <textarea
                                 ref={inputRef}
                                 value={input}
@@ -807,60 +741,47 @@ export default function ChatShow({ character, conversation, messages: initialMes
                                 placeholder={t('chat.show.placeholder', { name: character.name })}
                                 rows={1}
                                 disabled={isStreaming}
-                                className="input-sketch flex-1 resize-none h-11 px-3 py-2 font-body text-base leading-tight placeholder-[var(--ink-faint)] disabled:opacity-50"
+                                className="h-12 flex-1 resize-none rounded-[20px] bg-[var(--surface)] px-5 py-3.5 font-body text-[15px] text-[var(--ink)] placeholder-[var(--ink-faint)] shadow-[var(--shadow-tactile)] disabled:opacity-50"
                             />
                             <button
                                 type="submit"
                                 disabled={isStreaming || !input.trim()}
-                                className="btn-sketch flex h-11 w-11 items-center justify-center disabled:opacity-50"
-                                style={{ backgroundColor: accent, color: 'var(--bg)' }}
+                                aria-label={t('chat.show.send', { name: character.name })}
+                                className="btn-candy flex h-12 w-12 items-center justify-center disabled:opacity-50"
                             >
-                                <Send className="h-4 w-4" />
+                                <PaperPlaneRight size={20} weight="bold" />
                             </button>
                         </form>
-                    </div>
-                    </div>
-                    </div>
-                </div>
+                    </section>
                 </div>
             </div>
 
-            {/* CLEAR CONFIRM MODAL */}
+            {/* Confirmar borrado */}
             {clearOpen && (
                 <div
-                    className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+                    className="fixed inset-0 z-[60] flex items-center justify-center bg-[rgba(58,44,20,0.45)] p-4 backdrop-blur-sm"
                     onClick={() => setClearOpen(false)}
                 >
                     <div
-                        className="w-full max-w-sm bg-[var(--bg-deep)]"
-                        style={{
-                            border: '3px solid var(--ink)',
-                            boxShadow: `8px 8px 0 0 ${accent}`,
-                            imageRendering: 'pixelated',
-                        }}
+                        className="w-full max-w-sm rounded-2xl bg-[var(--surface)] p-6 shadow-[var(--shadow-sticker)]"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div
-                            className="border-b-2 border-[var(--ink)] px-3 py-1.5"
-                            style={{ backgroundColor: accent }}
-                        >
-                            <span className="font-display text-[10px] uppercase font-bold tracking-[0.2em] text-[var(--bg)]">
-                                ⚠ {t('chat.show.clear_title')}
-                            </span>
-                        </div>
-                        <div className="px-5 py-5">
-                            <p className="text-center font-body text-sm leading-snug text-[var(--ink)]">
-                                {t('chat.show.clear_description')}
-                            </p>
-                        </div>
-                        <div className="flex border-t-2 border-[var(--ink)]">
+                        <h2 className="font-display text-lg font-black text-[var(--ink)]">
+                            {t('chat.show.clear_title')}
+                        </h2>
+                        <p className="mt-2 font-body text-sm leading-relaxed text-[var(--ink-soft)]">
+                            {t('chat.show.clear_description')}
+                        </p>
+                        <div className="mt-5 flex gap-2.5">
                             <button
+                                type="button"
                                 onClick={() => setClearOpen(false)}
-                                className="flex flex-1 items-center justify-center gap-1.5 border-r border-[var(--ink)] bg-[var(--bg)] py-2.5 font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)] transition hover:bg-[var(--bg-tile)] hover:text-[var(--ink)]"
+                                className="btn-soft flex-1 px-4 py-2.5 text-sm"
                             >
                                 {t('chat.show.clear_cancel')}
                             </button>
                             <button
+                                type="button"
                                 onClick={() => {
                                     setClearOpen(false);
                                     router.delete(`/chat/${character.slug}/conversation`, {
@@ -875,8 +796,7 @@ export default function ChatShow({ character, conversation, messages: initialMes
                                         },
                                     });
                                 }}
-                                className="flex flex-1 items-center justify-center gap-1.5 py-2.5 font-display text-[10px] uppercase font-bold tracking-widest transition hover:translate-y-[-1px]"
-                                style={{ backgroundColor: accent, color: 'var(--bg)' }}
+                                className="btn-candy flex-1 px-4 py-2.5 text-sm"
                             >
                                 {t('chat.show.clear_confirm')}
                             </button>
@@ -885,7 +805,7 @@ export default function ChatShow({ character, conversation, messages: initialMes
                 </div>
             )}
 
-            {/* POWER-UP MODAL */}
+            {/* Movimiento activo */}
             {activePowerup && (
                 <PowerupModal
                     title={activePowerup.label}
@@ -901,51 +821,47 @@ export default function ChatShow({ character, conversation, messages: initialMes
                 />
             )}
 
-            {/* HISTORY OVERLAY */}
+            {/* Historial */}
             {historyOpen && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(58,44,20,0.45)] p-4 backdrop-blur-sm"
                     onClick={() => setHistoryOpen(false)}
                 >
                     <div
-                        className="flex w-full max-w-2xl flex-col bg-[var(--bg-deep)]"
-                        style={{
-                            maxHeight: '80vh',
-                            border: '3px solid var(--ink)',
-                            boxShadow: `8px 8px 0 0 ${accent}`,
-                        }}
+                        className="flex max-h-[80vh] w-full max-w-2xl flex-col rounded-2xl bg-[var(--surface)] shadow-[var(--shadow-sticker)]"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-between border-b-2 border-[var(--ink)] bg-[var(--bg)] px-4 py-2">
-                            <h2 className="font-display text-xs uppercase font-bold tracking-[0.2em] text-[var(--ink)]">
+                        <div className="flex items-center justify-between border-b border-[var(--line)] px-5 py-3.5">
+                            <h2 className="font-display text-base font-black text-[var(--ink)]">
                                 {t('chat.show.dialog_log')}
                             </h2>
                             <button
+                                type="button"
                                 onClick={() => setHistoryOpen(false)}
-                                className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)] hover:text-[var(--ink)] flex items-center gap-1"
+                                aria-label={t('chat.show.close')}
+                                className="text-[var(--ink-soft)] transition hover:text-[var(--ink)]"
                             >
-                                <X className="h-3 w-3" />
-                                {t('chat.show.close')}
+                                <X size={18} weight="bold" />
                             </button>
                         </div>
-                        <div className="flex-1 space-y-4 overflow-y-auto px-5 py-5">
+                        <div className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
                             {messages.length === 0 ? (
-                                <p className="font-body text-sm italic text-[var(--ink-faint)] text-center">
+                                <p className="text-center font-body text-sm italic text-[var(--ink-faint)]">
                                     {t('chat.show.no_dialog')}
                                 </p>
                             ) : (
                                 messages.map((msg) => (
                                     <div key={msg.id}>
                                         {msg.role === 'assistant' && msg.escena && (
-                                            <p className="mb-1 font-body text-xs italic text-[var(--ink-faint)]">
-                                                ~ {msg.escena} ~
+                                            <p className="mb-1 font-body text-xs italic text-[var(--ink-soft)]">
+                                                {msg.escena}
                                             </p>
                                         )}
                                         <p
-                                            className="font-display text-[9px] uppercase tracking-widest"
+                                            className="font-display text-[11px] font-extrabold"
                                             style={{ color: msg.role === 'user' ? 'var(--ink-faint)' : accent }}
                                         >
-                                            {msg.role === 'user' ? t('chat.show.you') : `> ${character.name}`}
+                                            {msg.role === 'user' ? t('chat.show.you') : character.name}
                                         </p>
                                         {msg.role === 'assistant' ? (
                                             <MarkdownMessage
@@ -955,7 +871,7 @@ export default function ChatShow({ character, conversation, messages: initialMes
                                                 {msg.content}
                                             </MarkdownMessage>
                                         ) : (
-                                            <p className="font-body text-sm leading-relaxed text-[var(--ink)] whitespace-pre-wrap">
+                                            <p className="font-body text-sm leading-relaxed whitespace-pre-wrap text-[var(--ink)]">
                                                 {msg.content}
                                             </p>
                                         )}

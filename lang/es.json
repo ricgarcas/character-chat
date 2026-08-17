@@ -73,7 +73,7 @@
     "chat.tool_badge.defenses": "Mecanismos de defensa",
     "chat.tool_badge.unconscious_face": "Lo que el rostro delata",
     "chat.tool_badge.paranoid_critical": "Método paranoico-crítico",
-    "chat.show.say_hi": "> salúda a {name}...",
+    "chat.show.say_hi": "Salúdala y arranquen algo juntos.",
     "chat.show.placeholder": "Dile algo a {name}...",
     "chat.show.attach_photo": "Adjuntar foto",
     "chat.show.your_photo": "tu foto",
@@ -142,6 +142,15 @@
     "powerup.beauvoir.lectura.label": "Ruta de lectura",
     "powerup.beauvoir.lectura.description": "Simone arma un árbol de lecturas para entender su pensamiento.",
     "powerup.beauvoir.lectura.prompt": "Dame una ruta de lecturas para entender tu pensamiento.",
+    "powerup.sor-juana.taller.label": "Taller poético",
+    "powerup.sor-juana.taller.description": "Sor Juana te lanza el primer verso y tú sigues. Soneto, décima o lo que salga.",
+    "powerup.sor-juana.taller.prompt": "Quiero escribir un poema contigo — dame el primer verso y seguimos por turnos.",
+    "powerup.sor-juana.duelo.label": "Duelo de ingenio",
+    "powerup.sor-juana.duelo.description": "Ella lanza una rima, tú respondes con otra que rime y mejore la idea.",
+    "powerup.sor-juana.duelo.prompt": "Rétame a un duelo de ingenio: tú lanzas un verso y yo respondo.",
+    "powerup.sor-juana.biblioteca.label": "Biblioteca infinita",
+    "powerup.sor-juana.biblioteca.description": "Pregúntale de lo que sea: astronomía, música, cocina. Todo le interesa.",
+    "powerup.sor-juana.biblioteca.prompt": "Cuéntame algo de tu biblioteca que me vuele la cabeza.",
     "powerup.freud.sueno.label": "Analiza un sueño",
     "powerup.freud.sueno.description": "Freud interpreta un sueño tuyo. Te pedirá que se lo cuentes.",
     "powerup.freud.sueno.prompt": "Quiero que analicemos un sueño mío — pídeme que te lo cuente.",
@@ -202,5 +211,6 @@
     "landing.final.subtitle": "Diez mensajes al día, gratis, sin tarjeta. Trae una idea a medias.",
     "landing.final.cta": "EMPIEZA GRATIS",
     "landing.footer.tagline": "Conversa con sabios. Crea con ellos.",
-    "landing.footer.made": "Hecho en México"
+    "landing.footer.made": "Hecho en México",
+    "chat.show.send": "Enviar mensaje a {name}"
 }

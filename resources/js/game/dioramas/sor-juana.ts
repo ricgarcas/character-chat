@@ -24,8 +24,8 @@ export const sorJuanaDiorama: DioramaConfig = {
             thinking: '/sprites/sor-juana/thinking.png',
             surprised: '/sprites/sor-juana/surprised.png',
         },
-        anchorY: 0.92, // parada sobre el piso de barro, frente al escritorio
-        heightRatio: 0.5, // los sprites del Estudio traen margen propio (2:3)
+        anchorY: 0.98, // parada sobre el piso de barro, frente al escritorio
+        heightRatio: 0.78, // el sprite del Estudio trae margen propio: se escala alto
         shadow: true,
     },
     ambient: [{ effect: 'petals', params: { colors: CANDLE_MOTES, delay: 1400 } }],
