@@ -12,22 +12,22 @@ export default function Login({ status }: Props) {
         <>
             <Head title="Log in" />
 
-            <div className="bg-paper relative flex min-h-svh flex-col items-center justify-center p-6">
-                <div className="w-full max-w-sm">
-                    <div className="mb-8 text-center">
-                        <h1
-                            className="font-display text-xl uppercase tracking-tight text-[var(--ink)]"
-                            style={{ textShadow: '3px 3px 0 var(--pixel-shadow)' }}
-                        >
+            <div
+                className="relative flex min-h-svh flex-col items-center justify-center bg-[var(--paper)] p-6"
+                style={{ backgroundImage: 'radial-gradient(circle at 80% 12%, #ffe9c4 0%, transparent 45%)' }}
+            >
+                <div className="w-full max-w-sm rounded-2xl bg-[var(--surface)] p-8 shadow-[var(--shadow-sticker)]">
+                    <div className="mb-7">
+                        <h1 className="font-display text-2xl font-black text-[var(--ink)]">
                             {t('auth.login.title')}
                         </h1>
-                        <p className="mt-3 font-body text-base text-[var(--ink-light)]">
+                        <p className="mt-1.5 font-body text-sm text-[var(--ink-soft)]">
                             {t('auth.login.subtitle')}
                         </p>
                     </div>
 
                     {status && (
-                        <div className="mb-4 border-2 border-[var(--accent-dali)] bg-[var(--bg-deep)] px-3 py-2 text-center font-body text-sm text-[var(--accent-dali)]">
+                        <div className="mb-4 rounded-[12px] bg-[var(--paper-deep)] px-3 py-2 text-center font-body text-sm text-[var(--candy-deep)]">
                             {status}
                         </div>
                     )}
@@ -44,7 +44,7 @@ export default function Login({ status }: Props) {
                                 <div className="flex flex-col gap-1">
                                     <label
                                         htmlFor="email"
-                                        className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)]"
+                                        className="font-display text-xs font-extrabold text-[var(--ink-soft)]"
                                     >
                                         {t('auth.login.email')}
                                     </label>
@@ -56,11 +56,11 @@ export default function Login({ status }: Props) {
                                         autoFocus
                                         autoComplete="email"
                                         placeholder={t('auth.login.email_placeholder')}
-                                        className="input-sketch px-3 py-2 font-body text-base"
+                                        className="rounded-[14px] bg-[var(--paper-deep)] px-4 py-3 font-body text-[15px] text-[var(--ink)] placeholder-[var(--ink-faint)]"
                                     />
                                     {errors.email && (
                                         <p className="mt-1 font-body text-sm text-[var(--accent-frida)]">
-                                            ▌ {errors.email}
+                                            {errors.email}
                                         </p>
                                     )}
                                 </div>
@@ -68,7 +68,7 @@ export default function Login({ status }: Props) {
                                 <div className="flex flex-col gap-1">
                                     <label
                                         htmlFor="password"
-                                        className="font-display text-[10px] uppercase tracking-widest text-[var(--ink-faint)]"
+                                        className="font-display text-xs font-extrabold text-[var(--ink-soft)]"
                                     >
                                         {t('auth.login.password')}
                                     </label>
@@ -79,11 +79,11 @@ export default function Login({ status }: Props) {
                                         required
                                         autoComplete="current-password"
                                         placeholder={t('auth.login.password_placeholder')}
-                                        className="input-sketch px-3 py-2 font-body text-base"
+                                        className="rounded-[14px] bg-[var(--paper-deep)] px-4 py-3 font-body text-[15px] text-[var(--ink)] placeholder-[var(--ink-faint)]"
                                     />
                                     {errors.password && (
                                         <p className="mt-1 font-body text-sm text-[var(--accent-frida)]">
-                                            ▌ {errors.password}
+                                            {errors.password}
                                         </p>
                                     )}
                                 </div>
@@ -91,11 +91,7 @@ export default function Login({ status }: Props) {
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className="btn-sketch mt-2 px-4 py-3 disabled:opacity-50"
-                                    style={{
-                                        backgroundColor: 'var(--accent-dali)',
-                                        color: 'var(--bg)',
-                                    }}
+                                    className="btn-candy mt-2 w-full px-4 py-3 text-base disabled:opacity-50"
                                 >
                                     {processing ? t('auth.login.loading') : t('auth.login.start')}
                                 </button>
