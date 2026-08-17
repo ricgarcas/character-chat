@@ -1,4 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
+import { Plus } from '@phosphor-icons/react';
 import { useMemo, useState, type ReactNode } from 'react';
 import InfoArtifactRenderer, { isInfoType, type InfoArtifact } from '@/components/artifacts/InfoArtifactRenderer';
 import PortraitCard from '@/components/artifacts/PortraitCard';
@@ -33,10 +34,16 @@ export default function PortfolioIndex({ artifacts }: { artifacts: PortfolioArti
         <>
             <Head title={t('portfolio.title')} />
             <div className="mx-auto max-w-5xl px-4 py-8">
-                <h1 className="font-display text-lg uppercase tracking-widest text-[var(--ink)]">
+                <h1 className="font-display text-3xl font-black text-[var(--ink)]">
                     {t('portfolio.title')}
+                    {artifacts.length > 0 && (
+                        <span className="text-[var(--ink-soft)]">
+                            {' '}
+                            — {artifacts.length} {artifacts.length === 1 ? 'pieza' : 'piezas'}
+                        </span>
+                    )}
                 </h1>
-                <p className="mt-1 font-body text-sm text-[var(--ink)]/70">{t('portfolio.subtitle')}</p>
+                <p className="mt-1 font-body text-base text-[var(--ink-soft)]">{t('portfolio.subtitle')}</p>
 
                 {characters.length > 1 && (
                     <div className="mt-4 flex flex-wrap gap-2">
@@ -52,32 +59,38 @@ export default function PortfolioIndex({ artifacts }: { artifacts: PortfolioArti
                 )}
 
                 {visible.length === 0 ? (
-                    <div
-                        className="mt-10 border-2 border-[var(--ink)] bg-[var(--bg-deep)] p-10 text-center"
-                        style={{ boxShadow: '4px 4px 0 0 var(--ink)' }}
-                    >
-                        <p className="font-display text-sm uppercase tracking-widest text-[var(--ink)]">
+                    <div className="mt-10 rounded-2xl bg-[var(--surface)] p-10 text-center shadow-[var(--shadow-sticker)]">
+                        <p className="font-display text-xl font-black text-[var(--ink)]">
                             {t('portfolio.empty_title')}
                         </p>
-                        <p className="mt-2 font-body text-sm text-[var(--ink)]/70">{t('portfolio.empty_body')}</p>
-                        <Link
-                            href={chatIndex.url()}
-                            className="mt-6 inline-block border-2 border-[var(--ink)] bg-[var(--bg)] px-4 py-2 font-display text-[10px] uppercase tracking-widest text-[var(--ink)] transition hover:translate-y-[-1px]"
-                            style={{ boxShadow: '3px 3px 0 0 var(--ink)' }}
-                        >
-                            {t('portfolio.empty_cta')} →
+                        <p className="mt-2 font-body text-sm text-[var(--ink-soft)]">{t('portfolio.empty_body')}</p>
+                        <Link href={chatIndex.url()} className="btn-candy mt-6 inline-block px-5 py-2.5 text-sm">
+                            {t('portfolio.empty_cta')}
                         </Link>
                     </div>
                 ) : (
-                    <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        {visible.map((a) => (
-                            <div key={a.id} className="min-w-0">
+                    <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-9 sm:grid-cols-2">
+                        {visible.map((a, index) => (
+                            <div
+                                key={a.id}
+                                className={`min-w-0 rounded-[12px] bg-[var(--surface)] p-2.5 shadow-[var(--shadow-sticker)] ${
+                                    index % 2 === 0 ? 'rotate-1' : '-rotate-1'
+                                }`}
+                            >
                                 <ArtifactByType artifact={a} />
-                                <p className="mt-1 font-display text-[9px] uppercase tracking-widest text-[var(--ink)]/50">
-                                    {a.character.name} · {a.created_at}
+                                <p className="mt-2 px-1 font-body text-xs text-[var(--ink-soft)]">
+                                    con {a.character.name} · {a.created_at}
                                 </p>
                             </div>
                         ))}
+
+                        <Link
+                            href={chatIndex.url()}
+                            className="flex min-h-40 flex-col items-center justify-center gap-1.5 rounded-[12px] border-2 border-dashed border-[var(--line)] font-display text-sm font-extrabold text-[var(--ink-faint)] transition hover:border-[var(--candy)] hover:text-[var(--candy-deep)]"
+                        >
+                            <Plus size={22} weight="bold" />
+                            siguiente pieza
+                        </Link>
                     </div>
                 )}
             </div>
@@ -108,10 +121,10 @@ function FilterChip({ active, accent, onClick, children }: {
         <button
             type="button"
             onClick={onClick}
-            className={`border-2 border-[var(--ink)] px-3 py-1 font-display text-[9px] uppercase tracking-widest transition ${
-                active ? 'bg-[var(--ink)] text-[var(--bg)]' : 'bg-[var(--bg-deep)] text-[var(--ink)] hover:translate-y-[-1px]'
+            className={`rounded-full px-4 py-1.5 font-display text-xs font-extrabold transition ${
+                active ? 'bg-[var(--ink)] text-[var(--paper)]' : 'btn-soft'
             }`}
-            style={{ boxShadow: active ? 'none' : `2px 2px 0 0 ${accent}` }}
+            style={active ? undefined : { color: accent }}
         >
             {children}
         </button>
