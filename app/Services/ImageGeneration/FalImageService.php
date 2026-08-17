@@ -54,6 +54,11 @@ class FalImageService
      */
     protected function buildEditPayload(string $prompt, string $imageDataUri, string $model, array $opts): array
     {
+        // Modelos de remove-background: payload mínimo, sin prompt.
+        if (str_contains($model, 'birefnet') || str_contains($model, 'rembg')) {
+            return ['image_url' => $imageDataUri];
+        }
+
         if ($this->isFluxKontext($model)) {
             $payload = [
                 'prompt' => $prompt,
@@ -180,8 +185,10 @@ class FalImageService
         ]);
 
         $body = $response->json();
+        // Algunos modelos (birefnet/rembg) devuelven `image` singular en vez de `images[]`.
+        $rawImages = $body['images'] ?? (isset($body['image']) ? [$body['image']] : []);
         $images = array_values(array_filter(
-            $body['images'] ?? [],
+            $rawImages,
             fn ($image) => is_array($image) && isset($image['url']),
         ));
 
