@@ -44,6 +44,10 @@ class GenerateAssetCandidatesJob implements ShouldQueue
                 ? $fal->editBatch($request->prompt, $request->source_path, $opts)
                 : $fal->generateBatch($request->prompt, $opts);
 
+            if ($request->type === 'sprite' && config('estudio.transparency_mode') === 'rembg') {
+                $results = $this->removeBackgrounds($fal, $results, $request->character_slug);
+            }
+
             foreach ($results as $result) {
                 $request->candidates()->create([
                     'path' => $result['path'],
@@ -60,5 +64,26 @@ class GenerateAssetCandidatesJob implements ShouldQueue
 
             $request->update(['status' => 'failed', 'error' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * Contingencia del spec §2: si gpt-image no respeta `background: transparent`,
+     * cada candidato pasa por un modelo de remove-background antes de guardarse.
+     *
+     * @param  list<array{path: string, url: string, raw: array<string,mixed>}>  $results
+     * @return list<array{path: string, url: string, raw: array<string,mixed>}>
+     */
+    private function removeBackgrounds(FalImageService $fal, array $results, string $slug): array
+    {
+        return array_map(fn (array $result) => $fal->editBatch(
+            prompt: 'remove background',
+            sourcePhotoPath: $result['path'],
+            opts: [
+                'model' => config('estudio.models.rembg'),
+                'num_images' => 1,
+                'folder' => "asset-staging/{$slug}",
+                'output_format' => 'png',
+            ],
+        )[0], $results);
     }
 }

@@ -56,6 +56,21 @@ it('generates emote sprites as edits of the source image', function () {
         && (isset($req['image_urls']) || isset($req['image_url'])));
 });
 
+it('chains remove-background per sprite candidate when mode is rembg', function () {
+    config(['estudio.transparency_mode' => 'rembg']);
+    fakeFalBatch();
+
+    $request = AssetRequest::factory()->create(['type' => 'sprite', 'emote' => 'neutral']);
+
+    (new GenerateAssetCandidatesJob($request->id))->handle();
+
+    expect($request->fresh())
+        ->status->toBe('ready_for_review')
+        ->candidates->toHaveCount(3);
+
+    Http::assertSent(fn ($req) => str_contains($req->url(), 'birefnet'));
+});
+
 it('marks the request failed when fal errors', function () {
     Http::fake(['fal.run/*' => Http::response('boom', 500)]);
 
