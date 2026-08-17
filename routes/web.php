@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DebugLogController;
+use App\Http\Controllers\Estudio\AssetCandidateController;
 use App\Http\Controllers\Estudio\AssetRequestController;
 use App\Http\Controllers\Estudio\EstudioController;
 use App\Http\Controllers\PortfolioController;
@@ -31,6 +32,9 @@ Route::middleware([EnsureLocalEnvironment::class])->prefix('estudio')->name('est
     Route::post('requests', [AssetRequestController::class, 'store'])->name('requests.store');
     Route::get('requests/{assetRequest}', [AssetRequestController::class, 'show'])->name('requests.show');
     Route::post('requests/{assetRequest}/regenerate', [AssetRequestController::class, 'regenerate'])->name('requests.regenerate');
+
+    Route::post('candidates/{assetCandidate}/approve', [AssetCandidateController::class, 'approve'])->name('candidates.approve');
+    Route::post('candidates/{assetCandidate}/reject', [AssetCandidateController::class, 'reject'])->name('candidates.reject');
 });
 
 require __DIR__.'/settings.php';
