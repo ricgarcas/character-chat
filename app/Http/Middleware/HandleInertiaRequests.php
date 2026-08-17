@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Artifact;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -41,6 +42,13 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            // Contador del "inventario" que la nav del shell muestra junto a Portafolio.
+            'portfolioCount' => fn () => $request->user()
+                ? Artifact::query()
+                    ->where('user_id', $request->user()->id)
+                    ->whereNotIn('type', ['image_pending', 'error'])
+                    ->count()
+                : 0,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

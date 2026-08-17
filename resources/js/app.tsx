@@ -2,6 +2,7 @@ import { createInertiaApp } from '@inertiajs/react';
 import { configureEcho } from '@laravel/echo-react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
+import AppShellScrapbook from '@/components/shell/app-shell';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
@@ -19,8 +20,10 @@ createInertiaApp({
             case name === 'auth/login':
             case name === 'landing':
             case name.startsWith('estudio/'):
-            case name.startsWith('chat/'):
                 return null;
+            case name.startsWith('chat/'):
+            case name.startsWith('portfolio/'):
+                return AppShellScrapbook;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):
