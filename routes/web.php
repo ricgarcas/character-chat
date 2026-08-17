@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DebugLogController;
+use App\Http\Controllers\Estudio\AssetRequestController;
 use App\Http\Controllers\Estudio\EstudioController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Middleware\EnsureLocalEnvironment;
@@ -26,6 +27,10 @@ Route::middleware(['auth'])->group(function () {
 // (Wayfinder las necesita en el build); el middleware las esconde fuera de local.
 Route::middleware([EnsureLocalEnvironment::class])->prefix('estudio')->name('estudio.')->group(function () {
     Route::get('/', [EstudioController::class, 'index'])->name('index');
+
+    Route::post('requests', [AssetRequestController::class, 'store'])->name('requests.store');
+    Route::get('requests/{assetRequest}', [AssetRequestController::class, 'show'])->name('requests.show');
+    Route::post('requests/{assetRequest}/regenerate', [AssetRequestController::class, 'regenerate'])->name('requests.regenerate');
 });
 
 require __DIR__.'/settings.php';
