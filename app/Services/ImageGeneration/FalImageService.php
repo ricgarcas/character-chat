@@ -30,10 +30,30 @@ class FalImageService
      */
     public function edit(string $prompt, string $sourcePhotoPath, array $opts = []): array
     {
+        return $this->editBatch($prompt, $sourcePhotoPath, $opts)[0];
+    }
+
+    /**
+     * Edit a source image and keep every image of the batch.
+     *
+     * @param  array<string,mixed>  $opts
+     * @return list<array{path: string, url: string, raw: array<string,mixed>}>
+     */
+    public function editBatch(string $prompt, string $sourcePhotoPath, array $opts = []): array
+    {
         $disk = $opts['disk'] ?? 'public';
         $imageDataUri = $this->fileToDataUri($sourcePhotoPath, $disk);
         $model = $opts['model'] ?? 'openai/gpt-image-2';
 
+        return $this->runBatch($model, $this->buildEditPayload($prompt, $imageDataUri, $model, $opts), $opts);
+    }
+
+    /**
+     * @param  array<string,mixed>  $opts
+     * @return array<string,mixed>
+     */
+    protected function buildEditPayload(string $prompt, string $imageDataUri, string $model, array $opts): array
+    {
         if ($this->isFluxKontext($model)) {
             $payload = [
                 'prompt' => $prompt,
@@ -61,7 +81,7 @@ class FalImageService
             $payload = array_merge($payload, $opts['extra']);
         }
 
-        return $this->run($model, $payload, $opts);
+        return $payload;
     }
 
     protected function isFluxKontext(string $model): bool
@@ -76,6 +96,17 @@ class FalImageService
      * @return array{path: string, url: string, raw: array<string,mixed>}
      */
     public function generate(string $prompt, array $opts = []): array
+    {
+        return $this->generateBatch($prompt, $opts)[0];
+    }
+
+    /**
+     * Text-to-image generation keeping every image of the batch.
+     *
+     * @param  array<string,mixed>  $opts
+     * @return list<array{path: string, url: string, raw: array<string,mixed>}>
+     */
+    public function generateBatch(string $prompt, array $opts = []): array
     {
         $payload = [
             'prompt' => $prompt,
@@ -92,9 +123,7 @@ class FalImageService
             $payload = array_merge($payload, $opts['extra']);
         }
 
-        $model = $opts['model'] ?? 'openai/gpt-image-2';
-
-        return $this->run($model, $payload, $opts);
+        return $this->runBatch($opts['model'] ?? 'openai/gpt-image-2', $payload, $opts);
     }
 
     /**
@@ -103,6 +132,16 @@ class FalImageService
      * @return array{path: string, url: string, raw: array<string,mixed>}
      */
     protected function run(string $model, array $payload, array $opts): array
+    {
+        return $this->runBatch($model, $payload, $opts)[0];
+    }
+
+    /**
+     * @param  array<string,mixed>  $payload
+     * @param  array<string,mixed>  $opts
+     * @return list<array{path: string, url: string, raw: array<string,mixed>}>
+     */
+    protected function runBatch(string $model, array $payload, array $opts): array
     {
         if (! $this->apiKey) {
             throw new RuntimeException('FAL_API_KEY is not configured.');
@@ -141,13 +180,19 @@ class FalImageService
         ]);
 
         $body = $response->json();
-        $imageUrl = $body['images'][0]['url'] ?? null;
+        $images = array_values(array_filter(
+            $body['images'] ?? [],
+            fn ($image) => is_array($image) && isset($image['url']),
+        ));
 
-        if (! $imageUrl) {
-            throw new RuntimeException('fal.ai response missing images[0].url: '.$response->body());
+        if ($images === []) {
+            throw new RuntimeException('fal.ai response missing images[].url: '.$response->body());
         }
 
-        return $this->storeRemoteImage($imageUrl, $body, $opts);
+        return array_map(
+            fn (array $image) => $this->storeRemoteImage($image['url'], $body, $opts),
+            $images,
+        );
     }
 
     /**
