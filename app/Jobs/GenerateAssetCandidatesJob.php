@@ -32,7 +32,9 @@ class GenerateAssetCandidatesJob implements ShouldQueue
                 'num_images' => config('estudio.candidates_per_batch'),
                 'folder' => "asset-staging/{$request->character_slug}",
                 'output_format' => 'png',
-                'image_size' => $request->type === 'avatar' ? '1024x1024' : '1024x1536',
+                // fal sólo acepta tamaños con nombre; PublishAssetAction normaliza
+                // después al spec exacto (1024×1024 / 1024×1536) con recorte cover.
+                'image_size' => $request->type === 'avatar' ? 'square_hd' : 'portrait_4_3',
             ];
 
             // Transparencia nativa; la contingencia rembg vive en su propia rama.
