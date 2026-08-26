@@ -82,7 +82,9 @@ return [
         'nezahualcoyotl' => [
             'name' => 'Nezahualcóyotl',
             'visual' => 'Acolhua poet-king with jade and gold headdress with quetzal feathers, embroidered tilmatli cloak',
-            'scene' => 'Texcotzingo gardens with stone aqueduct, flowering terraces, lake vista at dusk',
+            // Sin negativos explícitos, gpt-image resuelve "aqueduct" con arcos
+            // romanos y cipreses — sale villa novohispana en vez de Texcotzingo.
+            'scene' => 'pre-Hispanic Mesoamerican royal gardens of Texcotzingo circa 1460: stepped stone terraces carved into the hillside, straight open water channels and small carved rock pools fed by canals, cempasuchil marigolds and ahuehuete trees, stepped-fret grecas carved in stone, view of Lake Texcoco and distant volcanoes at dusk. Aztec/Acolhua architecture only: post-and-lintel stonework, NO arches of any kind, no Roman or colonial columns, no European buildings, no cypress trees, no terracotta flower pots',
         ],
         'socrates' => [
             'name' => 'Sócrates',
