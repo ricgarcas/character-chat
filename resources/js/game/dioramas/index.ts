@@ -16,7 +16,10 @@ export const dioramas: Record<string, DioramaConfig> = {
 
 /**
  * Resolve a character's diorama config. Unknown slugs fall back to a bare
- * config built from convention (background + 4 emote avatars, no FX).
+ * config built from convention (background + 4 emote sprites, no FX).
+ *
+ * Los sprites de cuerpo completo son lo que publica el Estudio para cada
+ * figura del roster; `/avatars/` sólo guarda el busto y no sirve en escena.
  */
 export function getDiorama(slug: string): DioramaConfig {
     return (
@@ -25,10 +28,10 @@ export function getDiorama(slug: string): DioramaConfig {
             layers: [],
             character: {
                 sprites: {
-                    neutral: `/avatars/${slug}/neutral.png`,
-                    happy: `/avatars/${slug}/happy.png`,
-                    thinking: `/avatars/${slug}/thinking.png`,
-                    surprised: `/avatars/${slug}/surprised.png`,
+                    neutral: `/sprites/${slug}/neutral.png`,
+                    happy: `/sprites/${slug}/happy.png`,
+                    thinking: `/sprites/${slug}/thinking.png`,
+                    surprised: `/sprites/${slug}/surprised.png`,
                 },
                 shadow: true,
             },

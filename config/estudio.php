@@ -11,7 +11,7 @@ return [
     | y sólo una se aprueba y publica.
     */
 
-    'candidates_per_batch' => 3,
+    'candidates_per_batch' => env('ESTUDIO_CANDIDATES', 1),
 
     'models' => [
         'default' => 'openai/gpt-image-2',
@@ -92,7 +92,9 @@ return [
         'marie-curie' => [
             'name' => 'Marie Curie',
             'visual' => 'physicist in a dark Edwardian dress, hair in a bun, holding a glowing vial',
-            'scene' => 'laboratory with glassware, notebooks, softly glowing green vials on wooden benches',
+            // Sin el anclaje temporal explícito, gpt-image deriva a taller de
+            // alquimista medieval en vez de laboratorio de principios del XX.
+            'scene' => 'turn-of-the-century Parisian physics laboratory circa 1900: tall iron-framed windows, wooden lab benches with electrometers and brass instruments, racks of test tubes and glass beakers, softly glowing green radium vials, stacked notebooks. Modern scientific equipment, not a medieval alchemist workshop, no cauldrons, no stone dungeon',
         ],
         'darwin' => [
             'name' => 'Charles Darwin',
