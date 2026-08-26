@@ -78,5 +78,131 @@ class CharacterSeeder extends Seeder
                 ['key' => 'biblioteca_infinita', 'name' => 'Biblioteca Infinita', 'icon' => '📚'],
             ],
         ]);
+
+        Character::updateOrCreate(['slug' => 'einstein'], [
+            'name' => 'Albert Einstein',
+            'tagline' => 'Físico, soñador profesional, enemigo de la solemnidad',
+            'description' => 'El hombre que reinventó el universo montado en un rayo de luz imaginario. Juguetón, curioso sin remedio y alérgico a la autoridad. Piensa en imágenes y pregunta "¿qué pasaría si…?" antes que cualquier fórmula.',
+            'agent_class' => 'App\\Agents\\EinsteinAgent',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
+            'active' => true,
+            'superpowers' => [
+                ['key' => 'experimento_mental', 'name' => 'Experimento Mental', 'icon' => '🚂'],
+                ['key' => 'caza_paradojas', 'name' => 'Caza de Paradojas', 'icon' => '🌀'],
+                ['key' => 'fisica_cotidiana', 'name' => 'Física de lo Cotidiano', 'icon' => '🧭'],
+            ],
+        ]);
+
+        Character::updateOrCreate(['slug' => 'da-vinci'], [
+            'name' => 'Leonardo da Vinci',
+            'tagline' => 'Inventor, pintor, anatomista — se niega a elegir',
+            'description' => 'El maestro del cuaderno infinito: máquinas voladoras, escritura en espejo y mil proyectos empezados. Aprende de la experiencia, no de los libros, y convierte cualquier pregunta en un boceto.',
+            'agent_class' => 'App\\Agents\\DaVinciAgent',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
+            'active' => true,
+            'superpowers' => [
+                ['key' => 'cuaderno_inventos', 'name' => 'Cuaderno de Inventos', 'icon' => '📓'],
+                ['key' => 'maquinas_imposibles', 'name' => 'Máquinas Imposibles', 'icon' => '⚙️'],
+                ['key' => 'escritura_espejo', 'name' => 'Escritura Espejo', 'icon' => '🪞'],
+            ],
+        ]);
+
+        Character::updateOrCreate(['slug' => 'nezahualcoyotl'], [
+            'name' => 'Nezahualcóyotl',
+            'tagline' => 'Poeta rey de Texcoco, ingeniero del agua',
+            'description' => 'El Coyote que Ayuna: perdió su reino a los quince y volvió a ganarlo. Canta a lo que se acaba, construye acueductos que permanecen. Poesía sin rima e ingeniería con alma — el único con taller doble.',
+            'agent_class' => 'App\\Agents\\NezahualcoyotlAgent',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
+            'active' => true,
+            'superpowers' => [
+                ['key' => 'flor_y_canto', 'name' => 'Flor y Canto', 'icon' => '🌸'],
+                ['key' => 'ingenieria_del_agua', 'name' => 'Ingeniería del Agua', 'icon' => '💧'],
+                ['key' => 'filosofia_efimera', 'name' => 'Filosofía de lo Efímero', 'icon' => '🍃'],
+            ],
+        ]);
+
+        Character::updateOrCreate(['slug' => 'socrates'], [
+            'name' => 'Sócrates',
+            'tagline' => 'Filósofo callejero, partero de ideas, tábano de Atenas',
+            'description' => 'Nunca da respuestas: las devuelve convertidas en mejores preguntas. Descalzo, irónico y encantado de que lo refuten. La encarnación del anti-tarea — contigo las ideas nacen tuyas.',
+            'agent_class' => 'App\\Agents\\SocratesAgent',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
+            'active' => true,
+            'superpowers' => [
+                ['key' => 'dialogo_socratico', 'name' => 'Diálogo Socrático', 'icon' => '💬'],
+                ['key' => 'torneo_preguntas', 'name' => 'Torneo de Preguntas', 'icon' => '❓'],
+                ['key' => 'mayeutica', 'name' => 'Mayéutica', 'icon' => '🐣'],
+            ],
+        ]);
+
+        Character::updateOrCreate(['slug' => 'marie-curie'], [
+            'name' => 'Marie Curie',
+            'tagline' => 'Dos veces Nobel, cazadora de lo invisible',
+            'description' => 'Estudió a escondidas, procesó toneladas de mineral en un cobertizo y le puso nombre a dos elementos. Precisa, serena y obstinada: nada debe ser temido, solamente comprendido.',
+            'agent_class' => 'App\\Agents\\MarieCurieAgent',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
+            'active' => true,
+            'superpowers' => [
+                ['key' => 'diseno_experimentos', 'name' => 'Diseña tu Experimento', 'icon' => '🧪'],
+                ['key' => 'bitacora_laboratorio', 'name' => 'Bitácora de Laboratorio', 'icon' => '📔'],
+                ['key' => 'perseverancia_radiante', 'name' => 'Perseverancia Radiante', 'icon' => '✨'],
+            ],
+        ]);
+
+        Character::updateOrCreate(['slug' => 'darwin'], [
+            'name' => 'Charles Darwin',
+            'tagline' => 'Naturalista del Beagle, paciente profesional',
+            'description' => 'Dio la vuelta al mundo coleccionando pistas y tardó veinte años en contar lo que descubrió. Amable, curioso y honesto hasta con sus propias dudas. Tu patio es su próximo Galápagos.',
+            'agent_class' => 'App\\Agents\\DarwinAgent',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
+            'active' => true,
+            'superpowers' => [
+                ['key' => 'expedicion_naturalista', 'name' => 'Expedición Naturalista', 'icon' => '🗺️'],
+                ['key' => 'clasificar_criaturas', 'name' => 'Clasificador de Criaturas', 'icon' => '🐦'],
+                ['key' => 'arbol_de_la_vida', 'name' => 'Árbol de la Vida', 'icon' => '🌳'],
+            ],
+        ]);
+
+        Character::updateOrCreate(['slug' => 'van-gogh'], [
+            'name' => 'Vincent van Gogh',
+            'tagline' => 'Pintor de emociones, hermano de cartas',
+            'description' => 'Empezó a pintar a los 27 y en diez años lo dio todo: girasoles, noches estrelladas y cartas que son literatura. Intenso, cálido, cero cinismo. Contigo el color se vuelve idioma.',
+            'agent_class' => 'App\\Agents\\VanGoghAgent',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
+            'active' => true,
+            'superpowers' => [
+                ['key' => 'pintar_emociones', 'name' => 'Pintar Emociones', 'icon' => '🎨'],
+                ['key' => 'carta_a_theo', 'name' => 'Carta a Theo', 'icon' => '✉️'],
+                ['key' => 'ver_el_color', 'name' => 'Ver el Color', 'icon' => '🌻'],
+            ],
+        ]);
+
+        Character::updateOrCreate(['slug' => 'cervantes'], [
+            'name' => 'Miguel de Cervantes',
+            'tagline' => 'Soldado, cautivo, inventor de la novela moderna',
+            'description' => 'Su vida es más novelesca que sus libros: Lepanto, Argel, la cárcel donde nació Don Quijote. Irónico y compasivo, responde con historias y convierte cualquier idea en aventura por capítulos.',
+            'agent_class' => 'App\\Agents\\CervantesAgent',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
+            'active' => true,
+            'superpowers' => [
+                ['key' => 'inventar_personajes', 'name' => 'Inventor de Personajes', 'icon' => '🎭'],
+                ['key' => 'aventuras_por_capitulos', 'name' => 'Aventuras por Capítulos', 'icon' => '📜'],
+                ['key' => 'duelo_de_refranes', 'name' => 'Duelo de Refranes', 'icon' => '🗡️'],
+            ],
+        ]);
+
+        Character::updateOrCreate(['slug' => 'juarez'], [
+            'name' => 'Benito Juárez',
+            'tagline' => 'El pastor que llegó a presidente, la ley como brújula',
+            'description' => 'De Guelatao al carruaje que cargó la República entera. Sobrio, firme y justo: plantea dilemas de verdad, te hace defender los dos lados y te trata como ciudadano, no como niño.',
+            'agent_class' => 'App\\Agents\\JuarezAgent',
+            'model' => \App\Enums\ChatModel::current()->modelId(),
+            'active' => true,
+            'superpowers' => [
+                ['key' => 'debate_justo', 'name' => 'Debate Justo', 'icon' => '⚖️'],
+                ['key' => 'que_harias_tu', 'name' => '¿Qué Harías Tú?', 'icon' => '🤔'],
+                ['key' => 'leyes_para_todos', 'name' => 'Leyes para Todos', 'icon' => '📜'],
+            ],
+        ]);
     }
 }

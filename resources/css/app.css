@@ -169,6 +169,15 @@
     --accent-frida: #ff5252;
     --accent-beauvoir: #8e7cc3;
     --accent-sor-juana: #d9a441;
+    --accent-einstein: #7ec8e3;
+    --accent-da-vinci: #c98a6b;
+    --accent-nezahualcoyotl: #2f9e77;
+    --accent-socrates: #aeb8c4;
+    --accent-marie-curie: #79c98f;
+    --accent-darwin: #8a9a5b;
+    --accent-van-gogh: #f4c542;
+    --accent-cervantes: #c4664a;
+    --accent-juarez: #3e5a78;
 
     /* Stage / parchment compatibility (legacy class names map to new vars) */
     --parchment: var(--bg-tile);

@@ -9,9 +9,22 @@ import {
     Lightbulb as Brain,
     Potion as CookingPot,
     Shield,
+    Zap,
+    Clock,
+    Feather,
+    Leaf,
+    Cloud,
+    Message,
+    Chess,
+    MapPin,
+    Search,
+    Mail,
+    Human,
+    Sword,
+    Flag,
 } from 'pixelarticons/react';
 import type { ComponentType } from 'react';
-import { Notebook, Key, VenusSymbol as GenderFemale, PaintBrush, Egg } from '@/components/icons/retro';
+import { Notebook, Key, VenusSymbol as GenderFemale, PaintBrush, Egg, Star, Sitemap } from '@/components/icons/retro';
 
 export type PixelIcon = ComponentType<{
     width?: number | string;
@@ -41,6 +54,33 @@ export const superpowerIcon: Record<string, PixelIcon> = {
     taller_poetico: Notebook,
     duelo_de_ingenio: Brain,
     biblioteca_infinita: BookOpen,
+    experimento_mental: Brain,
+    caza_paradojas: Zap,
+    fisica_cotidiana: Clock,
+    cuaderno_inventos: Notebook,
+    maquinas_imposibles: Sitemap,
+    escritura_espejo: Eye,
+    flor_y_canto: Feather,
+    ingenieria_del_agua: Cloud,
+    filosofia_efimera: Leaf,
+    dialogo_socratico: Message,
+    torneo_preguntas: Chess,
+    mayeutica: Egg,
+    diseno_experimentos: CookingPot,
+    bitacora_laboratorio: Notebook,
+    perseverancia_radiante: Star,
+    expedicion_naturalista: MapPin,
+    clasificar_criaturas: Search,
+    arbol_de_la_vida: Leaf,
+    pintar_emociones: PaintBrush,
+    carta_a_theo: Mail,
+    ver_el_color: Palette,
+    inventar_personajes: Human,
+    aventuras_por_capitulos: BookOpen,
+    duelo_de_refranes: Sword,
+    debate_justo: Scales,
+    que_harias_tu: Message,
+    leyes_para_todos: Flag,
 };
 
 export const roleIcon: Record<string, PixelIcon> = {
@@ -49,6 +89,15 @@ export const roleIcon: Record<string, PixelIcon> = {
     beauvoir: Scales,
     freud: Brain,
     'sor-juana': BookOpen,
+    einstein: Brain,
+    'da-vinci': Sitemap,
+    nezahualcoyotl: Feather,
+    socrates: Message,
+    'marie-curie': CookingPot,
+    darwin: Leaf,
+    'van-gogh': Palette,
+    cervantes: Sword,
+    juarez: Scales,
 };
 
 export interface CharacterMeta {
@@ -77,5 +126,41 @@ export const characterMeta: Record<string, CharacterMeta> = {
     'sor-juana': {
         role: 'POETA',
         quote: '"Yo no estudio por saber más, sino por ignorar menos."',
+    },
+    einstein: {
+        role: 'FÍSICO',
+        quote: '"La imaginación es más importante que el conocimiento."',
+    },
+    'da-vinci': {
+        role: 'INVENTOR',
+        quote: '"La sabiduría es hija de la experiencia."',
+    },
+    nezahualcoyotl: {
+        role: 'POETA REY',
+        quote: '"No acabarán mis flores, no cesarán mis cantos."',
+    },
+    socrates: {
+        role: 'FILÓSOFO',
+        quote: '"Sólo sé que no sé nada."',
+    },
+    'marie-curie': {
+        role: 'CIENTÍFICA',
+        quote: '"Nada en la vida debe ser temido, solamente comprendido."',
+    },
+    darwin: {
+        role: 'NATURALISTA',
+        quote: '"La ignorancia engendra confianza más frecuentemente que el conocimiento."',
+    },
+    'van-gogh': {
+        role: 'PINTOR',
+        quote: '"¿Qué sería de la vida si no tuviéramos el valor de intentar algo?"',
+    },
+    cervantes: {
+        role: 'NOVELISTA',
+        quote: '"El que lee mucho y anda mucho, ve mucho y sabe mucho."',
+    },
+    juarez: {
+        role: 'ESTADISTA',
+        quote: '"El respeto al derecho ajeno es la paz."',
     },
 };
