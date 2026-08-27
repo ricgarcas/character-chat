@@ -115,7 +115,7 @@ export class DioramaScene extends Phaser.Scene {
 
         // Character
         this.baseX = (char.anchorX ?? 0.5) * width;
-        this.baseY = (char.anchorY ?? 1) * height;
+        this.baseY = (char.anchorY ?? 0.96) * height;
         this.sprite.setPosition(this.baseX, this.baseY);
         this.fitSprite();
 
@@ -180,7 +180,7 @@ export class DioramaScene extends Phaser.Scene {
 
     private fitSprite() {
         const ratio =
-            ((this.config.character.heightRatio ?? 0.7) * this.scale.height) /
+            ((this.config.character.heightRatio ?? 0.72) * this.scale.height) /
             this.sprite.height;
         this.sprite.setScale(ratio);
     }

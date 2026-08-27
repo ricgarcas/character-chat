@@ -49,9 +49,9 @@ export interface DioramaCharacter {
     sprites: Partial<Record<EmoteKey, string>> & { neutral: string };
     /** Horizontal position as a fraction of width (default 0.5). */
     anchorX?: number;
-    /** Vertical foot position as a fraction of height (default 1.0). */
+    /** Vertical foot position as a fraction of height (default 0.96). */
     anchorY?: number;
-    /** Sprite height as a fraction of scene height (default 0.70). */
+    /** Sprite canvas height as a fraction of scene height (default 0.72). */
     heightRatio?: number;
     /** Depth value — layers sort around this (default 100). */
     z?: number;

@@ -50,8 +50,8 @@ export const fridaDiorama: DioramaConfig = {
             thinking: '/sprites/frida/thinking.png',
             surprised: '/sprites/frida/surprised.png',
         },
-        anchorY: 0.9, // stands mid-floor, with depth in front and behind
-        heightRatio: 0.32,
+        anchorY: 0.96,
+        heightRatio: 0.72,
         shadow: true,
     },
     ambient: [
