@@ -12,10 +12,10 @@ export const freudDiorama: DioramaConfig = {
     layers: [],
     character: {
         sprites: {
-            neutral: '/avatars/freud/neutral.png',
-            happy: '/avatars/freud/happy.png',
-            thinking: '/avatars/freud/thinking.png',
-            surprised: '/avatars/freud/surprised.png',
+            neutral: '/sprites/freud/neutral.png',
+            happy: '/sprites/freud/happy.png',
+            thinking: '/sprites/freud/thinking.png',
+            surprised: '/sprites/freud/surprised.png',
         },
         shadow: true,
     },

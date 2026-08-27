@@ -12,10 +12,10 @@ export const daliDiorama: DioramaConfig = {
     layers: [],
     character: {
         sprites: {
-            neutral: '/avatars/dali/neutral.png',
-            happy: '/avatars/dali/happy.png',
-            thinking: '/avatars/dali/thinking.png',
-            surprised: '/avatars/dali/surprised.png',
+            neutral: '/sprites/dali/neutral.png',
+            happy: '/sprites/dali/happy.png',
+            thinking: '/sprites/dali/thinking.png',
+            surprised: '/sprites/dali/surprised.png',
         },
         shadow: true,
     },

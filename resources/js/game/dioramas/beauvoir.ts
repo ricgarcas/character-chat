@@ -12,10 +12,10 @@ export const beauvoirDiorama: DioramaConfig = {
     layers: [],
     character: {
         sprites: {
-            neutral: '/avatars/beauvoir/neutral.png',
-            happy: '/avatars/beauvoir/happy.png',
-            thinking: '/avatars/beauvoir/thinking.png',
-            surprised: '/avatars/beauvoir/surprised.png',
+            neutral: '/sprites/beauvoir/neutral.png',
+            happy: '/sprites/beauvoir/happy.png',
+            thinking: '/sprites/beauvoir/thinking.png',
+            surprised: '/sprites/beauvoir/surprised.png',
         },
         shadow: true,
     },
